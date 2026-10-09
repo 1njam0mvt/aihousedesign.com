@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}House Design Gallery: plans in 2D, 3D and 4D | House Design Hub{% endblock %}
+{% block content %}
+<h1 data-i18n="nav_gallery">{{ T('nav_gallery') }}</h1>
+
+<form class="filters" id="filters" onsubmit="return false">
+  <input type="search" id="q" data-i18n-ph="search_ph" placeholder="{{ T('search_ph') }}" aria-label="Search">
+  <select id="style" aria-label="Style">
+    <option value="" data-i18n="all">{{ T('all') }}</option>
+    {% for k in STYLE_KEYS %}<option value="{{ k }}" data-i18n="style.{{ k }}">{{ style_en(k) }}</option>{% endfor %}
+  </select>
+  <select id="beds" aria-label="Bedrooms">
+    <option value="">{{ T('bedrooms') }}</option>
+    {% for n in range(1,7) %}<option value="{{ n }}">{{ n }} BHK</option>{% endfor %}
+  </select>
+  <select id="floors" aria-label="Floors">
+    <option value="">{{ T('floors') }}</option>
+    {% for n in range(1,4) %}<option value="{{ n }}">{{ n }}</option>{% endfor %}
+  </select>
+  <select id="facing" aria-label="Facing">
+    <option value="">{{ T('facing') }}</option>
+    {% for f in ['N','E','S','W'] %}<option value="{{ f }}" data-i18n="{{ f }}">{{ T(f) }}</option>{% endfor %}
+  </select>
+  <select id="sort" aria-label="Sort">
+    <option value="popular" data-i18n="sort_popular">{{ T('sort_popular') }}</option>
+    <option value="cost_asc" data-i18n="sort_cost_asc">{{ T('sort_cost_asc') }}</option>
+    <option value="cost_desc" data-i18n="sort_cost_desc">{{ T('sort_cost_desc') }}</option>
+    <option value="area_desc" data-i18n="sort_area_desc">{{ T('sort_area_desc') }}</option>
+  </select>
+</form>
+<p class="muted" id="resultCount"></p>
+<div class="grid" id="grid"></div>
+<p class="center"><button class="btn" id="more" hidden data-i18n="load_more">{{ T('load_more') }}</button></p>
+<p class="muted center" id="empty" hidden data-i18n="no_results">{{ T('no_results') }}</p>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cards.js') }}"></script>
+<script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+{% endblock %}

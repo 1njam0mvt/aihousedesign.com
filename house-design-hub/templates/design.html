@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ d.name }} | House Design Hub{% endblock %}
+{% block desc %}{{ d.name }}: about {{ '{:,}'.format(d.built_area) }} sq ft built-up. View the 2D floor plan, rotate the 3D model and play the 4D construction timeline.{% endblock %}
+{% block content %}
+<h1 id="title" data-style="{{ d.style }}" data-beds="{{ d.beds }}" data-floors="{{ d.floors }}" data-w="{{ d.w }}" data-d="{{ d.d }}">{{ d.name }}</h1>
+<div id="view" data-id="{{ d.id }}"></div>
+<section>
+  <h2 data-i18n="similar">{{ T('similar') }}</h2>
+  <div class="grid" id="similar"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
+<script src="{{ url_for('static', filename='js/viewer3d.js') }}"></script>
+<script src="{{ url_for('static', filename='js/view.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cards.js') }}"></script>
+<script>
+(function(){
+  var id = document.getElementById('view').dataset.id;
+  fetch('/api/design/' + id).then(function(r){return r.json()}).then(function(data){
+    HD.mountView(document.getElementById('view'), data);
+    var t = document.getElementById('title');
+    function title(){ t.textContent = HD.designName(data.meta); }
+    title(); document.addEventListener('langchange', title);
+  });
+  fetch('/api/similar/' + id).then(function(r){return r.json()}).then(function(s){
+    var el = document.getElementById('similar');
+    HD.renderCards(el, s.items);
+    document.addEventListener('langchange', function(){ HD.renderCards(el, s.items); });
+  });
+})();
+</script>
+{% endblock %}

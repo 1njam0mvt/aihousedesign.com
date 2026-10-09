@@ -1,0 +1,4 @@
+flask>=3.0
+gunicorn>=22.0
+# optional: richer AI design notes (set ANTHROPIC_API_KEY to enable)
+# anthropic>=0.40

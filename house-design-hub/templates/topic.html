@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ t.title }}: {{ '{:,}'.format(count) }} plans in 2D and 3D | House Design Hub{% endblock %}
+{% block desc %}{{ t.blurb }} Related searches: {{ t.keywords }}.{% endblock %}
+{% block content %}
+<h1>{{ t.title }}</h1>
+<p class="lead">{{ t.blurb }}</p>
+<p class="muted"><strong>{{ '{:,}'.format(count) }}</strong> <span data-i18n="designs_count">{{ T('designs_count') }}</span></p>
+<div class="grid" id="grid" data-cards='{{ cards|tojson|forceescape }}'></div>
+<p class="center"><a class="btn primary" href="{{ url_for('gallery') }}?topic={{ t.slug }}" data-i18n="load_more">{{ T('load_more') }}</a></p>
+<p class="muted small">{{ t.keywords }}</p>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cards.js') }}"></script>
+<script>
+(function(){
+  var el = document.getElementById('grid');
+  var items = JSON.parse(el.getAttribute('data-cards'));
+  HD.renderCards(el, items);
+  document.addEventListener('langchange', function(){ HD.renderCards(el, items); });
+})();
+</script>
+{% endblock %}

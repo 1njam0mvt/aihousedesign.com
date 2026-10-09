@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}House Design Hub: house design ideas, plans in 2D, 3D and 4D{% endblock %}</title>
+  <meta name="description"
+    content="{% block desc %}Browse thousands of house designs: village, single floor, modern, duplex, Assam type and low cost plans in 2D, 3D and 4D, or generate your own with the AI house designer.{% endblock %}">
+  <meta name="theme-color" content="#0f766e">
+  <script>
+    /* apply saved theme before paint to avoid a flash */
+    (function () {
+      try {
+        var t = localStorage.getItem('hd-theme'); if (!t) { t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'light') }
+    })();
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="{{ url_for('index') }}"><span class="logo" aria-hidden="true">⌂</span> <span
+          class="brand-text">House Design Hub</span></a>
+      <nav class="nav" id="nav">
+        <a href="{{ url_for('index') }}" data-i18n="nav_home">{{ T('nav_home') }}</a>
+        <a href="{{ url_for('gallery') }}" data-i18n="nav_gallery">{{ T('nav_gallery') }}</a>
+        <a href="{{ url_for('designer') }}" data-i18n="nav_designer">{{ T('nav_designer') }}</a>
+      </nav>
+      <div class="tools">
+        <div class="lang-dd" id="langDd">
+          <button type="button" class="lang-toggle" id="langToggle" aria-haspopup="listbox" aria-expanded="false"
+            aria-label="Language" title="Language">
+            <span id="langCurrent">English</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language" hidden>
+            {% for code, name, dir in LANGS %}
+            <button type="button" role="option" class="lang-btn{% if code == 'en' %} active{% endif %}"
+              aria-selected="{{ 'true' if code == 'en' else 'false' }}" data-lang="{{ code }}" lang="{{ code }}">{{ name
+              }}</button>
+            {% endfor %}
+          </div>
+        </div>
+        <button class="icon-btn" id="themeBtn" aria-label="Toggle dark / light theme" title="Theme">
+          <span class="sun">☀</span><span class="moon">☾</span>
+        </button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">{% block content %}{% endblock %}</main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="foot-links">
+        {% for t in TOPICS %}<a href="{{ url_for('topic', slug=t.slug) }}">{{ t.title }}</a>{% endfor %}
+      </div>
+      <nav class="foot-pages" aria-label="Information">
+        <a href="{{ url_for('faq') }}" data-i18n="foot_faq">{{ T('foot_faq') }}</a>
+        <a href="{{ url_for('contact') }}" data-i18n="foot_contact">{{ T('foot_contact') }}</a>
+        <a href="{{ url_for('terms') }}" data-i18n="foot_terms">{{ T('foot_terms') }}</a>
+        <a href="{{ url_for('privacy') }}" data-i18n="foot_privacy">{{ T('foot_privacy') }}</a>
+        <a href="{{ url_for('cookies') }}" data-i18n="foot_cookies">{{ T('foot_cookies') }}</a>
+      </nav>
+      <p class="muted" data-i18n="footer">{{ T('footer') }}</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

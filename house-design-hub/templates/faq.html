@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}FAQ | {{ SITE_NAME }}{% endblock %}
+{% block desc %}Answers about house plans, AI house design, cost estimates, downloads and languages on {{ SITE_NAME
+}}.{% endblock %}
+{% block head %}
+<script type="application/ld+json">{{ faq_ld|tojson }}</script>
+{% endblock %}
+{% block content %}
+<article class="doc">
+    <h1>Frequently asked questions</h1>
+    <p class="lead">Quick answers about the plans, the AI designer and your data.</p>
+    <div class="faq">
+        {% for q, a in faqs %}
+        <details{% if loop.first %} open{% endif %}>
+            <summary>{{ q }}</summary>
+            <p>{{ a }}</p>
+            </details>
+            {% endfor %}
+    </div>
+    <p>Still need help? <a href="{{ url_for('contact') }}">Contact us</a>.</p>
+</article>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy | {{ SITE_NAME }}{% endblock %}
+{% block desc %}What {{ SITE_NAME }} collects, why, and the choices you have.{% endblock %}
+{% block content %}
+{# Draft policy written for how this app currently works. Update it if you add analytics, ads, accounts or payments. #}
+<article class="doc">
+    <h1>Privacy Policy</h1>
+    <p class="muted">Last updated: {{ LEGAL_UPDATED }}</p>
+    <p class="lead">Short version: no accounts, no ads, no tracking. We only keep what you send us through the contact
+        form.</p>
+
+    <h2>1. Who we are</h2>
+    <p>{{ SITE_NAME }} runs this website. You can reach us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL
+            }}</a>.</p>
+
+    <h2>2. What we collect</h2>
+    <h3>Contact form</h3>
+    <p>If you write to us we receive your name, email address and message. We use them only to answer you, and keep them
+        only as long as needed for that.</p>
+    <h3>AI designer</h3>
+    <p>The text you type is used to generate your plan. We do not store it and it is not linked to you.</p>
+    <h3>Your choices in the browser</h3>
+    <p>Your theme (light or dark) and language are saved in your own browser so the site remembers them. They never
+        leave your device. See the <a href="{{ url_for('cookies') }}">Cookies page</a>.</p>
+    <h3>Server logs</h3>
+    <p>Like most websites, the server or hosting provider may automatically log technical details such as IP address,
+        browser type, pages requested and time. This is used for security and to keep the site running.</p>
+    <h3>What we do not collect</h3>
+    <p>We do not ask for accounts, passwords, payment details or location, and we do not use advertising or analytics
+        trackers.</p>
+
+    <h2>3. Other companies involved</h2>
+    <ul>
+        <li><strong>cdnjs (Cloudflare):</strong> the 3D viewer loads the three.js library from cdnjs. When you open a 3D
+            page, your browser contacts that service, which can see your IP address and browser details.</li>
+        <li><strong>AI model provider:</strong> if the site owner has switched on AI design tips, a short request is
+            sent to the Anthropic API. It contains only house details such as style, bedrooms, floors, plot size,
+            facing, room types and language code. It does not contain your name, email or the text you typed.</li>
+        <li><strong>Hosting provider:</strong> processes the technical data in section 2 on our behalf.</li>
+    </ul>
+
+    <h2>4. Why we use data</h2>
+    <p>To run the Service, answer your messages, keep the site secure and fix problems. We do not sell your data.</p>
+
+    <h2>5. Your rights</h2>
+    <p>Depending on where you live, you may have the right to ask what we hold about you, to correct it, or to have it
+        deleted. Email us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> and we will respond within a
+        reasonable time.</p>
+
+    <h2>6. Children</h2>
+    <p>The Service is not aimed at children under 13 and we do not knowingly collect their information.</p>
+
+    <h2>7. Security</h2>
+    <p>We take reasonable steps to protect the information we hold, but no system on the internet is completely secure.
+    </p>
+
+    <h2>8. Changes</h2>
+    <p>If we change this policy, the date at the top will change. If we ever add analytics, ads or accounts, we will
+        update this page first.</p>
+</article>
+{% endblock %}

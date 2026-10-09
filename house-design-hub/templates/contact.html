@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Contact | {{ SITE_NAME }}{% endblock %}
+{% block desc %}Send a question, a bug report or a suggestion to the {{ SITE_NAME }} team.{% endblock %}
+{% block content %}
+<article class="doc">
+    <h1>Contact us</h1>
+    <p class="lead">Questions, bug reports, wrong translations or ideas: we read every message.</p>
+
+    {% if sent %}
+    <div class="notice ok" role="status">Thank you! Your message was sent. We will reply by email.</div>
+    {% else %}
+    {% if error %}<div class="notice err" role="alert">{{ error }}</div>{% endif %}
+    <form class="contact-form" method="post" action="{{ url_for('contact') }}" novalidate>
+        <label for="cName">Name</label>
+        <input id="cName" name="name" type="text" maxlength="100" autocomplete="name" required
+            value="{{ form.get('name', '') }}">
+
+        <label for="cEmail">Email</label>
+        <input id="cEmail" name="email" type="email" maxlength="200" autocomplete="email" required
+            value="{{ form.get('email', '') }}">
+
+        <label for="cMsg">Message</label>
+        <textarea id="cMsg" name="message" rows="6" minlength="10" maxlength="3000"
+            required>{{ form.get('message', '') }}</textarea>
+
+        <div class="hp" aria-hidden="true">
+            <label for="cWeb">Leave this field empty</label>
+            <input id="cWeb" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn primary" type="submit">Send message</button>
+        <p class="muted small">We use your details only to reply. See the <a href="{{ url_for('privacy') }}">Privacy
+                Policy</a>.</p>
+    </form>
+    {% endif %}
+
+    <p>Prefer email? Write to <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.</p>
+</article>
+{% endblock %}
