@@ -2,7 +2,10 @@
 import json
 import os
 import re
+import smtplib
+import threading
 import time
+from email.message import EmailMessage
 from urllib.parse import urlencode
 from flask import Flask, abort, jsonify, redirect, render_template, request, Response, url_for
 
@@ -17,7 +20,7 @@ EN = get_dict("en")["t"]
 
 # Shown on the legal pages. Set these env vars before going live.
 SITE_NAME = os.getenv("SITE_NAME", "AI Houses Design")
-CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "hello@example.com")
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "hello@aihousesdesign.com")  # create this mailbox / forwarder
 LEGAL_UPDATED = "9 October 2026"
 
 
@@ -203,7 +206,36 @@ def contact():
     os.makedirs(app.instance_path, exist_ok=True)
     with open(os.path.join(app.instance_path, "contact_messages.jsonl"), "a", encoding="utf-8") as fh:
         fh.write(json.dumps({"time": time.strftime("%Y-%m-%d %H:%M:%S"), **f}, ensure_ascii=False) + "\n")
+    _email_contact(f)
     return redirect(url_for("contact", sent=1))
+
+
+def _email_contact(f):
+    """Email the message to CONTACT_EMAIL when SMTP_HOST is set (SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM optional).
+    Runs in the background so the visitor never waits; the message is already saved to instance/contact_messages.jsonl."""
+    host = os.getenv("SMTP_HOST")
+    if not host:
+        return
+
+    def send():
+        try:
+            msg = EmailMessage()
+            msg["Subject"] = f"[{SITE_NAME}] Message from " + re.sub(r"[\r\n]+", " ", f["name"])[:80]
+            msg["From"] = os.getenv("SMTP_FROM", CONTACT_EMAIL)
+            msg["To"] = CONTACT_EMAIL
+            msg["Reply-To"] = f["email"]
+            msg.set_content(f"Name: {f['name']}\nEmail: {f['email']}\n\n{f['message']}\n")
+            port = int(os.getenv("SMTP_PORT", "587"))
+            with (smtplib.SMTP_SSL if port == 465 else smtplib.SMTP)(host, port, timeout=10) as smtp:
+                if port != 465:
+                    smtp.starttls()
+                if os.getenv("SMTP_USER"):
+                    smtp.login(os.getenv("SMTP_USER"), os.getenv("SMTP_PASS", ""))
+                smtp.send_message(msg)
+        except Exception as exc:  # never break the form because mail failed
+            app.logger.warning("contact email failed: %s", exc)
+
+    threading.Thread(target=send, daemon=True).start()
 
 
 @app.errorhandler(404)
@@ -302,8 +334,8 @@ def api_chat():
 # ---------- SEO ----------
 @app.route("/robots.txt")
 def robots():
-    # /api/ is left crawlable on purpose: the gallery cards are loaded from it and Google needs it to render the page.
-    return Response(f"User-agent: *\nAllow: /\n\nSitemap: {seo.SITE_URL}/sitemap.xml\n", mimetype="text/plain")
+    # /api/ stays crawlable on purpose: gallery cards load from it and Google needs it to render the page.
+    return Response(f"User-agent: *\nAllow: /\nSitemap: {seo.SITE_URL}/sitemap.xml\n", mimetype="text/plain")
 
 
 @app.route("/favicon.ico")
@@ -311,16 +343,40 @@ def favicon():
     return redirect(url_for("static", filename="img/favicon.svg"), code=301)
 
 
-_LASTMOD = time.strftime("%Y-%m-%d")
+def _lastmod():
+    """Date of the newest change to templates / content code, so <lastmod> is real and moves only when the site changes."""
+    root = os.path.dirname(os.path.abspath(__file__))
+    newest = 0
+    for folder in ("templates", "core"):
+        for dirpath, _, files in os.walk(os.path.join(root, folder)):
+            for fn in files:
+                if fn.endswith((".html", ".py")):
+                    newest = max(newest, os.path.getmtime(os.path.join(dirpath, fn)))
+    return time.strftime("%Y-%m-%d", time.gmtime(newest or time.time()))
+
+
+# path -> (priority, changefreq).  Google ignores priority and changefreq but other crawlers read them; lastmod is the one that counts.
+_SM = {
+    "/": (1.0, "daily"), "/designer": (0.9, "weekly"), "/gallery": (0.8, "weekly"), "/faq": (0.8, "weekly"), "/contact": (0.5, "monthly"),
+    "/free-ai-house-design/": (0.9, "weekly"), "/floor-plan-creator/": (0.9, "weekly"),
+    "/modern-houses-design/": (0.8, "weekly"), "/elevation-design/": (0.8, "weekly"), "/small-houses-design/": (0.8, "weekly"),
+    "/passive-houses-design/": (0.8, "weekly"), "/indian-village-house-design/": (0.8, "weekly"),
+    "/guides/": (0.7, "weekly"),
+}
 
 
 @app.route("/sitemap.xml")
 def sitemap():
-    paths = ["/", "/gallery", "/designer", "/guides/", "/faq", "/contact", "/privacy", "/terms", "/cookies"]
-    paths += [v["path"] for v in seo.ALL_PAGES.values()]
-    paths += [f"/topic/{t['slug']}" for t in topics.TOPICS]
-    paths += [f"/design/{d['id']}" for d in catalog.DESIGNS[::4]]  # even sample across every style
-    body = "".join(f"<url><loc>{seo.SITE_URL}{u}</loc><lastmod>{_LASTMOD}</lastmod></url>" for u in paths)
+    guide_pages = [v["path"] for v in seo.ALL_PAGES.values() if v["kind"] == "guide"]
+    landing_pages = [v["path"] for v in seo.ALL_PAGES.values() if v["kind"] == "landing"]
+    core_pages = ["/", "/gallery", "/designer", "/faq", "/contact"]
+    rows = [(p, *_SM[p]) for p in core_pages + landing_pages + ["/guides/"]]
+    rows += [(f"/topic/{t['slug']}", 0.7, "weekly") for t in topics.TOPICS]
+    rows += [(p, 0.7, "monthly") for p in guide_pages]
+    rows += [(f"/design/{d['id']}", 0.4, "monthly") for d in catalog.DESIGNS[::4]]  # even sample across every style
+    lm = _lastmod()
+    body = "".join(f"<url><loc>{seo.SITE_URL}{p}</loc><lastmod>{lm}</lastmod><changefreq>{cf}</changefreq><priority>{pr:.1f}</priority></url>"
+                   for p, pr, cf in rows)
     return Response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                     + body + '</urlset>', mimetype="application/xml")
 
@@ -332,4 +388,3 @@ def healthz():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=os.getenv("FLASK_DEBUG") == "1")
-    
