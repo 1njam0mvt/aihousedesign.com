@@ -1,9 +1,29 @@
 {% extends "base.html" %}
-{% block title %}{{ d.name }} | House Design Hub{% endblock %}
-{% block desc %}{{ d.name }}: about {{ '{:,}'.format(d.built_area) }} sq ft built-up. View the 2D floor plan, rotate the 3D model and play the 4D construction timeline.{% endblock %}
+{% block title %}{{ style_en(d.style) }} {{ d.beds }} BHK House Plan {{ d.w }}x{{ d.d }} ft, {{ d.floors }} Floor{{ 's'
+if d.floors > 1 }}{% endblock %}
+{% block desc %}{{ d.name }}: about {{ '{:,}'.format(d.built_area) }} sq ft, est. Rs {{ '%.1f'|format(d.cost / 100000)
+}} lakh. 2D plan, 3D model and 4D timeline.{% endblock %}
 {% block content %}
-<h1 id="title" data-style="{{ d.style }}" data-beds="{{ d.beds }}" data-floors="{{ d.floors }}" data-w="{{ d.w }}" data-d="{{ d.d }}">{{ d.name }}</h1>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('index') }}">Home</a><span aria-hidden="true"> ›
+  </span><a href="{{ url_for('gallery') }}">Gallery</a>{% if topic %}<span aria-hidden="true"> › </span><a
+    href="{{ url_for('topic', slug=topic.slug) }}">{{ topic.title }}</a>{% endif %}</nav>
+<h1 id="title" data-style="{{ d.style }}" data-beds="{{ d.beds }}" data-floors="{{ d.floors }}" data-w="{{ d.w }}"
+  data-d="{{ d.d }}">{{ d.name }}</h1>
 <div id="view" data-id="{{ d.id }}"></div>
+<section class="doc plan-facts">
+  <h2>Plan details</h2>
+  <ul>
+    <li>Style: {{ style_en(d.style) }}</li>
+    <li>Plot size: {{ d.w }} x {{ d.d }} ft, {{ d.facing }}-facing</li>
+    <li>Bedrooms: {{ d.beds }} &middot; Floors: {{ d.floors }}</li>
+    <li>Built-up area: about {{ '{:,}'.format(d.built_area) }} sq ft</li>
+    <li>Estimated cost: around Rs {{ '%.1f'|format(d.cost / 100000) }} lakh (rough estimate)</li>
+  </ul>
+  <p>This is a concept plan for ideas and planning. Have a licensed architect or engineer verify it before you build.
+    {% if topic %}Explore more <a href="{{ url_for('topic', slug=topic.slug) }}">{{ topic.title|lower }}</a> or <a
+      href="{{ url_for('designer') }}?style={{ d.style }}&beds={{ d.beds }}&floors={{ d.floors }}&w={{ d.w }}&d={{ d.d }}&facing={{ d.facing }}">customise
+      this plan with the AI designer</a>.{% endif %}</p>
+</section>
 <section>
   <h2 data-i18n="similar">{{ T('similar') }}</h2>
   <div class="grid" id="similar"></div>
@@ -16,19 +36,19 @@
 <script src="{{ url_for('static', filename='js/view.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 <script>
-(function(){
-  var id = document.getElementById('view').dataset.id;
-  fetch('/api/design/' + id).then(function(r){return r.json()}).then(function(data){
-    HD.mountView(document.getElementById('view'), data);
-    var t = document.getElementById('title');
-    function title(){ t.textContent = HD.designName(data.meta); }
-    title(); document.addEventListener('langchange', title);
-  });
-  fetch('/api/similar/' + id).then(function(r){return r.json()}).then(function(s){
-    var el = document.getElementById('similar');
-    HD.renderCards(el, s.items);
-    document.addEventListener('langchange', function(){ HD.renderCards(el, s.items); });
-  });
-})();
+  (function () {
+    var id = document.getElementById('view').dataset.id;
+    fetch('/api/design/' + id).then(function (r) { return r.json() }).then(function (data) {
+      HD.mountView(document.getElementById('view'), data);
+      var t = document.getElementById('title');
+      function title() { t.textContent = HD.designName(data.meta); }
+      title(); document.addEventListener('langchange', title);
+    });
+    fetch('/api/similar/' + id).then(function (r) { return r.json() }).then(function (s) {
+      var el = document.getElementById('similar');
+      HD.renderCards(el, s.items);
+      document.addEventListener('langchange', function () { HD.renderCards(el, s.items); });
+    });
+  })();
 </script>
 {% endblock %}

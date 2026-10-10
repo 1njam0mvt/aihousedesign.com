@@ -3,14 +3,16 @@ import json
 import os
 import re
 import time
+from urllib.parse import urlencode
 from flask import Flask, abort, jsonify, redirect, render_template, request, Response, url_for
 
-from core import catalog, ai, topics
+from core import ai, catalog, seo, topics
 from core.i18n import LANGS, get_dict
 from core.planner import STYLES, FACINGS
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 60 * 60 * 24 * 30  # long browser cache for /static (faster pages)
 EN = get_dict("en")["t"]
 
 # Shown on the legal pages. Set these env vars before going live.
@@ -23,7 +25,9 @@ LEGAL_UPDATED = "9 October 2026"
 def inject():
     return dict(T=lambda k: EN.get(k, k), LANGS=LANGS, TOPICS=topics.TOPICS, STYLE_KEYS=list(STYLES),
                 total=len(catalog.DESIGNS), style_en=lambda k: EN["style." + k],
-                SITE_NAME=SITE_NAME, CONTACT_EMAIL=CONTACT_EMAIL, LEGAL_UPDATED=LEGAL_UPDATED)
+                SITE_NAME=SITE_NAME, CONTACT_EMAIL=CONTACT_EMAIL, LEGAL_UPDATED=LEGAL_UPDATED,
+                SITE_URL=seo.SITE_URL, canonical=seo.SITE_URL + request.path, site_ld=seo.site_ld(SITE_NAME),
+                SEO_LINKS=[(v["nav"], v["path"]) for v in seo.ALL_PAGES.values() if v["kind"] == "landing"])
 
 
 def _int(name, default=None, lo=None, hi=None):
@@ -42,12 +46,13 @@ def _int(name, default=None, lo=None, hi=None):
 @app.route("/")
 def index():
     featured = [catalog.card(d) for d in catalog.DESIGNS[:8]]
-    return render_template("index.html", featured=featured, stats=catalog.stats())
+    return render_template("index.html", featured=featured, stats=catalog.stats(), faqs=seo.HOME_FAQS,
+                           ld=[seo.faq_ld(seo.HOME_FAQS)], explore=[v for v in seo.ALL_PAGES.values()])
 
 
 @app.route("/gallery")
 def gallery():
-    return render_template("gallery.html")
+    return render_template("gallery.html", ld=[seo.breadcrumb([("Home", "/"), ("Gallery", "/gallery")])])
 
 
 @app.route("/design/<int:design_id>")
@@ -55,12 +60,18 @@ def design(design_id):
     d = catalog.BY_ID.get(design_id)
     if not d:
         abort(404)
-    return render_template("design.html", d=catalog.meta(d))
+    m = catalog.meta(d)
+    topic_slug = {"village": "village-house-design", "assam": "assam-type-house-design", "duplex": "duplex-house-design",
+                  "modern": "modern-house-design", "contemporary": "modern-house-design", "minimalist": "minimalist-house-design",
+                  "passive": "passive-house-design", "compact": "small-house-design", "lowcost": "low-cost-village-house-design"}.get(m["style"])
+    t = topics.BY_SLUG.get(topic_slug) if topic_slug else None
+    crumbs = [("Home", "/"), ("Gallery", "/gallery")] + ([(t["title"], f"/topic/{t['slug']}")] if t else []) + [(m["name"], f"/design/{m['id']}")]
+    return render_template("design.html", d=m, topic=t, ld=[seo.breadcrumb(crumbs)])
 
 
 @app.route("/designer")
 def designer():
-    return render_template("designer.html")
+    return render_template("designer.html", ld=[seo.breadcrumb([("Home", "/"), ("AI Designer", "/designer")]), seo.webapp_ld(SITE_NAME)])
 
 
 @app.route("/topic/<slug>")
@@ -69,12 +80,44 @@ def topic(slug):
     if not t:
         abort(404)
     items = _topic_items(t)
-    return render_template("topic.html", t=t, count=len(items), cards=[catalog.card(d) for d in items[:12]])
+    cards = [catalog.card(d) for d in items[:12]]
+    crumbs = [("Home", "/"), ("Gallery", "/gallery"), (t["title"], f"/topic/{slug}")]
+    return render_template("topic.html", t=t, count=len(items), cards=cards,
+                           ld=[seo.breadcrumb(crumbs), seo.itemlist_ld(cards)])
 
 
 def _topic_items(t):
     f = t["filt"]
     return catalog.search(predicate=topics.predicate(t), max_cost=f.get("max_cost"), max_area=f.get("max_area"))
+
+
+# ---------- SEO landing pages and guides (one search intent per URL) ----------
+def _landing_view(key):
+    def view():
+        p = seo.ALL_PAGES[key]
+        cards, count, t = [], 0, None
+        if p.get("topic"):
+            t = topics.BY_SLUG[p["topic"]]
+            items = _topic_items(t)
+            count, cards = len(items), [catalog.card(d) for d in items[:8]]
+        crumbs = [("Home", "/")] + ([("Guides", "/guides/")] if p["kind"] == "guide" else []) + [(p["nav"], p["path"])]
+        ld = [seo.breadcrumb(crumbs)] + ([seo.faq_ld(p["faqs"])] if p.get("faqs") else []) + \
+             ([seo.article_ld(p, SITE_NAME)] if p["kind"] == "guide" else [])
+        related = [(seo.ALL_PAGES[r]["nav"], seo.ALL_PAGES[r]["path"]) for r in p["related"]]
+        return render_template("landing.html", p=p, cards=cards, count=count, topic=t, crumbs=crumbs, ld=ld, related=related,
+                               designer_url=url_for("designer") + "?" + urlencode(p["cta"]))
+    return view
+
+
+for _key, _p in seo.ALL_PAGES.items():
+    app.add_url_rule(_p["path"], endpoint="seo_" + re.sub(r"\W", "_", _key), view_func=_landing_view(_key))
+
+
+@app.route("/guides/")
+def guides():
+    items = [v for v in seo.ALL_PAGES.values() if v["kind"] == "guide"]
+    return render_template("guides.html", items=items,
+                           ld=[seo.breadcrumb([("Home", "/"), ("Guides", "/guides/")])])
 
 
 # ---------- info / legal pages ----------
@@ -115,7 +158,7 @@ def faq():
     ld = {"@context": "https://schema.org", "@type": "FAQPage",
           "mainEntity": [{"@type": "Question", "name": q,
                           "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in FAQS]}
-    return render_template("faq.html", faqs=FAQS, faq_ld=ld)
+    return render_template("faq.html", faqs=FAQS, faq_ld=ld, ld=[seo.breadcrumb([("Home", "/"), ("FAQ", "/faq")])])
 
 
 @app.route("/terms")
@@ -259,16 +302,27 @@ def api_chat():
 # ---------- SEO ----------
 @app.route("/robots.txt")
 def robots():
-    return Response(f"User-agent: *\nAllow: /\nSitemap: {request.url_root}sitemap.xml\n", mimetype="text/plain")
+    # /api/ is left crawlable on purpose: the gallery cards are loaded from it and Google needs it to render the page.
+    return Response(f"User-agent: *\nAllow: /\n\nSitemap: {seo.SITE_URL}/sitemap.xml\n", mimetype="text/plain")
+
+
+@app.route("/favicon.ico")
+def favicon():
+    return redirect(url_for("static", filename="img/favicon.svg"), code=301)
+
+
+_LASTMOD = time.strftime("%Y-%m-%d")
 
 
 @app.route("/sitemap.xml")
 def sitemap():
-    base = request.url_root.rstrip("/")
-    urls = [f"{base}/", f"{base}/gallery", f"{base}/designer"] + [f"{base}/{x}" for x in ("faq", "contact", "privacy", "terms", "cookies")] + [f"{base}/topic/{t['slug']}" for t in topics.TOPICS]
-    urls += [f"{base}/design/{d['id']}" for d in catalog.DESIGNS[:2000]]
-    body = "".join(f"<url><loc>{u}</loc></url>" for u in urls)
-    return Response(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>', mimetype="application/xml")
+    paths = ["/", "/gallery", "/designer", "/guides/", "/faq", "/contact", "/privacy", "/terms", "/cookies"]
+    paths += [v["path"] for v in seo.ALL_PAGES.values()]
+    paths += [f"/topic/{t['slug']}" for t in topics.TOPICS]
+    paths += [f"/design/{d['id']}" for d in catalog.DESIGNS[::4]]  # even sample across every style
+    body = "".join(f"<url><loc>{seo.SITE_URL}{u}</loc><lastmod>{_LASTMOD}</lastmod></url>" for u in paths)
+    return Response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                    + body + '</urlset>', mimetype="application/xml")
 
 
 @app.route("/healthz")

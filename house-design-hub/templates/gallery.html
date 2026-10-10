@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% block title %}House Design Gallery: plans in 2D, 3D and 4D | House Design Hub{% endblock %}
+{% block title %}House Design Gallery: Browse {{ '{:,}'.format(total) }} Plans in 2D, 3D and 4D{% endblock %}
+{% block desc %}Browse and filter {{ '{:,}'.format(total) }} house designs by style, bedrooms, floors and direction.
+Every plan has a 2D floor plan, 3D model and cost estimate.{% endblock %}
 {% block content %}
 <h1 data-i18n="nav_gallery">{{ T('nav_gallery') }}</h1>
 

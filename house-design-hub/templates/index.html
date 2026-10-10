@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block title %}AI House Design: Free 2D Plans, 3D Models and Cost Estimates{% endblock %}
+{% block desc %}Free AI house design: get a 2D floor plan, 3D model and cost estimate in seconds. Browse {{
+'{:,}'.format(stats.total) }} modern, village, duplex and low cost house designs.{% endblock %}
 {% block content %}
 <section class="hero hero-split">
   <div class="hero-copy">
@@ -92,6 +95,36 @@
 <section>
   <h2 data-i18n="nav_gallery">{{ T('nav_gallery') }}</h2>
   <div class="grid" id="featured" data-cards='{{ featured|tojson|forceescape }}'></div>
+</section>
+
+<section class="doc seo-text">
+  <h2>Free AI house design for every plot</h2>
+  <p>{{ SITE_NAME }} is a free AI house design tool and a library of {{ '{:,}'.format(stats.total) }} ready-made house
+    designs. Tell the AI designer your plot size, number of bedrooms, floors and style, and it draws a floor plan with
+    room sizes, a 3D model you can rotate and a rough construction cost in seconds. There is no login and nothing to
+    install.</p>
+  <p>Whether you are looking for modern houses design ideas, a small house design for a compact plot, a simple single
+    floor home design or a low cost village house plan, every design opens in 2D, 3D and as a 4D construction timeline.
+    Compare options, download the plan and take your favourite to an architect.</p>
+</section>
+
+<section>
+  <h2>Explore house design ideas and guides</h2>
+  <div class="explore">
+    {% for e in explore %}
+    <a class="explore-card" href="{{ e.path }}"><strong>{{ e.nav }}</strong><span>{{ e.lead }}</span></a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="doc">
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    {% for q, a in faqs %}<details{% if loop.first %} open{% endif %}>
+      <summary>{{ q }}</summary>
+      <p>{{ a }}</p>
+      </details>{% endfor %}
+  </div>
 </section>
 {% endblock %}
 {% block scripts %}

@@ -1,30 +1,41 @@
 {% extends "base.html" %}
-{% block title %}AI House Designer: generate house plans in 2D, 3D and 4D | House Design Hub{% endblock %}
-{% block desc %}Describe your plot, bedrooms, floors and style and the AI house designer generates a floor plan, 3D model and 4D construction timeline instantly.{% endblock %}
+{% block title %}AI House Designer: Free Floor Plan and 3D Generator{% endblock %}
+{% block desc %}Describe your plot, bedrooms, floors and style and the AI house designer generates a floor plan, 3D
+model and 4D construction timeline instantly.{% endblock %}
 {% block content %}
 <h1 data-i18n="ai_title">{{ T('ai_title') }}</h1>
 <div class="designer-layout">
   <section class="panel chat">
     <div class="chat-log" id="chatLog" aria-live="polite"></div>
     <form id="chatForm" class="chat-form">
-      <input id="chatInput" type="text" maxlength="300" autocomplete="off" data-i18n-ph="ai_ph" placeholder="{{ T('ai_ph') }}">
+      <input id="chatInput" type="text" maxlength="300" autocomplete="off" data-i18n-ph="ai_ph"
+        placeholder="{{ T('ai_ph') }}">
       <button class="btn primary" type="submit" data-i18n="ai_send">{{ T('ai_send') }}</button>
     </form>
     <button class="btn" id="surprise" type="button" data-i18n="ai_surprise">{{ T('ai_surprise') }}</button>
 
     <form id="paramForm" class="params">
       <label><span data-i18n="style">{{ T('style') }}</span>
-        <select name="style"><option value="" data-i18n="all">{{ T('all') }}</option>
-          {% for k in STYLE_KEYS %}<option value="{{ k }}" data-i18n="style.{{ k }}">{{ style_en(k) }}</option>{% endfor %}
+        <select name="style">
+          <option value="" data-i18n="all">{{ T('all') }}</option>
+          {% for k in STYLE_KEYS %}<option value="{{ k }}" data-i18n="style.{{ k }}">{{ style_en(k) }}</option>{% endfor
+          %}
         </select></label>
       <label><span data-i18n="bedrooms">{{ T('bedrooms') }}</span>
-        <select name="beds"><option value="">-</option>{% for n in range(1,7) %}<option>{{ n }}</option>{% endfor %}</select></label>
+        <select name="beds">
+          <option value="">-</option>{% for n in range(1,7) %}<option>{{ n }}</option>{% endfor %}
+        </select></label>
       <label><span data-i18n="floors">{{ T('floors') }}</span>
-        <select name="floors"><option value="">-</option>{% for n in range(1,4) %}<option>{{ n }}</option>{% endfor %}</select></label>
-      <label><span data-i18n="width">{{ T('width') }}</span> <input name="w" type="number" min="15" max="150" placeholder="30"></label>
-      <label><span data-i18n="depth">{{ T('depth') }}</span> <input name="d" type="number" min="20" max="200" placeholder="40"></label>
+        <select name="floors">
+          <option value="">-</option>{% for n in range(1,4) %}<option>{{ n }}</option>{% endfor %}
+        </select></label>
+      <label><span data-i18n="width">{{ T('width') }}</span> <input name="w" type="number" min="15" max="150"
+          placeholder="30"></label>
+      <label><span data-i18n="depth">{{ T('depth') }}</span> <input name="d" type="number" min="20" max="200"
+          placeholder="40"></label>
       <label><span data-i18n="facing">{{ T('facing') }}</span>
-        <select name="facing"><option value="">-</option>
+        <select name="facing">
+          <option value="">-</option>
           {% for f in ['N','E','S','W'] %}<option value="{{ f }}" data-i18n="{{ f }}">{{ T(f) }}</option>{% endfor %}
         </select></label>
       <button class="btn" type="submit" data-i18n="ai_send">{{ T('ai_send') }}</button>

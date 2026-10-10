@@ -4,10 +4,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>{% block title %}House Design Hub: house design ideas, plans in 2D, 3D and 4D{% endblock %}</title>
+  <title>{% block title %}AI House Design: Free House Plans in 2D, 3D and 4D | {{ SITE_NAME }}{% endblock %}</title>
   <meta name="description"
-    content="{% block desc %}Browse thousands of house designs: village, single floor, modern, duplex, Assam type and low cost plans in 2D, 3D and 4D, or generate your own with the AI house designer.{% endblock %}">
+    content="{% block desc %}Free AI house design: generate a floor plan, 3D model and cost estimate in seconds, or browse thousands of modern, village, duplex and low cost house designs.{% endblock %}">
   <meta name="theme-color" content="#0f766e">
+  <link rel="canonical" href="{{ canonical }}">
+  <meta name="robots" content="{{ robots|default('index,follow,max-image-preview:large') }}">
+  <meta property="og:type" content="{% block ogtype %}website{% endblock %}">
+  <meta property="og:site_name" content="{{ SITE_NAME }}">
+  <meta property="og:title" content="{{ self.title()|striptags|trim }}">
+  <meta property="og:description" content="{{ self.desc()|striptags|trim }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:image" content="{{ SITE_URL }}/static/img/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="AI house design: illustrated houses with 2D plans and 3D models">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ self.title()|striptags|trim }}">
+  <meta name="twitter:description" content="{{ self.desc()|striptags|trim }}">
+  <meta name="twitter:image" content="{{ SITE_URL }}/static/img/og-default.png">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon-512.png') }}">
+  <script type="application/ld+json">{{ site_ld|tojson }}</script>
+  {% for item in ld|default([]) %}
+  <script type="application/ld+json">{{ item|tojson }}</script>
+  {% endfor %}
   <script>
     /* apply saved theme before paint to avoid a flash */
     (function () {
@@ -59,6 +80,11 @@
       <div class="foot-links">
         {% for t in TOPICS %}<a href="{{ url_for('topic', slug=t.slug) }}">{{ t.title }}</a>{% endfor %}
       </div>
+      <nav class="foot-seo" aria-label="Popular pages">
+        <strong>Popular</strong>
+        {% for label, path in SEO_LINKS %}<a href="{{ path }}">{{ label }}</a>{% endfor %}
+        <a href="{{ url_for('guides') }}">Guides</a>
+      </nav>
       <nav class="foot-pages" aria-label="Information">
         <a href="{{ url_for('faq') }}" data-i18n="foot_faq">{{ T('foot_faq') }}</a>
         <a href="{{ url_for('contact') }}" data-i18n="foot_contact">{{ T('foot_contact') }}</a>

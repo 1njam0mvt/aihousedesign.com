@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ p.title }}{% endblock %}
+{% block desc %}{{ p.desc }}{% endblock %}
+{% block ogtype %}{{ 'article' if p.kind == 'guide' else 'website' }}{% endblock %}
+{% block content %}
+<nav class="crumbs" aria-label="Breadcrumb">
+    {% for n, u in crumbs %}{% if not loop.last %}<a href="{{ u }}">{{ n }}</a><span aria-hidden="true"> › </span>{%
+    else %}<span aria-current="page">{{ n }}</span>{% endif %}{% endfor %}
+</nav>
+<div class="landing">
+    <article class="doc">
+        <h1>{{ p.h1 }}</h1>
+        <p class="lead">{{ p.lead }}</p>
+        <div class="cta">
+            <a class="btn primary" href="{{ designer_url }}">{{ p.cta_label }}</a>
+            {% if topic %}<a class="btn" href="{{ url_for('gallery') }}?topic={{ topic.slug }}">Browse {{
+                '{:,}'.format(count) }} designs</a>{% endif %}
+        </div>
+        {% for sec in p.sections %}
+        <h2>{{ sec[0] }}</h2>
+        {% for para in sec[1] %}<p>{{ para }}</p>{% endfor %}
+        {% if sec|length > 2 %}<ul>{% for li in sec[2] %}<li>{{ li }}</li>{% endfor %}</ul>{% endif %}
+        {% endfor %}
+    </article>
+
+    {% if cards %}
+    <section>
+        <h2>Sample designs</h2>
+        <div class="grid" id="grid" data-cards='{{ cards|tojson|forceescape }}'></div>
+        <noscript>
+            <ul>{% for c in cards %}<li><a href="{{ url_for('design', design_id=c.id) }}">{{ c.name }}</a></li>{% endfor
+                %}</ul>
+        </noscript>
+        <p class="center"><a class="btn" href="{{ url_for('topic', slug=topic.slug) }}">See all {{ '{:,}'.format(count)
+                }} {{ topic.title|lower }} plans</a></p>
+    </section>
+    {% endif %}
+
+    {% if p.faqs %}
+    <section class="doc">
+        <h2>Frequently asked questions</h2>
+        <div class="faq">
+            {% for q, a in p.faqs %}<details{% if loop.first %} open{% endif %}>
+                <summary>{{ q }}</summary>
+                <p>{{ a }}</p>
+                </details>{% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="doc">
+        <h2>Related pages</h2>
+        <ul class="related">
+            {% for label, path in related %}<li><a href="{{ path }}">{{ label }}</a></li>{% endfor %}
+            <li><a href="{{ url_for('designer') }}">AI house designer</a></li>
+            <li><a href="{{ url_for('gallery') }}">All house designs</a></li>
+        </ul>
+    </section>
+</div>
+{% endblock %}
+{% block scripts %}
+{% if cards %}
+<script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cards.js') }}"></script>
+<script>
+    (function () {
+        var el = document.getElementById('grid');
+        var items = JSON.parse(el.getAttribute('data-cards'));
+        HD.renderCards(el, items);
+        document.addEventListener('langchange', function () { HD.renderCards(el, items); });
+    })();
+</script>
+{% endif %}
+{% endblock %}

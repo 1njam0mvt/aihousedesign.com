@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% set robots = 'noindex,follow' %}
+{% block title %}Page not found | {{ SITE_NAME }}{% endblock %}
 {% block content %}
-<section class="hero"><h1>404</h1><p class="lead">This page does not exist.</p>
-<a class="btn primary" href="{{ url_for('gallery') }}" data-i18n="cta_gallery">{{ T('cta_gallery') }}</a></section>
+<section class="hero">
+    <h1>404</h1>
+    <p class="lead">This page does not exist.</p>
+    <a class="btn primary" href="{{ url_for('gallery') }}" data-i18n="cta_gallery">{{ T('cta_gallery') }}</a>
+</section>
 {% endblock %}

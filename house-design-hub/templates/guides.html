@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}House Design Guides: AI Prompts, Software and How-To{% endblock %}
+{% block desc %}Practical guides on designing a house with AI, writing better prompts and the software architects use.{%
+endblock %}
+{% block content %}
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('index') }}">Home</a><span aria-hidden="true"> ›
+    </span><span aria-current="page">Guides</span></nav>
+<div class="landing">
+    <article class="doc">
+        <h1>House Design Guides</h1>
+        <p class="lead">Short, practical guides for planning your home with AI.</p>
+        <div class="guide-list">
+            {% for g in items %}
+            <a class="guide-card" href="{{ g.path }}">
+                <h2>{{ g.nav }}</h2>
+                <p>{{ g.lead }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </article>
+</div>
+{% endblock %}
