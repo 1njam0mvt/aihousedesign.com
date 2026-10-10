@@ -1,4 +1,4 @@
-"""House Design Hub: Flask app (pages + JSON API)."""
+"""AI Houses Design: Flask app (pages + JSON API)."""
 import json
 import os
 import re
@@ -16,7 +16,7 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 60 * 60 * 24 * 30  # long browser cach
 EN = get_dict("en")["t"]
 
 # Shown on the legal pages. Set these env vars before going live.
-SITE_NAME = os.getenv("SITE_NAME", "House Design Hub")
+SITE_NAME = os.getenv("SITE_NAME", "AI Houses Design")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "hello@example.com")
 LEGAL_UPDATED = "9 October 2026"
 
@@ -122,7 +122,7 @@ def guides():
 
 # ---------- info / legal pages ----------
 FAQS = [
-    ("What is House Design Hub?",
+    (f"What is {SITE_NAME}?",
      "A free library of house design ideas with 2D plans, 3D models and a 4D construction timeline, plus an AI designer "
      "that generates a plan from a short description of your plot, family and budget."),
     ("Are the plans ready to build from?",
@@ -155,10 +155,10 @@ FAQS = [
 
 @app.route("/faq")
 def faq():
-    ld = {"@context": "https://schema.org", "@type": "FAQPage",
-          "mainEntity": [{"@type": "Question", "name": q,
-                          "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in FAQS]}
-    return render_template("faq.html", faqs=FAQS, faq_ld=ld, ld=[seo.breadcrumb([("Home", "/"), ("FAQ", "/faq")])])
+    # One FAQPage for everything visible on the page (a page may only have one FAQPage block).
+    all_faqs = FAQS + [(q, a) for q, a, _ in seo.FAQ_SEARCH]
+    return render_template("faq.html", faqs=FAQS, search_faqs=seo.FAQ_SEARCH,
+                           ld=[seo.breadcrumb([("Home", "/"), ("FAQ", "/faq")]), seo.faq_ld(all_faqs)])
 
 
 @app.route("/terms")

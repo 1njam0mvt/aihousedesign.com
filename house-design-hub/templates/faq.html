@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-{% block title %}FAQ | {{ SITE_NAME }}{% endblock %}
-{% block desc %}Answers about house plans, AI house design, cost estimates, downloads and languages on {{ SITE_NAME
-}}.{% endblock %}
-{% block head %}
-<script type="application/ld+json">{{ faq_ld|tojson }}</script>
-{% endblock %}
+{% block title %}AI House Design FAQ: Free Plans, Architects | {{ SITE_NAME }}{% endblock %}
+{% block desc %}Can AI design a house for free? Answers on AI floor plans, building from AI plans, passive houses,
+architect software, village and small house design.{% endblock %}
 {% block content %}
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('index') }}">Home</a><span aria-hidden="true"> ›
+    </span><span aria-current="page">FAQ</span></nav>
 <article class="doc">
-    <h1>Frequently asked questions</h1>
-    <p class="lead">Quick answers about the plans, the AI designer and your data.</p>
+    <h1>House Design &amp; AI Planning FAQ</h1>
+    <p class="lead">Quick answers about designing a house with AI, the plans and 3D models on {{ SITE_NAME }}, and how
+        houses really get designed and built.</p>
+
+    <h2 id="platform">Using {{ SITE_NAME }}</h2>
     <div class="faq">
         {% for q, a in faqs %}
         <details{% if loop.first %} open{% endif %}>
@@ -17,6 +19,18 @@
             </details>
             {% endfor %}
     </div>
+
+    <h2 id="architecture-ai-design-planning">Architecture, AI Design &amp; Planning FAQ</h2>
+    <div class="faq">
+        {% for q, a, link in search_faqs %}
+        <details id="q{{ loop.index }}">
+            <summary>{{ q }}</summary>
+            <p>{{ a }}</p>
+            <p class="faq-more"><a href="{{ link[1] }}">{{ link[0] }} &rarr;</a></p>
+        </details>
+        {% endfor %}
+    </div>
+
     <p>Still need help? <a href="{{ url_for('contact') }}">Contact us</a>.</p>
 </article>
 {% endblock %}

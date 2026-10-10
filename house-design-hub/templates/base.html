@@ -46,7 +46,7 @@
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="{{ url_for('index') }}"><span class="logo" aria-hidden="true">⌂</span> <span
-          class="brand-text">House Design Hub</span></a>
+          class="brand-text">{{ SITE_NAME }}</span></a>
       <nav class="nav" id="nav">
         <a href="{{ url_for('index') }}" data-i18n="nav_home">{{ T('nav_home') }}</a>
         <a href="{{ url_for('gallery') }}" data-i18n="nav_gallery">{{ T('nav_gallery') }}</a>

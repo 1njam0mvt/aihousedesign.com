@@ -30,6 +30,49 @@ HOME_FAQS = [
      "SketchUp Free, Sweet Home 3D and FreeCAD."),
 ]
 
+# ---------------------------------------------------------------- /faq search-intent section (also in FAQPage JSON-LD)
+# (question, answer, (link label, link path)).  Keep answers to 2-3 sentences: that is the length search engines quote.
+FAQ_SEARCH = [
+    ("Can I design a house for free using AI without logging in?",
+     "Yes. AI Houses Design is a free AI house design generator that needs no account or login: enter your plot size, bedrooms, floors and style and it "
+     "creates a 2D floor plan, a 3D model and a rough cost estimate in seconds. You can generate as many options as you like online, with nothing to install.",
+     ("Try the free AI house design generator", "/free-ai-house-design/")),
+    ("Can AI-generated house plans be used directly for building construction?",
+     "Not directly. An AI house plan is a concept layout for planning and discussion, not a stamped construction drawing. Architects lead the layout and "
+     "appearance, and civil or structural engineers design the structure and foundations, so a licensed professional must review the plan, add the "
+     "electrical and plumbing drawings and prepare the documents your local authority needs before you build.",
+     ("How to design a house with AI, step by step", "/guides/how-to-design-a-house-with-ai/")),
+    ("What is passive house design, and how do you design a passive house?",
+     "Passive house design is an approach to very high energy efficiency that keeps a home comfortable with minimal heating or cooling. To design one, follow "
+     "five principles: airtight construction, continuous high-grade insulation, high-performance windows, thermal-bridge-free detailing and heat recovery "
+     "ventilation. Orient the house and size the windows for your climate, and in hot regions focus on shading, cross-ventilation and insulation to keep heat out.",
+     ("Passive house design plans and principles", "/passive-houses-design/")),
+    ("What software and apps do professional architects use to design houses?",
+     "Most architects use CAD and BIM software and apps such as AutoCAD, Revit and ArchiCAD for plans and construction drawings. They add SketchUp or Rhino "
+     "for 3D models and tools like Lumion, Enscape or V-Ray for realistic visuals. AI house design tools are used early on, to explore layouts quickly before "
+     "detailed drawings are made.",
+     ("What software do architects use?", "/guides/software-architects-use/")),
+    ("What are people who design houses called?",
+     "People who design houses are called architects. Interior designers plan the interiors and finishes, and civil or structural engineers make sure the "
+     "building is safe and stable. In many countries a licensed architect or engineer must sign off the drawings before a house can be built.",
+     ("Who designs houses, and which software they use", "/guides/software-architects-use/")),
+    ("How do you design a low-cost single-floor village house?",
+     "Keep the footprint a simple rectangle so beams, walls and roof stay short and cheap, and build on one floor to avoid stairs and heavy columns. Use locally "
+     "available materials, choose load-bearing brick masonry where it suits the plot, and place windows on opposite walls for cross-ventilation. Add a front "
+     "verandah and keep corridors minimal so most of your carpet area is usable room space.",
+     ("Indian village house design plans", "/indian-village-house-design/")),
+    ("How do you design small or tiny houses to maximize space?",
+     "Use a simple compact footprint, combine living, dining and kitchen into one open space and avoid long corridors. Build up with a second floor or loft "
+     "instead of out, and add built-in storage and furniture that does double duty. Large windows placed opposite each other bring in daylight and "
+     "cross-ventilation so small rooms feel bigger.",
+     ("Small houses design for small plots", "/small-houses-design/")),
+    ("What is the difference between house design and home design?",
+     "The terms are used interchangeably, but house design usually means the building itself: its floor layout, structure and exterior elevation. Home design "
+     "often goes further to include interiors such as furniture, colours and decor. A 3D house design focuses on the shape and layout of the building, which is "
+     "what you see in the 3D models on this site.",
+     ("House front elevation and 3D exterior design", "/elevation-design/")),
+]
+
 # ---------------------------------------------------------------- landing pages (one search intent per URL)
 # cta = parameters for a pre-filled AI designer link; topic = existing /topic/<slug> collection shown as samples
 LANDING = {

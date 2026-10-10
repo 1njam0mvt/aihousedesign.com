@@ -1383,3 +1383,23 @@ a.feat:hover,
     columns: 1;
   }
 }
+
+.faq .faq-more {
+  margin: -6px 0 14px;
+  font-size: .92rem;
+}
+
+.faq .faq-more a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.faq .faq-more a:hover {
+  text-decoration: underline;
+}
+
+.faq details[id],
+.doc h2[id] {
+  scroll-margin-top: 78px;
+}
