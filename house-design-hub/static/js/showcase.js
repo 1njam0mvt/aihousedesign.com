@@ -189,7 +189,7 @@
     HD.renderShowcase = function (scope) {
         scope = scope || document;
         scope.querySelectorAll('[data-art]').forEach(function (el) {
-            if (el.dataset.done) return;
+            if (el.dataset.done || el.querySelector('img')) return;
             var k = el.getAttribute('data-art');
             if (k === 'plan') el.innerHTML = planArt();
             else if (k === 'cube') el.innerHTML = cubeArt();

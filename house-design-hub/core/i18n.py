@@ -136,8 +136,8 @@ _UI = {
     "road": ("Road", "सड़क", "Calle", "Route", "الشارع", "রাস্তা", "道路"),
     "foot_faq": ("FAQ", "अक्सर पूछे सवाल", "Preguntas frecuentes", "FAQ", "الأسئلة الشائعة", "প্রশ্নোত্তর", "常见问题"),
     "foot_contact": ("Contact", "संपर्क", "Contacto", "Contact", "اتصل بنا", "যোগাযোগ", "联系我们"),
-    "foot_terms": ("Terms", "नियम और शर्तें", "Términos", "Conditions", "الشروط", "শর্তাবলী", "服务条款"),
-    "foot_privacy": ("Privacy", "गोपनीयता", "Privacidad", "Confidentialité", "الخصوصية", "গোপনীয়তা", "隐私政策"),
+    "foot_terms": ("Terms of Service", "नियम और शर्तें", "Términos", "Conditions", "الشروط", "শর্তাবলী", "服务条款"),
+    "foot_privacy": ("Privacy Policy", "गोपनीयता", "Privacidad", "Confidentialité", "الخصوصية", "গোপনীয়তা", "隐私政策"),
     "foot_cookies": ("Cookies", "कुकीज़", "Cookies", "Cookies", "ملفات تعريف الارتباط", "কুকিজ", "Cookie 政策"),
 }
 

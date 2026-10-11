@@ -797,41 +797,10 @@ a:focus-visible {
 /* ---------- footer ---------- */
 .site-footer {
   margin-top: 40px;
-  padding: 22px 0 36px;
+  padding: 36px 0 32px;
   border-top: 1px solid var(--line);
   background: var(--surface);
   font-size: .9rem;
-}
-
-.foot-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 16px;
-  margin-bottom: 10px;
-}
-
-.foot-links a {
-  text-decoration: none;
-}
-
-/* ---------- footer page links ---------- */
-.foot-pages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 16px;
-  margin: 0 0 10px;
-  padding-top: 10px;
-  border-top: 1px dashed var(--line);
-}
-
-.foot-pages a {
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.foot-pages a:hover {
-  color: var(--brand);
-  text-decoration: underline;
 }
 
 /* ---------- info / legal pages ---------- */
@@ -1356,28 +1325,6 @@ a.feat:hover,
   margin-top: 24px;
 }
 
-.foot-seo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 16px;
-  margin: 0 0 6px;
-  font-size: .92rem;
-}
-
-.foot-seo strong {
-  color: var(--ink);
-}
-
-.foot-seo a {
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.foot-seo a:hover {
-  color: var(--brand);
-  text-decoration: underline;
-}
-
 @media (max-width: 600px) {
   .related {
     columns: 1;
@@ -1402,4 +1349,103 @@ a.feat:hover,
 .faq details[id],
 .doc h2[id] {
   scroll-margin-top: 78px;
+}
+
+
+/* ---------- footer: 4-column grid ---------- */
+.foot-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1.2fr 1.2fr 1fr;
+  gap: 28px 36px;
+}
+
+.foot-title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.foot-sum {
+  margin: 0 0 14px;
+  color: var(--muted);
+  max-width: 28ch;
+}
+
+.foot-copy {
+  margin: 0;
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+.foot-h {
+  margin: 0 0 12px;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.foot-col ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.foot-col a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.foot-col a:hover,
+.foot-col a:focus-visible {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+.foot-disclaimer {
+  margin: 28px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .foot-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .foot-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .foot-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- real photos / renders: drop-in for the SVG art ---------- */
+.tile .art img,
+.show-card .art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card .thumb.has-img {
+  padding: 0;
+}
+
+.card .thumb.has-img img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }

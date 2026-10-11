@@ -17,7 +17,8 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
   <div class="collage">
     {% for k, cls in (('modern', 't1'), ('village', 't2'), ('villa', 't3'), ('duplex', 't4')) %}
     <a class="tile {{ cls }}" href="{{ url_for('gallery') }}?style={{ k }}">
-      <div class="art" data-art="{{ k }}" {% if k=='duplex' %} data-dusk="1" {% endif %}></div>
+      <div class="art" data-art="{{ k }}" {% if k=='duplex' %} data-dusk="1" {% endif %}>{{ art_img(k, hero=True) }}
+      </div>
       <span class="tag" data-i18n="style.{{ k }}">{{ style_en(k) }}</span>
     </a>
     {% endfor %}
@@ -78,7 +79,7 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
   <div class="showcase">
     {% for k in STYLE_KEYS %}
     <a class="show-card" href="{{ url_for('gallery') }}?style={{ k }}">
-      <div class="art" data-art="{{ k }}"></div>
+      <div class="art" data-art="{{ k }}">{{ art_img(k) }}</div>
       <span data-i18n="style.{{ k }}">{{ style_en(k) }}</span>
     </a>
     {% endfor %}

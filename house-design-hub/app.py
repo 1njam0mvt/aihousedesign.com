@@ -7,6 +7,7 @@ import threading
 import time
 from email.message import EmailMessage
 from urllib.parse import urlencode
+from markupsafe import Markup, escape
 from flask import Flask, abort, jsonify, redirect, render_template, request, Response, url_for
 
 from core import ai, catalog, seo, topics
@@ -24,11 +25,40 @@ CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "hello@aihousesdesign.com")  # create
 LEGAL_UPDATED = "9 October 2026"
 
 
+# ---------- real images: drop .webp files in static/img/gallery/<style>.webp or static/img/designs/<id | style-Nbhk>.webp ----------
+_img_cache = {"t": 0, "data": {"gallery": {}, "designs": {}}}
+
+
+def img_manifest():
+    """Which real images exist (re-scanned at most once a minute). Missing images fall back to the SVG art automatically."""
+    if time.time() - _img_cache["t"] > 60:
+        root = os.path.join(app.static_folder, "img")
+        data = {}
+        for folder in ("gallery", "designs"):
+            try:
+                data[folder] = {f[:-5]: 1 for f in os.listdir(os.path.join(root, folder)) if f.lower().endswith(".webp")}
+            except OSError:
+                data[folder] = {}
+        _img_cache.update(t=time.time(), data=data)
+    return _img_cache["data"]
+
+
+def art_img(style, hero=False):
+    """<img> for a style picture if /static/img/gallery/<style>.webp exists, else empty (the page draws the SVG instead)."""
+    if style not in img_manifest()["gallery"]:
+        return ""
+    alt = f"{EN['style.' + style]} house design: front elevation and 3D exterior view"
+    src = url_for("static", filename=f"img/gallery/{style}.webp")
+    load = 'loading="eager" fetchpriority="high"' if hero else 'loading="lazy"'
+    return Markup(f'<img src="{escape(src)}" alt="{escape(alt)}" width="400" height="300" {load} decoding="async">')
+
+
 @app.context_processor
 def inject():
     return dict(T=lambda k: EN.get(k, k), LANGS=LANGS, TOPICS=topics.TOPICS, STYLE_KEYS=list(STYLES),
                 total=len(catalog.DESIGNS), style_en=lambda k: EN["style." + k],
                 SITE_NAME=SITE_NAME, CONTACT_EMAIL=CONTACT_EMAIL, LEGAL_UPDATED=LEGAL_UPDATED,
+                YEAR=time.localtime().tm_year, IMG=img_manifest(), art_img=art_img,
                 SITE_URL=seo.SITE_URL, canonical=seo.SITE_URL + request.path, site_ld=seo.site_ld(SITE_NAME),
                 SEO_LINKS=[(v["nav"], v["path"]) for v in seo.ALL_PAGES.values() if v["kind"] == "landing"])
 
@@ -388,3 +418,4 @@ def healthz():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=os.getenv("FLASK_DEBUG") == "1")
+    

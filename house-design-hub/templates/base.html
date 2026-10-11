@@ -10,6 +10,7 @@
   <meta name="theme-color" content="#0f766e">
   <meta name="google-site-verification" content="fCLh1uNDUo7OuJLkJLKrw1Lq1icU77w4IEu3rPpxOZ8">
   <meta name="msvalidate.01" content="1545E47A6B145F28F5BCD1CD76F2664D">
+  <script>window.HD_IMG = {{ IMG | tojson }};</script>
   <link rel="canonical" href="{{ canonical }}">
   <meta name="robots" content="{{ robots|default('index,follow,max-image-preview:large') }}">
   <meta property="og:type" content="{% block ogtype %}website{% endblock %}">
@@ -87,22 +88,39 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <div class="foot-links">
-        {% for t in TOPICS %}<a href="{{ url_for('topic', slug=t.slug) }}">{{ t.title }}</a>{% endfor %}
+      <div class="foot-grid">
+        <div class="foot-col foot-brand">
+          <p class="foot-title">{{ SITE_NAME }}</p>
+          <p class="foot-sum">Free 2D, 3D, and AI-powered residential house design concepts.</p>
+          <p class="foot-copy">&copy; {{ YEAR }} {{ SITE_NAME }}. All rights reserved.</p>
+        </div>
+        <nav class="foot-col" aria-label="House collections">
+          <h2 class="foot-h" data-i18n="collections">{{ T('collections') }}</h2>
+          <ul>
+            {% for t in TOPICS %}<li><a href="{{ url_for('topic', slug=t.slug) }}">{{ t.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-label="Tools and guides">
+          <h2 class="foot-h">Tools &amp; Guides</h2>
+          <ul>
+            {% for label, path in SEO_LINKS %}<li><a href="{{ path }}">{{ label }}</a></li>
+            {% endfor %}
+            <li><a href="{{ url_for('guides') }}">Guides &amp; Prompts</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-label="Company and legal">
+          <h2 class="foot-h">Company &amp; Legal</h2>
+          <ul>
+            <li><a href="{{ url_for('faq') }}" data-i18n="foot_faq">{{ T('foot_faq') }}</a></li>
+            <li><a href="{{ url_for('contact') }}" data-i18n="foot_contact">{{ T('foot_contact') }}</a></li>
+            <li><a href="{{ url_for('terms') }}" data-i18n="foot_terms">{{ T('foot_terms') }}</a></li>
+            <li><a href="{{ url_for('privacy') }}" data-i18n="foot_privacy">{{ T('foot_privacy') }}</a></li>
+            <li><a href="{{ url_for('cookies') }}" data-i18n="foot_cookies">{{ T('foot_cookies') }}</a></li>
+          </ul>
+        </nav>
       </div>
-      <nav class="foot-seo" aria-label="Popular pages">
-        <strong>Popular</strong>
-        {% for label, path in SEO_LINKS %}<a href="{{ path }}">{{ label }}</a>{% endfor %}
-        <a href="{{ url_for('guides') }}">Guides</a>
-      </nav>
-      <nav class="foot-pages" aria-label="Information">
-        <a href="{{ url_for('faq') }}" data-i18n="foot_faq">{{ T('foot_faq') }}</a>
-        <a href="{{ url_for('contact') }}" data-i18n="foot_contact">{{ T('foot_contact') }}</a>
-        <a href="{{ url_for('terms') }}" data-i18n="foot_terms">{{ T('foot_terms') }}</a>
-        <a href="{{ url_for('privacy') }}" data-i18n="foot_privacy">{{ T('foot_privacy') }}</a>
-        <a href="{{ url_for('cookies') }}" data-i18n="foot_cookies">{{ T('foot_cookies') }}</a>
-      </nav>
-      <p class="muted" data-i18n="footer">{{ T('footer') }}</p>
+      <p class="foot-disclaimer" data-i18n="footer">{{ T('footer') }}</p>
     </div>
   </footer>
 
