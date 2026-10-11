@@ -7,7 +7,8 @@
   <title>{% block title %}AI House Design: Free House Plans in 2D, 3D and 4D | {{ SITE_NAME }}{% endblock %}</title>
   <meta name="description"
     content="{% block desc %}Free AI house design: generate a floor plan, 3D model and cost estimate in seconds, or browse thousands of modern, village, duplex and low cost house designs.{% endblock %}">
-  <meta name="theme-color" content="#0f766e">
+  <meta name="theme-color" content="#235d42" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14262a" media="(prefers-color-scheme: dark)">
   <meta name="google-site-verification" content="fCLh1uNDUo7OuJLkJLKrw1Lq1icU77w4IEu3rPpxOZ8">
   <meta name="msvalidate.01" content="1545E47A6B145F28F5BCD1CD76F2664D">
   <script>window.HD_IMG = {{ IMG | tojson }};</script>
@@ -26,8 +27,13 @@
   <meta name="twitter:title" content="{{ self.title()|striptags|trim }}">
   <meta name="twitter:description" content="{{ self.desc()|striptags|trim }}">
   <meta name="twitter:image" content="{{ SITE_URL }}/static/img/og-default.png">
-  <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon-512.png') }}">
+  <link rel="icon" href="{{ url_for('favicon') }}" sizes="48x48">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon-96x96.png') }}" type="image/png" sizes="96x96">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon-32x32.png') }}" type="image/png" sizes="32x32">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon-16x16.png') }}" type="image/png" sizes="16x16">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}" sizes="180x180">
+  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
   <script type="application/ld+json">{{ site_ld|tojson }}</script>
   {% for item in ld|default([]) %}
   <script type="application/ld+json">{{ item|tojson }}</script>

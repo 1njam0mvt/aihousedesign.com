@@ -8,7 +8,7 @@ import time
 from email.message import EmailMessage
 from urllib.parse import urlencode
 from markupsafe import Markup, escape
-from flask import Flask, abort, jsonify, redirect, render_template, request, Response, url_for
+from flask import Flask, send_from_directory, abort, jsonify, redirect, render_template, request, Response, url_for
 
 from core import ai, catalog, seo, topics
 from core.i18n import LANGS, get_dict
@@ -370,7 +370,36 @@ def robots():
 
 @app.route("/favicon.ico")
 def favicon():
-    return redirect(url_for("static", filename="img/favicon.svg"), code=301)
+    # real multi-size .ico (16/32/48) at the root: Google and older browsers request exactly this URL
+    return send_from_directory(os.path.join(app.static_folder, "img"), "favicon.ico", mimetype="image/x-icon")
+
+
+@app.route("/apple-touch-icon.png")
+@app.route("/apple-touch-icon-precomposed.png")
+def apple_touch_icon():
+    # iOS Safari asks for this at the root even when a <link> exists
+    return send_from_directory(os.path.join(app.static_folder, "img"), "apple-touch-icon.png", mimetype="image/png")
+
+
+@app.route("/manifest.json")
+@app.route("/manifest.webmanifest")
+@app.route("/site.webmanifest")  # registered first, so url_for('webmanifest') gives this one
+def webmanifest():
+    """Web app manifest, built in code (no file to misplace). Icons live in static/img/."""
+    icon = lambda name, size, purpose: {"src": url_for("static", filename=f"img/{name}"), "sizes": f"{size}x{size}",
+                                        "type": "image/png", "purpose": purpose}
+    data = {
+        "name": SITE_NAME, "short_name": "AI Houses",
+        "description": "Free AI house design: 2D floor plans, 3D models and cost estimates in seconds.",
+        "id": "/", "start_url": "/", "scope": "/", "display": "standalone", "orientation": "portrait-primary",
+        "background_color": "#14262a", "theme_color": "#235d42",
+        "categories": ["design", "productivity", "lifestyle"],
+        "icons": [icon("icon-192.png", 192, "any"), icon("icon-256.png", 256, "any"),
+                  icon("icon-512.png", 512, "any"), icon("icon-maskable-512.png", 512, "maskable")],
+    }
+    resp = Response(json.dumps(data, indent=2), mimetype="application/manifest+json")
+    resp.headers["Cache-Control"] = "public, max-age=3600"
+    return resp
 
 
 def _lastmod():
