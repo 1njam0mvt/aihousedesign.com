@@ -42,7 +42,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-47YFCBR5Z2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-47YFCBR5Z2');
   </script>
@@ -62,7 +62,8 @@
 <body>
   <header class="site-header">
     <div class="wrap bar">
-      <a class="brand" href="{{ url_for('index') }}"><span class="logo" aria-hidden="true">⌂</span> <span
+      <a class="brand" href="{{ url_for('index') }}"><img class="logo"
+          src="{{ url_for('static', filename='img/favicon-96x96.png') }}" alt="" width="34" height="34"> <span
           class="brand-text">{{ SITE_NAME }}</span></a>
       <nav class="nav" id="nav">
         <a href="{{ url_for('index') }}" data-i18n="nav_home">{{ T('nav_home') }}</a>
@@ -95,11 +96,6 @@
   <footer class="site-footer">
     <div class="wrap">
       <div class="foot-grid">
-        <div class="foot-col foot-brand">
-          <p class="foot-title">{{ SITE_NAME }}</p>
-          <p class="foot-sum">Free 2D, 3D, and AI-powered residential house design concepts.</p>
-          <p class="foot-copy">&copy; {{ YEAR }} {{ SITE_NAME }}. All rights reserved.</p>
-        </div>
         <nav class="foot-col" aria-label="House collections">
           <h2 class="foot-h" data-i18n="collections">{{ T('collections') }}</h2>
           <ul>
@@ -125,8 +121,20 @@
             <li><a href="{{ url_for('cookies') }}" data-i18n="foot_cookies">{{ T('foot_cookies') }}</a></li>
           </ul>
         </nav>
+        <div class="foot-col foot-brand">
+          <a class="foot-logo" href="{{ url_for('index') }}" aria-label="{{ SITE_NAME }} home">
+            <img src="{{ url_for('static', filename='img/favicon-96x96.png') }}" alt="" width="44" height="44"
+              loading="lazy">
+            <span>{{ SITE_NAME }}</span>
+          </a>
+          <p class="foot-tagline" lang="en" dir="ltr">Empowering your dream home journey with instant 2D/3D layouts and
+            AI-powered architectural concepts.</p>
+        </div>
       </div>
-      <p class="foot-disclaimer" data-i18n="footer">{{ T('footer') }}</p>
+      <div class="foot-bottom">
+        <p class="foot-disclaimer" data-i18n="footer">{{ T('footer') }}</p>
+        <p class="foot-copy" lang="en" dir="ltr">&copy; {{ YEAR }} {{ SITE_NAME }}. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 

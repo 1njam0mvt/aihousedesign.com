@@ -150,13 +150,11 @@ a {
 }
 
 .logo {
-  display: inline-grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--brand);
-  color: var(--brand-ink);
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  object-fit: contain;
 }
 
 .nav {
@@ -1352,30 +1350,12 @@ a.feat:hover,
 }
 
 
-/* ---------- footer: 4-column grid ---------- */
+/* ---------- footer: link columns + brand block on the right + bottom legal row ---------- */
 .foot-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1.2fr 1.2fr 1fr;
-  gap: 28px 36px;
-}
-
-.foot-title {
-  margin: 0 0 8px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.foot-sum {
-  margin: 0 0 14px;
-  color: var(--muted);
-  max-width: 28ch;
-}
-
-.foot-copy {
-  margin: 0;
-  font-size: .85rem;
-  color: var(--muted);
+  grid-template-columns: 1.2fr 1.2fr 1fr 1.3fr;
+  gap: 32px 36px;
+  align-items: start;
 }
 
 .foot-h {
@@ -1406,27 +1386,85 @@ a.feat:hover,
   text-decoration: underline;
 }
 
-.foot-disclaimer {
-  margin: 28px 0 0;
+/* brand block: far right, sitting on the bottom edge of the column row */
+.foot-brand {
+  align-self: end;
+  justify-self: end;
+  max-width: 300px;
+}
+
+.foot-col a.foot-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.foot-logo img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+}
+
+.foot-tagline {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* very bottom: legal notice, then the copyright line */
+.foot-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 32px;
+  margin-top: 32px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
+}
+
+.foot-disclaimer {
+  flex: 1 1 420px;
+  margin: 0;
   font-size: .8rem;
   color: var(--muted);
 }
 
+.foot-copy {
+  margin: 0;
+  font-size: .85rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
 @media (max-width: 900px) {
+
+  /* 2 columns: collections | tools, then company | brand (brand stays bottom-right) */
   .foot-grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .foot-brand {
-    grid-column: 1 / -1;
   }
 }
 
 @media (max-width: 520px) {
+
+  /* everything stacks; brand block comes last, then the legal row */
   .foot-grid {
     grid-template-columns: 1fr;
+  }
+
+  .foot-brand {
+    justify-self: start;
+    max-width: none;
+  }
+
+  .foot-copy {
+    white-space: normal;
   }
 }
 
