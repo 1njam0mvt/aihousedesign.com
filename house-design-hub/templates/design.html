@@ -9,7 +9,13 @@ if d.floors > 1 }}{% endblock %}
     href="{{ url_for('topic', slug=topic.slug) }}">{{ topic.title }}</a>{% endif %}</nav>
 <h1 id="title" data-style="{{ d.style }}" data-beds="{{ d.beds }}" data-floors="{{ d.floors }}" data-w="{{ d.w }}"
   data-d="{{ d.d }}">{{ d.name }}</h1>
+
+<!-- Architectural Cinema & Blueprint Scrubber Engine -->
+<div id="videoExpMaster" style="margin-bottom: 24px;"></div>
+
+<!-- 2D CAD & 3D Interactive Model -->
 <div id="view" data-id="{{ d.id }}"></div>
+
 <section class="doc plan-facts">
   <h2>Plan details</h2>
   <ul>
@@ -33,6 +39,7 @@ if d.floors > 1 }}{% endblock %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/viewer3d.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cinematic.js') }}"></script>
 <script src="{{ url_for('static', filename='js/view.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 <script>
@@ -43,6 +50,11 @@ if d.floors > 1 }}{% endblock %}
       var t = document.getElementById('title');
       function title() { t.textContent = HD.designName(data.meta); }
       title(); document.addEventListener('langchange', title);
+
+      var mount = document.getElementById("videoExpMaster");
+      if (mount && window.HD && window.HD.initMasterExperience) {
+        window.HD.initMasterExperience(mount);
+      }
     });
     fetch('/api/similar/' + id).then(function (r) { return r.json() }).then(function (s) {
       var el = document.getElementById('similar');

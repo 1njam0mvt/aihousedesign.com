@@ -25,6 +25,14 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
   </div>
 </section>
 
+<section class="cinema-home">
+  <h2>See your home come to life</h2>
+  <p class="muted">Scrub from blueprint to finished home, peel back the six roof layers, slide from morning to night, or
+    take
+    a cinematic walkthrough, room by room.</p>
+  <div id="videoExpMaster"></div>
+</section>
+
 <section>
   <h2>2D · 3D · 4D · AI</h2>
   <div class="features">
@@ -132,11 +140,14 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
 <script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 <script src="{{ url_for('static', filename='js/showcase.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cinematic.js') }}"></script>
 <script>
   (function () {
     var el = document.getElementById('featured');
     var items = JSON.parse(el.getAttribute('data-cards'));
     HD.renderCards(el, items);
+    var mount = document.getElementById('videoExpMaster');
+    if (mount && HD.initMasterExperience) HD.initMasterExperience(mount);
     document.addEventListener('langchange', function () { HD.renderCards(el, items); });
   })();
 </script>

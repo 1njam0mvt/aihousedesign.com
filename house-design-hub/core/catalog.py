@@ -50,12 +50,51 @@ def plan_for(design_id):
 def meta(d):
     p = plan_for(d["id"])
     fl = "Single-Floor" if d["floors"] == 1 else f"{d['floors']}-Floor"
+    beds = d["beds"]
+
+    # Blueprint-to-Reality Stages
+    stages = [
+        {"id": "blueprint", "num": "STAGE 00", "label_key": "stage_blueprint", "tag": "CAD WIREFRAME", "desc": "Every home starts as lines on paper. Scroll to watch this one come to life."},
+        {"id": "foundation", "num": "STAGE 01", "label_key": "stage_foundation", "tag": "SOLID FOOTING", "desc": "Poured footers and a sealed crawl space set the stage for what goes up."},
+        {"id": "framing", "num": "STAGE 02", "label_key": "stage_framing", "tag": "TIMBER SKELETON", "desc": "Every wall, floor, joist and truss built to blueprint plan. Solid lumber as good as it gets."},
+        {"id": "driedin", "num": "STAGE 03", "label_key": "stage_driedin", "tag": "WEATHER SHIELD", "desc": "Weather-tight. Fully house-wrapped and roof-sealed before the weather gets a say."},
+        {"id": "exterior", "num": "STAGE 04", "label_key": "stage_exterior", "tag": "FACADE & STONE", "desc": "Architectural shingles, board-and-batten siding and hand-laid stone."},
+        {"id": "home", "num": "STAGE 05", "label_key": "stage_complete", "tag": "COMPLETED RESIDENCE", "desc": f"4,200 sq ft, {beds} bedrooms, {d['floors']} floors. Built to picture."}
+    ]
+
+    # Six Layers Architectural X-Ray
+    layers = [
+        {"id": "01", "name": "ROOF DECK", "spec": "5/8\" or 3/4\" exterior-grade plywood/OSB. Inspected and structurally verified."},
+        {"id": "02", "name": "DRIP EDGE", "spec": "Corrosion-resistant eaves & rakes edging to direct runoff clear of fascia."},
+        {"id": "03", "name": "ICE & WATER SHIELD", "spec": "Self-adhering waterproof membrane along eaves, valleys, and joints."},
+        {"id": "04", "name": "SYNTHETIC UNDERLAYMENT", "spec": "High-traction woven polymer air and moisture barrier with 4\" overlapping seams."},
+        {"id": "05", "name": "ARCHITECTURAL SHINGLES", "spec": "Multi-layered fiberglass dimensional asphalt shingles with Class-A fire rating."},
+        {"id": "06", "name": "RIDGE VENT & CAP", "spec": "Continuous passive exhaust ventilation balancing ridge airflow and attic temperature."}
+    ]
+
+    # Film Walkthrough Sequences
+    walkthrough = [
+        {"name": "EXTERIOR", "sub": "Architectural Facade & Landscaping", "lens": "24mm F/2.8", "iso": "ISO 100", "tc": "00:00:14:02"},
+        {"name": "FOYER", "sub": "Grand High-Ceiling Reception Gallery", "lens": "35mm F/1.8", "iso": "ISO 200", "tc": "00:01:04:18"},
+        {"name": "DINING ROOM", "sub": "Coffered Ceiling Formal Dining Space", "lens": "50mm F/1.4", "iso": "ISO 320", "tc": "00:02:18:09"},
+        {"name": "KITCHEN", "sub": "Chef's Island with Quartz Countertops", "lens": "35mm F/1.8", "iso": "ISO 400", "tc": "00:03:45:12"},
+        {"name": "LOWER LEVEL", "sub": "Entertainment Billiards & Private Wet Bar", "lens": "24mm F/2.8", "iso": "ISO 500", "tc": "00:04:30:20"},
+        {"name": "GREAT ROOM", "sub": "Double-Height Natural Stone Fireplace", "lens": "50mm F/1.4", "iso": "ISO 250", "tc": "00:05:12:04"},
+        {"name": "HOME OFFICE", "sub": "Bespoke Built-in Oak Shelving & Library", "lens": "35mm F/2.0", "iso": "ISO 200", "tc": "00:06:05:15"},
+        {"name": "PRIMARY SUITE", "sub": "Master Retreat with Private Balcony", "lens": "50mm F/1.4", "iso": "ISO 160", "tc": "00:07:22:19"},
+        {"name": "PRIMARY BATH", "sub": "Freestanding Soaking Tub & Dual Vanities", "lens": "24mm F/2.8", "iso": "ISO 320", "tc": "00:08:40:02"},
+        {"name": "BACKYARD", "sub": "Outdoor Pool, Stone Patio & Covered Verandah", "lens": "18mm F/2.8", "iso": "ISO 100", "tc": "00:09:55:23"}
+    ]
+
     return {
         "id": d["id"], "style": d["style"], "beds": d["beds"], "floors": d["floors"],
         "w": d["w"], "d": d["d"], "variant": d["variant"] + 1, "facing": d["facing"],
         "name": f"{_label(d['style'])} {d['beds']} BHK {fl} House {d['w']}x{d['d']} ft "
                 f"({_facing_word(d['facing'])}-facing) Plan {d['variant'] + 1}",
         "built_area": p["built_area"], "cost": p["cost"], "dims": DIMS,
+        "stages": stages,
+        "layers": layers,
+        "walkthrough": walkthrough
     }
 
 

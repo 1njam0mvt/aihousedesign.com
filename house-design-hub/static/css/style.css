@@ -1487,3 +1487,587 @@ a.feat:hover,
   aspect-ratio: 4 / 3;
   object-fit: cover;
 }
+
+/* ==========================================================================
+   VIDEO-INSPIRED MASTER ARCHITECTURAL EXPERIENCE
+   ========================================================================== */
+
+.video-exp-wrapper {
+  background: #090e11;
+  color: #e6f1f0;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  margin-bottom: 28px;
+  font-family: inherit;
+}
+
+.video-exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background: #0f1519;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.video-exp-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.exp-tab-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exp-tab-btn:hover {
+  color: #fff;
+  border-color: #2dd4bf;
+}
+
+.exp-tab-btn.active {
+  background: #2dd4bf;
+  color: #062a27;
+  border-color: #2dd4bf;
+  box-shadow: 0 0 16px rgba(45, 212, 191, 0.4);
+}
+
+.exp-badge-info {
+  font-family: ui-monospace, monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.video-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 420px;
+  background: #040608;
+  overflow: hidden;
+  user-select: none;
+}
+
+.viewport-layer {
+  position: absolute;
+  inset: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.viewport-layer.active {
+  display: block;
+}
+
+.screen-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.hud-top-bar,
+.hud-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  letter-spacing: 0.12em;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.hud-rec-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff334b;
+  font-weight: 800;
+  font-size: 0.82rem;
+}
+
+.rec-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff334b;
+  box-shadow: 0 0 10px #ff334b;
+  animation: rec-blink 1.2s infinite ease-in-out;
+}
+
+@keyframes rec-blink {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.2;
+    transform: scale(0.85);
+  }
+}
+
+.hud-timecode {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.hud-vu-meters {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vu-bar {
+  width: 5px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.vu-bar span {
+  width: 100%;
+  background: #2dd4bf;
+}
+
+.vu-label {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: 4px;
+}
+
+.hud-reticle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
+
+.reticle-box {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  position: relative;
+}
+
+.reticle-box::before,
+.reticle-box::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.reticle-box::before {
+  top: 50%;
+  left: -6px;
+  right: -6px;
+  height: 1px;
+}
+
+.reticle-box::after {
+  left: 50%;
+  top: -6px;
+  bottom: -6px;
+  width: 1px;
+}
+
+.hud-big-title {
+  font-size: clamp(1.4rem, 3.5vw, 2.3rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #fff;
+  line-height: 1;
+}
+
+.hud-sub-title {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 4px;
+  font-family: inherit;
+}
+
+.hud-tech-specs {
+  text-align: right;
+  font-size: 0.82rem;
+}
+
+.hud-accent-tag {
+  color: #2dd4bf;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.bp-stage-img,
+.film-room-visual {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-image: url('/static/img/cinema-house.svg');
+  transition: filter 0.4s ease;
+}
+
+.bp-wireframe-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.bp-stage-card {
+  position: absolute;
+  left: 28px;
+  bottom: 110px;
+  max-width: 380px;
+  background: rgba(15, 21, 25, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 18px 22px;
+  z-index: 10;
+}
+
+.bp-stage-pill {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #2dd4bf;
+  color: #062a27;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.bp-stage-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.bp-stage-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.45;
+}
+
+.xray-split-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  height: 100%;
+  background: #090e11;
+  padding: 24px 32px;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 820px) {
+  .xray-split-layout {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}
+
+.xray-kicker {
+  font-family: ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: #2dd4bf;
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
+}
+
+.xray-heading {
+  margin: 0 0 16px;
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.xray-layer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.xray-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.xray-item:hover,
+.xray-item.active {
+  background: rgba(45, 212, 191, 0.12);
+  border-color: #2dd4bf;
+}
+
+.xray-item-num {
+  font-family: ui-monospace, monospace;
+  color: #2dd4bf;
+  font-weight: 800;
+  font-size: 0.88rem;
+}
+
+.xray-item-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.xray-item-spec {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 2px;
+}
+
+.xray-3d-visual {
+  perspective: 900px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exploded-deck-stack {
+  position: relative;
+  width: 260px;
+  height: 180px;
+  transform-style: preserve-3d;
+  transform: rotateX(55deg) rotateZ(-35deg);
+}
+
+.deck-plate {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  border: 2px solid rgba(45, 212, 191, 0.4);
+  background: rgba(20, 35, 40, 0.7);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease;
+}
+
+.deck-plate.highlight,
+.deck-plate:hover {
+  border-color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.25);
+}
+
+.plate-label {
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.slider-split-host {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.split-side {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-image: url('/static/img/cinema-house.svg');
+}
+
+.split-side.night {
+  width: 100%;
+  filter: brightness(0.55) contrast(1.25) hue-rotate(210deg);
+}
+
+.split-side.morning {
+  width: 50%;
+  z-index: 2;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.7);
+  filter: brightness(1.1) contrast(1.05) saturate(1.15);
+}
+
+.side-label {
+  position: absolute;
+  top: 24px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+}
+
+.night-tag {
+  right: 24px;
+}
+
+.morning-tag {
+  left: 24px;
+}
+
+.split-divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: #fff;
+  z-index: 15;
+  transform: translateX(-50%);
+}
+
+.split-drag-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  cursor: ew-resize;
+}
+
+.video-exp-controls {
+  padding: 14px 18px;
+  background: #0f1519;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ctrl-subpanel {
+  display: none;
+}
+
+.ctrl-subpanel.active {
+  display: block;
+}
+
+.bp-timeline-bar {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .bp-timeline-bar {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.bp-step-btn {
+  padding: 9px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.2s ease;
+}
+
+.bp-step-btn:hover,
+.bp-step-btn.active {
+  background: #2dd4bf;
+  color: #062a27;
+  border-color: #2dd4bf;
+  font-weight: 700;
+}
+
+.bp-step-tag {
+  font-size: 0.65rem;
+  font-family: ui-monospace, monospace;
+  opacity: 0.8;
+}
+
+.bp-step-lbl {
+  font-size: 0.82rem;
+}
+
+.film-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.film-chips-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.film-chip-btn {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.film-chip-btn:hover,
+.film-chip-btn.active {
+  background: #2dd4bf;
+  color: #062a27;
+  border-color: #2dd4bf;
+  font-weight: 700;
+}
+
+.layers-action-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
