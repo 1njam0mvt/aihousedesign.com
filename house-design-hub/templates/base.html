@@ -11,7 +11,7 @@
   <meta name="theme-color" content="#14262a" media="(prefers-color-scheme: dark)">
   <meta name="google-site-verification" content="fCLh1uNDUo7OuJLkJLKrw1Lq1icU77w4IEu3rPpxOZ8">
   <meta name="msvalidate.01" content="1545E47A6B145F28F5BCD1CD76F2664D">
-  <script>window.HD_IMG = {{ IMG | tojson }};</script>
+  <script>window.HD_IMG = {{ IMG | tojson }}; window.HD_ASSET = {{ ASSET_BASE | tojson }};</script>
   <link rel="canonical" href="{{ canonical }}">
   <meta name="robots" content="{{ robots|default('index,follow,max-image-preview:large') }}">
   <meta property="og:type" content="{% block ogtype %}website{% endblock %}">

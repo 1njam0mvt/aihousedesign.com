@@ -28,6 +28,25 @@ HOME_FAQS = [
      "For a quick concept, a web-based planner like this one is fastest because there is nothing to install. For detailed "
      "drawings, professionals use CAD and BIM tools such as AutoCAD, Revit or ArchiCAD, and free options include "
      "SketchUp Free, Sweet Home 3D and FreeCAD."),
+    ("How much does it cost to build a house in India per square foot?",
+     "It depends on the city, the materials and the finish. As a rough guide, a basic to standard home often falls "
+     "somewhere around Rs 1,800 to Rs 2,800 per sq ft of built-up area, and premium finishes cost more. The cost shown on each design "
+     "here is only a rough estimate, so always get a written quote from a local contractor."),
+    ("What size house can I build on a 30x40 plot?",
+     "A 30x40 ft plot is 1,200 sq ft (about 133 sq yd). After the setbacks your local authority requires, it commonly fits "
+     "a 2 or 3 BHK single-floor home, or a compact duplex if you build on two floors. Type 30x40 into the gallery search to see "
+     "30x40 plans in every style."),
+    ("What is the difference between plot area, built-up area and carpet area?",
+     "Plot area is the whole land. Built-up area is the covered floor area including the thickness of walls, and carpet area "
+     "is the usable floor space inside the walls, where a carpet would fit. Carpet area is always smaller than built-up area."),
+    ("Which direction should my house face?",
+     "There is no single correct answer. Many families in India choose north or east facing for Vastu reasons, while "
+     "builders often advise limiting large west-facing windows because they take the hottest afternoon sun. You can "
+     "filter every design here by north, east, south or west facing."),
+    ("What is a duplex house?",
+     "In India a duplex is a two-storey house for one family, with the living areas usually downstairs and the bedrooms upstairs "
+     "connected by an internal staircase. It lets you use a small plot well. In some countries the word means two separate units "
+     "in one building."),
 ]
 
 # ---------------------------------------------------------------- /faq search-intent section (also in FAQPage JSON-LD)
@@ -57,6 +76,27 @@ FAQ_SEARCH = [
     ('What is the difference between house design and home design?',
      'House design primarily focuses on the structural architecture, footprint, exterior elevation, and room layout of the building. Home design expands into interior decor, color palettes, and furnishings.',
      ("House front elevation and 3D exterior design", "/elevation-design/")),
+    ('What are setbacks, and why do they matter when planning a house?',
+     'Setbacks are the open spaces your local authority requires between the building and the plot boundary on the front, sides and back. They decide how much of the plot you can actually build on, so check the rules for your area before you finalise any plan.',
+     ("Small houses design for small plots", "/small-houses-design/")),
+    ('How do I choose between a single-floor house and a duplex?',
+     'A single-floor home avoids stairs and is usually cheaper per square foot, but needs more land. A duplex fits more rooms on a small plot and costs more because of the staircase, extra structure and a bigger roof and foundation load. Choose by plot size, budget and who will live there.',
+     ("House designs in every style", "/gallery")),
+    ('Does Vastu really matter when designing a house?',
+     'Vastu is a traditional Indian system of orientation and room placement, for example the main entrance facing north or east and the kitchen in the south-east. It is a cultural preference, not an engineering requirement. If it matters to your family, start with the facing filter and ask your architect to adapt the plan.',
+     ("Indian village house design plans", "/indian-village-house-design/")),
+    ('What materials make a low-cost house cheaper to build?',
+     'Common choices are fly-ash bricks or AAC blocks for walls, a simple rectangular footprint, standard door and window sizes and a simple roof. Saving on shape and repeating standard sizes usually cuts cost more than lowering structural quality.',
+     ("Low cost house designs", "/gallery?style=lowcost")),
+    ('What do 2D, 3D and 4D mean in a house design?',
+     'A 2D plan is the flat floor layout. A 3D model lets you rotate the exterior and see the volume. On this site 4D means a construction timeline that shows how the house is built stage by stage, from foundation to finish.',
+     ("Try the AI house designer", "/designer")),
+    ('How much does an architect charge to design a house?',
+     'Fees vary by city, experience and scope. Architects commonly charge either a percentage of the construction cost or a fixed rate per square foot, and the fee changes depending on whether it covers only drawings or also supervision. Ask for the scope in writing before you agree.',
+     ("How to design a house with AI, step by step", "/guides/how-to-design-a-house-with-ai/")),
+    ('Which house style suits a small family on a limited budget?',
+     'A compact single-floor 2 BHK or a small low-cost design is usually the best fit: fewer corridors, shared walls and a simple roof keep the cost down. If you expect the family to grow, pick a plan that allows a second floor to be added later.',
+     ("Small houses design for small plots", "/small-houses-design/")),
 ]
 
 # ---------------------------------------------------------------- landing pages (one search intent per URL)

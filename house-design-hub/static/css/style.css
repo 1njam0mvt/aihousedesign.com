@@ -2804,3 +2804,49 @@ html {
     transition: none;
   }
 }
+
+/* ===== Photo frames: fixed aspect ratio + cover + centre, so rooflines and pillars are never stretched ===== */
+.tile .art,
+.show-card .art,
+.card .thumb.has-img {
+  overflow: hidden;
+}
+
+.show-card .art {
+  aspect-ratio: 4 / 3;
+}
+
+.card .thumb.has-img {
+  aspect-ratio: 4 / 3;
+}
+
+.tile .art img,
+.show-card .art img,
+.card .thumb.has-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+  max-width: none;
+}
+
+.media-16x9 {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.media-4x3 {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.media-16x9>img,
+.media-4x3>img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}

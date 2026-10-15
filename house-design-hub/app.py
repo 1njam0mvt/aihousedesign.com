@@ -51,32 +51,59 @@ CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "hello@aihousesdesign.com")  # create
 LEGAL_UPDATED = "9 October 2026"
 
 
-# ---------- real images: drop .webp files in static/img/gallery/<style>.webp or static/img/designs/<id | style-Nbhk>.webp ----------
+# ---------- real images: kept OUT of the UI code, looked up by ID --------------------------------------------------------
+# Photos live in their own folders (or on a CDN / S3 / Cloudinary bucket) and are found by name only:
+#   gallery/<style>.<ext>            hero collage + "Styles" showcase
+#   designs/<id>.<ext>               one specific design card (baseline thumbnail, always a plain static image)
+#   designs/<style>-<N>bhk.<ext>     every card of that style + bedroom count
+# Set ASSET_BASE_URL=https://cdn.example.com/aihouses to serve them from a bucket instead of /static/img.
+# For a bucket, list the files in static/img/manifest.json: {"gallery": {"modern": "modern.webp"}, "designs": {"15": "15.webp"}}
+# Anything without an image keeps its drawn illustration, and changing CSS/templates never touches these files.
+ASSET_BASE_URL = os.getenv("ASSET_BASE_URL", "").rstrip("/")
+_IMG_EXT = (".webp", ".jpg", ".jpeg", ".png")
 _img_cache = {"t": 0, "data": {"gallery": {}, "designs": {}}}
 
 
 def img_manifest():
-    """Which real images exist (re-scanned at most once a minute). Missing images fall back to the SVG art automatically."""
+    """{'gallery': {key: filename}, 'designs': {key: filename}} (re-scanned at most once a minute)."""
     if time.time() - _img_cache["t"] > 60:
         root = os.path.join(app.static_folder, "img")
         data = {}
         for folder in ("gallery", "designs"):
+            found = {}
             try:
-                data[folder] = {f[:-5]: 1 for f in os.listdir(os.path.join(root, folder)) if f.lower().endswith(".webp")}
+                for f in sorted(os.listdir(os.path.join(root, folder))):
+                    if f.lower().endswith(_IMG_EXT):
+                        found[os.path.splitext(f)[0]] = f
             except OSError:
-                data[folder] = {}
+                pass
+            data[folder] = found
+        try:  # optional file for images hosted elsewhere
+            import json
+            with open(os.path.join(root, "manifest.json"), encoding="utf-8") as fh:
+                extra = json.load(fh)
+            for folder in ("gallery", "designs"):
+                data[folder].update({str(k): v for k, v in (extra.get(folder) or {}).items()})
+        except (OSError, ValueError):
+            pass
         _img_cache.update(t=time.time(), data=data)
     return _img_cache["data"]
 
 
+def asset_url(folder, filename):
+    if ASSET_BASE_URL:
+        return f"{ASSET_BASE_URL}/{folder}/{filename}"
+    return url_for("static", filename=f"img/{folder}/{filename}")
+
+
 def art_img(style, hero=False):
-    """<img> for a style picture if /static/img/gallery/<style>.webp exists, else empty (the page draws the SVG instead)."""
-    if style not in img_manifest()["gallery"]:
+    """<img> for a style picture if gallery/<style>.<ext> exists, else empty (the page draws the SVG instead)."""
+    fn = img_manifest()["gallery"].get(style)
+    if not fn:
         return ""
     alt = f"{EN['style.' + style]} house design: front elevation and 3D exterior view"
-    src = url_for("static", filename=f"img/gallery/{style}.webp")
     load = 'loading="eager" fetchpriority="high"' if hero else 'loading="lazy"'
-    return Markup(f'<img src="{escape(src)}" alt="{escape(alt)}" width="400" height="300" {load} decoding="async">')
+    return Markup(f'<img src="{escape(asset_url("gallery", fn))}" alt="{escape(alt)}" width="400" height="300" {load} decoding="async">')
 
 
 @app.context_processor
@@ -84,7 +111,7 @@ def inject():
     return dict(T=lambda k: EN.get(k, k), LANGS=LANGS, TOPICS=topics.TOPICS, STYLE_KEYS=list(STYLES),
                 total=len(catalog.DESIGNS), style_en=lambda k: EN["style." + k],
                 SITE_NAME=SITE_NAME, CONTACT_EMAIL=CONTACT_EMAIL, LEGAL_UPDATED=LEGAL_UPDATED,
-                YEAR=time.localtime().tm_year, IMG=img_manifest(), art_img=art_img,
+                YEAR=time.localtime().tm_year, IMG=img_manifest(), ASSET_BASE=ASSET_BASE_URL, art_img=art_img,
                 SITE_URL=seo.SITE_URL, canonical=seo.SITE_URL + request.path, site_ld=seo.site_ld(SITE_NAME),
                 SEO_LINKS=[(v["nav"], v["path"]) for v in seo.ALL_PAGES.values() if v["kind"] == "landing"])
 
@@ -207,6 +234,14 @@ FAQS = [
      "No. There is no sign up or login. Your theme and language choices are saved only in your own browser."),
     ("What happens to what I type in the AI designer?",
      "It is used to generate your plan and is not stored by us. See the Privacy page for details."),
+    ("Do the designs show real photos?",
+     "Cards show an illustrated 2D plan or, where available, a photo or render of that style. The 3D model and the 4D "
+     "construction timeline open only on the design page, so the gallery stays fast. Photos are examples of a style, not a "
+     "guarantee of what your finished house will look like."),
+    ("Which plot sizes and house types are covered?",
+     "Plots from 20x30 ft up to 80x100 ft, in single-floor, duplex and triple-floor homes with 1 to 6 bedrooms, in styles "
+     "such as modern, village, Assam type, luxury villa, low cost, passive eco and compact. You can filter by "
+     "style, bedrooms, floors and facing, and sort by cost or area."),
     ("I found a mistake or have a suggestion. What do I do?",
      "Please use the Contact page. Reports about wrong plans, translations or broken pages are very welcome."),
 ]
@@ -473,4 +508,3 @@ def healthz():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=os.getenv("FLASK_DEBUG") == "1")
-    

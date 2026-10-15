@@ -10,12 +10,14 @@
     };
   }
 
-  // Real photo/render if one exists: /static/img/designs/<id>.webp, else /static/img/designs/<style>-<beds>bhk.webp
+  // Baseline thumbnail = a plain static image looked up by ID (designs/<id>, else designs/<style>-<N>bhk). It never loads 3D or layers;
+  // those open only on the design page. No image => the drawn plan thumbnail.
   function realImage(m) {
     var have = (window.HD_IMG && window.HD_IMG.designs) || {};
     var key = have[m.id] ? String(m.id) : (have[m.style + '-' + m.beds + 'bhk'] ? m.style + '-' + m.beds + 'bhk' : null);
     if (!key) return null;
-    return '<img src="/static/img/designs/' + key + '.webp" alt="' + HD.designName(m).replace(/[<>"&]/g, '') +
+    var base = window.HD_ASSET ? window.HD_ASSET + '/designs/' : '/static/img/designs/';
+    return '<img src="' + base + have[key] + '" alt="' + HD.designName(m).replace(/[<>"&]/g, '') +
       ' - 2D plan and 3D design" width="400" height="300" loading="lazy" decoding="async">';
   }
 
