@@ -38,14 +38,8 @@
   {% for item in ld|default([]) %}
   <script type="application/ld+json">{{ item|tojson }}</script>
   {% endfor %}
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-47YFCBR5Z2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-47YFCBR5Z2');
-  </script>
+  <!-- Google Analytics is loaded by site-ui.js only after the visitor accepts analytics cookies -->
+  <script>window.HD_GA_ID = 'G-47YFCBR5Z2';</script>
   <script>
     /* apply saved theme before paint to avoid a flash */
     (function () {
@@ -119,6 +113,7 @@
             <li><a href="{{ url_for('terms') }}" data-i18n="foot_terms">{{ T('foot_terms') }}</a></li>
             <li><a href="{{ url_for('privacy') }}" data-i18n="foot_privacy">{{ T('foot_privacy') }}</a></li>
             <li><a href="{{ url_for('cookies') }}" data-i18n="foot_cookies">{{ T('foot_cookies') }}</a></li>
+            <li><a href="#" data-cookie-settings>Cookie settings</a></li>
           </ul>
         </nav>
         <div class="foot-col foot-brand">
@@ -139,6 +134,7 @@
   </footer>
 
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/site-ui.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 

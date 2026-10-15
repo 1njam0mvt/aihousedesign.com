@@ -19,6 +19,32 @@ app.config["JSON_SORT_KEYS"] = False
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 60 * 60 * 24 * 30  # long browser cache for /static (faster pages)
 EN = get_dict("en")["t"]
 
+
+@app.url_defaults
+def _static_version(endpoint, values):
+    """Append ?v=<file mtime> to every /static URL so browsers never keep serving an old CSS/JS file after an update."""
+    if endpoint == "static" and values.get("filename"):
+        try:
+            values["v"] = int(os.path.getmtime(os.path.join(app.static_folder, values["filename"])))
+        except OSError:
+            pass
+
+
+def hero_photos():
+    """Real photos for the home hero: put .webp/.jpg files in static/img/hero/ named like 1-foundation.webp, 2-framing.webp ...
+    (sorted by name; the text after the number becomes the stage label). With 2+ photos the hero plays them as a cinematic sequence
+    instead of the 3D model."""
+    root = os.path.join(app.static_folder, "img", "hero")
+    out = []
+    try:
+        names = sorted(f for f in os.listdir(root) if f.lower().endswith((".webp", ".jpg", ".jpeg", ".png")))
+    except OSError:
+        return out
+    for f in names:
+        label = re.sub(r"^\d+[-_ ]*", "", os.path.splitext(f)[0]).replace("-", " ").replace("_", " ").strip().title()
+        out.append({"src": url_for("static", filename="img/hero/" + f), "label": label or "Home"})
+    return out
+
 # Shown on the legal pages. Set these env vars before going live.
 SITE_NAME = os.getenv("SITE_NAME", "AI Houses Design")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "hello@aihousesdesign.com")  # create this mailbox / forwarder
@@ -79,7 +105,7 @@ def _int(name, default=None, lo=None, hi=None):
 @app.route("/")
 def index():
     featured = [catalog.card(d) for d in catalog.DESIGNS[:8]]
-    return render_template("index.html", featured=featured, stats=catalog.stats(), faqs=seo.HOME_FAQS,
+    return render_template("index.html", featured=featured, stats=catalog.stats(), faqs=seo.HOME_FAQS, hero_photos=hero_photos(),
                            ld=[seo.faq_ld(seo.HOME_FAQS)], explore=[v for v in seo.ALL_PAGES.values()])
 
 
@@ -447,3 +473,4 @@ def healthz():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=os.getenv("FLASK_DEBUG") == "1")
+    

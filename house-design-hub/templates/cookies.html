@@ -1,52 +1,71 @@
 {% extends "base.html" %}
 {% block title %}Cookie Policy | {{ SITE_NAME }}{% endblock %}
-{% block desc %}{{ SITE_NAME }} sets no cookies. See what is saved in your browser and how to clear it.{% endblock %}
+{% block desc %}What {{ SITE_NAME }} saves in your browser, which cookies are optional, and how to change your choice.{%
+endblock %}
 {% block content %}
-{# Accurate for the current app: no cookies are set. Update if you add analytics, ads or login. #}
-<article class="doc">
-    <h1>Cookie Policy</h1>
-    <p class="muted">Last updated: {{ LEGAL_UPDATED }}</p>
-    <p class="lead">{{ SITE_NAME }} does not set any cookies and has no tracking or advertising scripts, so there is no
-        cookie banner to accept.</p>
 
-    <h2>What is saved in your browser</h2>
-    <p>To remember your choices, the site uses your browser's local storage. This is similar to a cookie but is never
-        sent to our server.</p>
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Purpose</th>
-                    <th>Kept</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>hd-theme</code></td>
-                    <td>Remembers light or dark mode</td>
-                    <td>Until you clear it</td>
-                </tr>
-                <tr>
-                    <td><code>hd-lang</code></td>
-                    <td>Remembers your chosen language</td>
-                    <td>Until you clear it</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <p>Both are strictly necessary for the features you choose, and they contain no personal information.</p>
+<div class="doc-layout">
+    <aside class="doc-toc" aria-label="On this page"></aside>
+    <article class="doc" data-toc>
+        <h1>Cookie Policy</h1>
+        <p class="muted">Last updated: {{ LEGAL_UPDATED }}</p>
+        <p class="lead">{{ SITE_NAME }} uses essential browser storage to work, and optional analytics cookies only if
+            you allow them.
+            You can change your choice at any time.</p>
+        <p><button type="button" class="btn" data-cookie-settings>Change your cookie choice</button></p>
 
-    <h2>Third party content</h2>
-    <p>The 3D viewer loads the three.js library from cdnjs (Cloudflare). This is a normal request for a file, and your
-        browser shares your IP address with that service. We do not control it. See our <a
-            href="{{ url_for('privacy') }}">Privacy Policy</a>.</p>
+        <h2>What is saved in your browser</h2>
+        <p>To remember your choices, the site uses your browser's local storage. This is similar to a cookie but is
+            never
+            sent to our server.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Purpose</th>
+                        <th>Kept</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>hd-consent</code> / <code>hd_consent</code></td>
+                        <td>Remembers your cookie choice (local storage and a first-party cookie)</td>
+                        <td>1 year</td>
+                    </tr>
+                    <tr>
+                        <td><code>_ga</code>, <code>_ga_*</code> (optional)</td>
+                        <td>Google Analytics, set only if you accept analytics</td>
+                        <td>Up to 2 years</td>
+                    </tr>
+                    <tr>
+                        <td><code>hd-theme</code></td>
+                        <td>Remembers light or dark mode</td>
+                        <td>Until you clear it</td>
+                    </tr>
+                    <tr>
+                        <td><code>hd-lang</code></td>
+                        <td>Remembers your chosen language</td>
+                        <td>Until you clear it</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Both are strictly necessary for the features you choose, and they contain no personal information.</p>
 
-    <h2>How to clear it</h2>
-    <p>In your browser settings, clear "site data" or "local storage" for this site. The site will then go back to your
-        device's default theme and English.</p>
+        <h2>Third party content</h2>
+        <p>The 3D viewer loads the three.js library from cdnjs (Cloudflare). This is a normal request for a file, and
+            your
+            browser shares your IP address with that service. We do not control it. See our <a
+                href="{{ url_for('privacy') }}">Privacy Policy</a>.</p>
 
-    <h2>Changes</h2>
-    <p>If we ever add analytics or advertising, we will ask for your permission first and update this page.</p>
-</article>
+        <h2>How to clear it</h2>
+        <p>In your browser settings, clear "site data" or "local storage" for this site. The site will then go back to
+            your
+            device's default theme and English.</p>
+
+        <h2>Changes</h2>
+        <p>If we ever add analytics or advertising, we will ask for your permission first and update this page.</p>
+    </article>
+</div>
 {% endblock %}

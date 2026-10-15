@@ -3,65 +3,76 @@
 {% block desc %}The terms that apply when you use {{ SITE_NAME }}.{% endblock %}
 {% block content %}
 {# Draft terms written for how this app currently works. Have a lawyer review before launch. #}
-<article class="doc">
-    <h1>Terms of Use</h1>
-    <p class="muted">Last updated: {{ LEGAL_UPDATED }}</p>
+<div class="doc-layout">
+    <aside class="doc-toc" aria-label="On this page"></aside>
+    <article class="doc" data-toc>
+        <h1>Terms of Use</h1>
+        <p class="muted">Last updated: {{ LEGAL_UPDATED }}</p>
 
-    <h2>1. Agreement</h2>
-    <p>By using {{ SITE_NAME }} (the "Service") you agree to these terms. If you do not agree, please do not use the
-        Service.</p>
+        <h2>1. Agreement</h2>
+        <p>By using {{ SITE_NAME }} (the "Service") you agree to these terms. If you do not agree, please do not use the
+            Service.</p>
 
-    <h2>2. What the Service is</h2>
-    <p>{{ SITE_NAME }} shows house design ideas as 2D plans, 3D models and construction timelines, and offers an AI
-        designer that generates a plan from your description. The Service is free to use and does not require an
-        account.</p>
+        <h2>2. What the Service is</h2>
+        <p>{{ SITE_NAME }} shows house design ideas as 2D plans, 3D models and construction timelines, and offers an AI
+            designer that generates a plan from your description. The Service is free to use and does not require an
+            account.</p>
 
-    <h2>3. Plans are concepts, not professional advice</h2>
-    <p>All plans, dimensions, room layouts, cost figures and design tips are illustrative and approximate. They are
-        <strong>not</strong> architectural, structural, legal or financial advice and are not approved for construction.
-        Before you build, a licensed architect or engineer must check the design, the structure, your local building
-        bylaws, setbacks and costs. You are responsible for any decision you make using the Service.</p>
+        <h2>3. Plans are concepts, not professional advice</h2>
+        <p>All plans, dimensions, room layouts, cost figures and design tips are illustrative and approximate. They are
+            <strong>not</strong> architectural, structural, legal or financial advice and are not approved for
+            construction.
+            Before you build, a licensed architect or engineer must check the design, the structure, your local building
+            bylaws, setbacks and costs. You are responsible for any decision you make using the Service.
+        </p>
 
-    <h2>4. AI generated content</h2>
-    <p>The AI designer and any AI written tips can be wrong or incomplete. Please check anything important before
-        relying on it.</p>
+        <h2>4. AI generated content</h2>
+        <p>The AI designer and any AI written tips can be wrong or incomplete. Please check anything important before
+            relying on it.</p>
 
-    <h2>5. Acceptable use</h2>
-    <p>You agree not to:</p>
-    <ul>
-        <li>break the law or infringe the rights of others while using the Service;</li>
-        <li>attack, overload or try to gain unauthorised access to the Service or its servers;</li>
-        <li>use bots or scrapers to copy the catalogue or the AI designer at scale;</li>
-        <li>send spam, harmful or abusive content through the contact form.</li>
-    </ul>
+        <h2>5. Acceptable use</h2>
+        <p>You agree not to:</p>
+        <ul>
+            <li>break the law or infringe the rights of others while using the Service;</li>
+            <li>attack, overload or try to gain unauthorised access to the Service or its servers;</li>
+            <li>use bots or scrapers to copy the catalogue or the AI designer at scale;</li>
+            <li>send spam, harmful or abusive content through the contact form.</li>
+        </ul>
 
-    <h2>6. Our content</h2>
-    <p>The site design, code, plans, 3D models, text and translations belong to {{ SITE_NAME }} or its licensors and are
-        protected by copyright. You may view the Service and download plans for your own personal reference. You may not
-        resell, republish or redistribute them, or present them as your own work, without our written permission.</p>
+        <h2>6. Our content</h2>
+        <p>The site design, code, plans, 3D models, text and translations belong to {{ SITE_NAME }} or its licensors and
+            are
+            protected by copyright. You may view the Service and download plans for your own personal reference. You may
+            not
+            resell, republish or redistribute them, or present them as your own work, without our written permission.
+        </p>
 
-    <h2>7. Messages you send us</h2>
-    <p>If you contact us, you allow us to use your message to reply to you and to improve the Service. See the <a
-            href="{{ url_for('privacy') }}">Privacy Policy</a> for how we handle your details.</p>
+        <h2>7. Messages you send us</h2>
+        <p>If you contact us, you allow us to use your message to reply to you and to improve the Service. See the <a
+                href="{{ url_for('privacy') }}">Privacy Policy</a> for how we handle your details.</p>
 
-    <h2>8. No warranty</h2>
-    <p>The Service is provided "as is" and "as available". We do not promise that it will be error free, always
-        available, or that plans and estimates are accurate.</p>
+        <h2>8. No warranty</h2>
+        <p>The Service is provided "as is" and "as available". We do not promise that it will be error free, always
+            available, or that plans and estimates are accurate.</p>
 
-    <h2>9. Limit of liability</h2>
-    <p>To the fullest extent allowed by law, {{ SITE_NAME }} is not liable for any loss or damage arising from your use
-        of the Service or from building, buying or spending money based on its plans and estimates.</p>
+        <h2>9. Limit of liability</h2>
+        <p>To the fullest extent allowed by law, {{ SITE_NAME }} is not liable for any loss or damage arising from your
+            use
+            of the Service or from building, buying or spending money based on its plans and estimates.</p>
 
-    <h2>10. Changes and ending access</h2>
-    <p>We may change the Service or these terms at any time. The date above shows the latest version. Continuing to use
-        the Service after a change means you accept it. We may suspend access for anyone who breaks these terms.</p>
+        <h2>10. Changes and ending access</h2>
+        <p>We may change the Service or these terms at any time. The date above shows the latest version. Continuing to
+            use
+            the Service after a change means you accept it. We may suspend access for anyone who breaks these terms.</p>
 
-    <h2>11. Governing law</h2>
-    <p>These terms are governed by the laws of India. Courts in India have jurisdiction over any dispute, unless your
-        local consumer law says otherwise.</p>
+        <h2>11. Governing law</h2>
+        <p>These terms are governed by the laws of India. Courts in India have jurisdiction over any dispute, unless
+            your
+            local consumer law says otherwise.</p>
 
-    <h2>12. Contact</h2>
-    <p>Questions about these terms: <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> or use the <a
-            href="{{ url_for('contact') }}">contact page</a>.</p>
-</article>
+        <h2>12. Contact</h2>
+        <p>Questions about these terms: <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a> or use the <a
+                href="{{ url_for('contact') }}">contact page</a>.</p>
+    </article>
+</div>
 {% endblock %}
