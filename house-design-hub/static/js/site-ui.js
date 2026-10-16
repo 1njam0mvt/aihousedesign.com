@@ -178,6 +178,21 @@
         window.addEventListener("storage", function (e) { if (e.key === KEY && e.newValue) { apply(readChoice()); closeBanner(); } });
     }
 
-    function boot() { try { initToc(); } catch (e) { } try { initConsent(); } catch (e) { } }
+    /* ======================================================================================
+     * 3. Email buttons: desktop opens Gmail compose (subject + text pre-filled); phones use mailto: (opens the Gmail app)
+     * ====================================================================================== */
+    function initMail() {
+        document.addEventListener("click", function (e) {
+            var a = e.target.closest && e.target.closest("a[data-mail]"); if (!a) return;
+            var mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (window.matchMedia && matchMedia("(pointer:coarse)").matches && window.innerWidth < 900);
+            if (mobile || e.ctrlKey || e.metaKey || e.shiftKey) return;           // let the mailto: link do its normal thing
+            e.preventDefault();
+            var q = "view=cm&fs=1&to=" + encodeURIComponent(a.dataset.to) + "&su=" + encodeURIComponent(a.dataset.subject || "") + "&body=" + encodeURIComponent(a.dataset.body || "");
+            var w = window.open("https://mail.google.com/mail/?" + q, "_blank", "noopener");
+            if (!w) location.href = a.href;                                       // pop-up blocked: fall back to mailto:
+        });
+    }
+
+    function boot() { try { initToc(); } catch (e) { } try { initConsent(); } catch (e) { } try { initMail(); } catch (e) { } }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();

@@ -47,7 +47,7 @@ def hero_photos():
 
 # Shown on the legal pages. Set these env vars before going live.
 SITE_NAME = os.getenv("SITE_NAME", "AI Houses Design")
-CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "hello@aihousesdesign.com")  # create this mailbox / forwarder
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "support@aihousesdesign.com")  # create this mailbox / forwarder
 LEGAL_UPDATED = "9 October 2026"
 
 
