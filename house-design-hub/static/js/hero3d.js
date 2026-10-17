@@ -29,17 +29,26 @@
         var ui = (host.closest("section") || host.parentNode).querySelector("[data-hero3d-ui]");
         if (!ui) return function () { };
         var btnPlay = ui.querySelector("[data-act=play]"), label = ui.querySelector("[data-h3-stage]"), bar = ui.querySelector(".h3-bar i");
-        var chips = {};
+        var chips = {}, steps = [].slice.call(ui.querySelectorAll("[data-step]")), nSteps = 0, cur = 0;
+        steps.forEach(function (b) { nSteps = Math.max(nSteps, +b.getAttribute("data-step") + 1); });
         ["build", "open", "dusk"].forEach(function (k) { chips[k] = ui.querySelector("[data-act=" + k + "]"); });
         ui.addEventListener("click", function (ev) {
+            var s = ev.target.closest("[data-step]");
+            if (s && api.step) { api.step(+s.getAttribute("data-step")); return; }
             var b = ev.target.closest("[data-act]"); if (!b) return;
-            api.act(b.getAttribute("data-act"));
+            var a = b.getAttribute("data-act");
+            if ((a === "prev" || a === "next") && api.step) { api.step((cur + (a === "next" ? 1 : -1) + nSteps) % nSteps); return; }
+            api.act(a);
         });
         return function refresh(st) {
             Object.keys(chips).forEach(function (k) { if (chips[k]) chips[k].classList.toggle("active", k === st.phase); });
-            if (btnPlay) btnPlay.textContent = st.playing ? "Pause" : "Play";
+            if (btnPlay) { btnPlay.textContent = btnPlay.hasAttribute("data-icon") ? (st.playing ? "\u275a\u275a" : "\u25b6") : (st.playing ? "Pause" : "Play"); btnPlay.setAttribute("aria-label", st.playing ? "Pause animation" : "Play animation"); }
             if (label) label.textContent = st.label || "";
             if (bar) bar.style.width = (clamp(st.progress, 0, 1) * 100) + "%";
+            if (st.step != null && st.step !== cur || !steps.some(function (b) { return b.hasAttribute("data-on"); })) {
+                cur = st.step || 0;
+                steps.forEach(function (b) { var on = +b.getAttribute("data-step") === cur; b.classList.toggle("active", on); b.toggleAttribute("data-on", on); if (on) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+            }
         };
     }
 
@@ -62,7 +71,7 @@
                 l.style.transform = "scale(" + (1.03 + .06 * o) + ") translate3d(" + ((i % 2 ? -1 : 1) * (p - i) * -1.2) + "%,0,0)";
             });
             var near = Math.round(p) % n;
-            refresh({ phase: near === 0 ? "build" : near === n - 1 ? "dusk" : "open", playing: playing, label: photos[near].label, progress: (clock % TOTAL) / TOTAL });
+            refresh({ phase: near === 0 ? "build" : near === n - 1 ? "dusk" : "open", playing: playing, label: photos[near].label, progress: (clock % TOTAL) / TOTAL, step: Math.min(5, Math.floor(near * 6 / n)) });
         }
         function frame(now) {
             raf = 0; var dt = Math.min(.05, (now - last) / 1000); last = now;
@@ -77,7 +86,8 @@
                 else if (a === "open") { clock = PER * Math.floor((n - 1) / 2); playing = true; }
                 else if (a === "dusk") { clock = PER * (n - 1); playing = true; }
                 render(); if (playing) start();
-            }
+            },
+            step: function (i) { clock = PER * Math.min(n - 1, Math.round(i * (n - 1) / 5)); playing = true; render(); start(); }
         });
         if ("IntersectionObserver" in window) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible && playing) start(); }, { threshold: .05 }).observe(host);
         render(); if (playing) start();
@@ -527,8 +537,8 @@
         function size() {
             var w = host.clientWidth || 800, h = host.clientHeight || 500;
             renderer.setSize(w, h, false); canvas.style.width = "100%"; canvas.style.height = "100%";
-            camera.aspect = w / h; camera.fov = w / h < 1 ? 42 : 30;
-            camera.clearViewOffset();
+            camera.aspect = w / h; camera.fov = w / h < 1 ? 42 : 34;
+            if (w / h > 1.25 && window.innerWidth > 900 && host.closest(".hx-scene")) camera.setViewOffset(w, h, -w * .13, -h * .02, w, h); else camera.clearViewOffset();   /* home hero: house sits right of centre, text fades in on the left */
             camera.updateProjectionMatrix();
         }
         size();
@@ -542,8 +552,11 @@
                 else if (a === "open") { clock = OPEN_AT - .3; manual = true; playing = true; }
                 else if (a === "dusk") { clock = DUSK_AT - .1; manual = true; playing = true; }
                 last = performance.now(); frame(performance.now(), true); if (playing) start();
-            }
+            },
+            step: function (i) { clock = STEP_T[Math.max(0, Math.min(5, i))]; manual = false; playing = true; last = performance.now(); frame(performance.now(), true); start(); }
         });
+        var STEP_T = [1.9, 3.9, 5.3, 6.5, 7.8, 9.4], STEP_START = [0, 2.7, 5.0, 6.1, 7.4, 8.6];
+        function stepAt(t) { var k = 0; for (var i = 0; i < 6; i++) if (t >= STEP_START[i]) k = i; return k; }
         function stageLabel(t) {
             return t < T_FOUND ? "Stage 00 \u00b7 Blueprint" : t < T_FRAME ? "Stage 01 \u00b7 Foundation" : t < T_DRY ? "Stage 02 \u00b7 Framing" : t < T_FIN ? "Stage 03 \u00b7 Dried in"
                 : t < OPEN_AT ? "Stage 04 \u00b7 Home" : t < DUSK_AT ? "Open up" : "Dusk";
@@ -566,7 +579,7 @@
             applyBuild(t); applyOpen(u(t, OPEN_AT, OPEN_DUR)); applyNight(ease(u(t, DUSK_AT, DUSK_DUR)));
             applyCamera(t);
             renderer.render(scene, camera);
-            refresh({ phase: t < OPEN_AT ? "build" : t < DUSK_AT ? "open" : "dusk", playing: playing, label: stageLabel(t), progress: t / TOTAL });
+            refresh({ phase: t < OPEN_AT ? "build" : t < DUSK_AT ? "open" : "dusk", playing: playing, label: stageLabel(t), progress: t / TOTAL, step: stepAt(t) });
             if (!force && visible && !reduce) raf = requestAnimationFrame(frame);
         }
         function start() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } }

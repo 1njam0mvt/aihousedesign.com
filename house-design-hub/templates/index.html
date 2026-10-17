@@ -3,25 +3,131 @@
 {% block desc %}Free AI house design generator: create 2D floor plans, 3D models and front elevation designs online in
 seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblock %}
 {% block content %}
-<section class="hero hero-split">
-  <div class="hero-copy">
-    <h1 data-i18n="hero_title">{{ T('hero_title') }}</h1>
-    <p class="lead" data-i18n="hero_sub">{{ T('hero_sub') }}</p>
-    <p class="count"><strong>{{ '{:,}'.format(stats.total) }}</strong> <span data-i18n="designs_count">{{
-        T('designs_count') }}</span> · 2D · 3D · 4D</p>
-    <div class="cta">
-      <a class="btn primary" href="{{ url_for('gallery') }}" data-i18n="cta_gallery">{{ T('cta_gallery') }}</a>
-      <a class="btn" href="{{ url_for('designer') }}" data-i18n="cta_ai">{{ T('cta_ai') }}</a>
+{% set HX_STEPS =
+[("Foundation","stage-1"),("Structure","stage-2"),("Walls","stage-3"),("Roof","stage-4"),("Finishing","stage-5"),("Completed","stage-6")]
+%}
+<section class="hx" id="hero3dSection" aria-labelledby="hxTitle">
+  <div class="hx-inner" data-hero3d-ui>
+    <div class="hx-copy">
+      <span class="hx-badge"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M3 11.5 12 4l9 7.5V21h-6v-6H9v6H3z" fill="currentColor" />
+        </svg>Your home, reimagined</span>
+      <h1 id="hxTitle" data-i18n="hero_title">{{ T('hero_title') }}</h1>
+      <p class="hx-lead">From your idea to a 2D plan, 3D model and 4D construction timeline.</p>
+      <form class="hx-prompt" action="{{ url_for('designer') }}" method="get">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path
+            d="M12 2l2.2 6.3L20.5 10l-6.3 1.7L12 18l-2.2-6.3L3.5 10l6.3-1.7zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"
+            fill="currentColor" />
+        </svg>
+        <input type="text" name="q" maxlength="300" placeholder="Describe your dream house…"
+          aria-label="Describe your dream house" autocomplete="off">
+        <button type="submit" class="hx-go">Generate with AI <span aria-hidden="true">→</span></button>
+      </form>
+      <ul class="hx-trust">
+        <li><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M13 2 4 14h6l-1 8 9-12h-6z" fill="currentColor" />
+          </svg>No signup required</li>
+        <li><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path
+              d="M12 2 3 7v10l9 5 9-5V7zm0 2.2 6.6 3.7L12 11.6 5.4 7.9zM5 9.6l6 3.3v6.7l-6-3.3zm8 10v-6.7l6-3.3v6.7z"
+              fill="currentColor" />
+          </svg>2D &amp; 3D previews</li>
+        <li><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path
+              d="M20 7h-2.2A3 3 0 0 0 12 4.8 3 3 0 0 0 6.2 7H4a1 1 0 0 0-1 1v3h8V8h2v3h8V8a1 1 0 0 0-1-1zM9 7a1 1 0 1 1 1-1v1zm6 0h-1V6a1 1 0 1 1 1 1zM4 13v7a1 1 0 0 0 1 1h6v-8zm9 0v8h6a1 1 0 0 0 1-1v-7z"
+              fill="currentColor" />
+          </svg>Free to explore</li>
+      </ul>
+    </div>
+
+    <div class="hx-stage">
+      <div class="hx-scene h3-viewport">
+        <img class="hx-fallback" src="{{ url_for('static', filename='img/home/hero-fallback.jpg') }}" alt=""
+          width="1200" height="800" fetchpriority="high">
+        <div class="hero3d-stage" id="hero3d" data-photos='{{ hero_photos|tojson|forceescape }}' role="img"
+          aria-label="Animated 3D house that builds itself from foundation to finished home"></div>
+      </div>
+      <ol class="hx-steps" aria-label="Construction stages">
+        {% for label, img in HX_STEPS %}
+        <li><button type="button" class="hx-step" data-step="{{ loop.index0 }}"><b>{{ loop.index }}</b><span>{{ label
+              }}</span></button></li>
+        {% endfor %}
+      </ol>
+      <button type="button" class="hx-watch" data-act="build"><i aria-hidden="true">▶</i><span>Watch the
+          Construction<br>Process</span></button>
+      <button type="button" class="hx-pp" data-act="play" data-icon aria-label="Pause animation">❚❚</button>
+      <span class="h3-stage" data-h3-stage aria-live="off" hidden></span>
+      <div class="hx-strip" role="group" aria-label="Jump to a construction stage">
+        <button type="button" class="hx-arrow" data-act="prev" aria-label="Previous stage">‹</button>
+        <div class="hx-thumbs">
+          {% for label, img in HX_STEPS %}
+          <button type="button" class="hx-thumb" data-step="{{ loop.index0 }}" aria-label="{{ label }}">
+            <img src="{{ url_for('static', filename='img/home/' ~ img ~ '.jpg') }}" alt="" width="240" height="150"
+              loading="lazy" decoding="async">
+            <span>{{ label }}</span>
+          </button>
+          {% endfor %}
+        </div>
+        <button type="button" class="hx-arrow" data-act="next" aria-label="Next stage">›</button>
+      </div>
     </div>
   </div>
-  <div class="collage">
-    {% for k, cls in (('modern', 't1'), ('village', 't2'), ('villa', 't3'), ('duplex', 't4')) %}
-    <a class="tile {{ cls }}" href="{{ url_for('gallery') }}?style={{ k }}">
-      <div class="art" data-art="{{ k }}" {% if k=='duplex' %} data-dusk="1" {% endif %}>{{ art_img(k, hero=True) }}
+</section>
+
+<section class="hx-feats-wrap" aria-label="What you can do">
+  <h2 class="hx-h2">2D · 3D · 4D · AI</h2>
+  {% set fid = featured[0].id if featured else 1 %}
+  <div class="hx-feats">
+    <a class="hx-feat" href="{{ url_for('design', design_id=fid) }}">
+      <div class="hx-fimg"><img src="{{ url_for('static', filename='img/home/feat-plan.jpg') }}"
+          alt="Floor plan with room layout and dimensions" width="720" height="480" loading="lazy" decoding="async">
       </div>
-      <span class="tag" data-i18n="style.{{ k }}">{{ style_en(k) }}</span>
+      <div class="hx-ftxt">
+        <h3>2D Plan</h3>
+        <p>Detailed floor layout with dimensions</p>
+      </div><span class="hx-go-ic" aria-hidden="true">→</span>
     </a>
-    {% endfor %}
+    <a class="hx-feat" href="{{ url_for('design', design_id=fid) }}">
+      <div class="hx-fimg"><img src="{{ url_for('static', filename='img/home/feat-3d.jpg') }}" alt="3D model of a house"
+          width="720" height="480" loading="lazy" decoding="async"><em class="hx-badge360">360°</em></div>
+      <div class="hx-ftxt">
+        <h3>3D Model</h3>
+        <p>Interactive 3D view with full rotation</p>
+      </div><span class="hx-go-ic" aria-hidden="true">→</span>
+    </a>
+    <a class="hx-feat" href="{{ url_for('design', design_id=fid) }}">
+      <div class="hx-fimg"><img src="{{ url_for('static', filename='img/home/feat-4d.jpg') }}"
+          alt="House under construction" width="720" height="480" loading="lazy" decoding="async"><em
+          class="hx-badge4d">4D</em>
+        <ol class="hx-prog" aria-hidden="true">
+          <li class="done">Foundation</li>
+          <li class="done">Structure</li>
+          <li class="now">Walls</li>
+          <li>Roof</li>
+          <li>Finishing</li>
+        </ol>
+      </div>
+      <div class="hx-ftxt">
+        <h3>4D Timeline</h3>
+        <p>Step-by-step construction animation</p>
+      </div><span class="hx-go-ic" aria-hidden="true">→</span>
+    </a>
+    <div class="hx-feat hx-feat-ai">
+      <a class="hx-fimg" href="{{ url_for('designer') }}"><img
+          src="{{ url_for('static', filename='img/home/feat-ai.jpg') }}" alt="AI designed house" width="720"
+          height="480" loading="lazy" decoding="async"></a>
+      <ul class="hx-chips" aria-label="Pick a style">
+        <li><a class="on" href="{{ url_for('designer') }}?style=modern">Modern</a></li>
+        <li><a href="{{ url_for('designer') }}?style=traditional">Traditional</a></li>
+        <li><a href="{{ url_for('designer') }}?style=minimalist">Minimalist</a></li>
+        <li><a href="{{ url_for('designer') }}?style=villa">Luxury</a></li>
+      </ul>
+      <div class="hx-ftxt">
+        <h3>AI House Designer</h3>
+        <p>Generate &amp; customize your house</p>
+      </div><a class="hx-go-ic" href="{{ url_for('designer') }}" aria-label="Open the AI house designer">→</a>
+    </div>
   </div>
 </section>
 
@@ -33,56 +139,7 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
   <div id="videoExpMaster"></div>
 </section>
 
-<section>
-  <h2>2D · 3D · 4D · AI</h2>
-  <div class="features">
-    <div class="feat">
-      <div class="fart">
-        <div data-art="plan"></div>
-      </div>
-      <div class="txt">
-        <h3 data-i18n="view_2d">{{ T('view_2d') }}</h3>
-        <p class="muted small" data-i18n="download_svg">{{ T('download_svg') }}</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="fart">
-        <div data-art="cube"></div>
-      </div>
-      <div class="txt">
-        <h3 data-i18n="view_3d">{{ T('view_3d') }}</h3>
-        <p class="muted small" data-i18n="drag_hint">{{ T('drag_hint') }}</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="fart stages">
-        {% for n, key in ((1, 'stage_foundation'), (2, 'stage_walls'), (3, 'stage_roof'), (4, 'stage_finish')) %}
-        <div class="stage-item">
-          <div data-stage="{{ n }}"></div><span data-i18n="{{ key }}">{{ T(key) }}</span>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="txt">
-        <h3 data-i18n="view_4d">{{ T('view_4d') }}</h3>
-        <p class="muted small" data-i18n="construction">{{ T('construction') }}</p>
-      </div>
-    </div>
-    <a class="feat" href="{{ url_for('designer') }}">
-      <div class="fart ai-demo">
-        <div class="bubble user"><i></i><i></i></div>
-        <div class="bubble bot">
-          <div data-art="contemporary"></div>
-        </div>
-      </div>
-      <div class="txt">
-        <h3 data-i18n="ai_title">{{ T('ai_title') }}</h3>
-        <p class="muted small" data-i18n="ai_hello">{{ T('ai_hello') }}</p>
-      </div>
-    </a>
-  </div>
-</section>
-
-<section>
+<section id="styles">
   <h2 data-i18n="styles">{{ T('styles') }}</h2>
   <div class="showcase">
     {% for k in STYLE_KEYS %}
@@ -141,11 +198,15 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
 <script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 <script src="{{ url_for('static', filename='js/showcase.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cinematic.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/three.r128.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/hero3d.js') }}"></script>
 <script>
   (function () {
     var el = document.getElementById('featured');
     var items = JSON.parse(el.getAttribute('data-cards'));
     HD.renderCards(el, items);
+    var h3 = document.getElementById('hero3d');
+    if (h3 && HD.initHero3D && HD.initHero3D(h3)) document.getElementById('hero3dSection').classList.add('h3-on');
     var mount = document.getElementById('videoExpMaster');
     if (mount && HD.initMasterExperience) HD.initMasterExperience(mount);
     document.addEventListener('langchange', function () { HD.renderCards(el, items); });

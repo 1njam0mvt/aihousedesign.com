@@ -57,18 +57,46 @@
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="{{ url_for('index') }}"><img class="logo"
-          src="{{ url_for('static', filename='img/favicon-96x96.png') }}" alt="" width="34" height="34"> <span
-          class="brand-text">{{ SITE_NAME }}</span></a>
-      <nav class="nav" id="nav">
-        <a href="{{ url_for('index') }}" data-i18n="nav_home">{{ T('nav_home') }}</a>
-        <a href="{{ url_for('gallery') }}" data-i18n="nav_gallery">{{ T('nav_gallery') }}</a>
-        <a href="{{ url_for('designer') }}" data-i18n="nav_designer">{{ T('nav_designer') }}</a>
+          src="{{ url_for('static', filename='img/favicon-96x96.png') }}" alt="" width="44" height="44"> <span
+          class="brand-text"><b>{{ SITE_NAME }}</b><small>Design · Visualize · Plan · Build</small></span></a>
+      {% set ep = request.endpoint %}
+      <nav class="nav" id="nav" aria-label="Main">
+        <a href="{{ url_for('index') }}" {% if ep=='index' %} class="active" aria-current="page" {% endif %}
+          data-i18n="nav_home">{{ T('nav_home') }}</a>
+        <a href="{{ url_for('gallery') }}" {% if ep=='gallery' %} class="active" aria-current="page" {% endif %}
+          data-i18n="nav_gallery">{{ T('nav_gallery') }}</a>
+        <a href="{{ url_for('designer') }}" {% if ep=='designer' %} class="active" aria-current="page" {% endif %}
+          data-i18n="nav_designer">{{ T('nav_designer') }}</a>
+        <a href="{{ url_for('index') }}#styles">Styles</a>
+        <a href="{{ url_for('gallery') }}?sort=cost_asc">Cost Plans</a>
+        <a href="{{ url_for('guides') }}" {% if ep=='guides' %} class="active" aria-current="page" {% endif
+          %}>Guides</a>
+        <a href="{{ url_for('faq') }}" {% if ep=='faq' %} class="active" aria-current="page" {% endif %}>FAQ</a>
+        <a class="nav-cta" href="{{ url_for('designer') }}">Start Designing</a>
       </nav>
       <div class="tools">
+        <form class="hd-search" id="hdSearch" action="{{ url_for('gallery') }}" method="get" role="search">
+          <input type="search" name="q" maxlength="80" placeholder="Search designs…" aria-label="Search designs"
+            autocomplete="off">
+          <button type="button" class="hd-search-btn" id="hdSearchBtn" aria-label="Search designs"
+            aria-expanded="false">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path
+                d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.3 4.3-1.4 1.4-4.3-4.3A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"
+                fill="currentColor" />
+            </svg>
+          </button>
+        </form>
         <div class="lang-dd" id="langDd">
           <button type="button" class="lang-toggle" id="langToggle" aria-haspopup="listbox" aria-expanded="false"
             aria-label="Language" title="Language">
-            <span id="langCurrent">English</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round">
+              <circle cx="12" cy="12" r="9" />
+              <path
+                d="M3 12h18M12 3c2.600 2.400 4 5.600 4 9s-1.400 6.600-4 9c-2.600-2.400-4-5.600-4-9s1.400-6.600 4-9z" />
+            </svg>
+            <span id="langCurrent">EN</span><span class="caret" aria-hidden="true">▾</span>
           </button>
           <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language" hidden>
             {% for code, name, dir in LANGS %}
@@ -78,9 +106,10 @@
             {% endfor %}
           </div>
         </div>
-        <button class="icon-btn" id="themeBtn" aria-label="Toggle dark / light theme" title="Theme">
-          <span class="sun">☀</span><span class="moon">☾</span>
+        <button class="theme-pill" id="themeBtn" aria-label="Toggle dark / light theme" title="Theme">
+          <span class="sun" aria-hidden="true">☀</span><span class="moon" aria-hidden="true">☾</span>
         </button>
+        <a class="hd-cta" href="{{ url_for('designer') }}">Start Designing</a>
         <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
       </div>
     </div>
