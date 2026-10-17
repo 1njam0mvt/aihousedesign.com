@@ -193,16 +193,6 @@
         });
     }
 
-    /* header search: icon opens the box, Enter goes to the gallery with ?q= */
-    function initSearch() {
-        var f = document.getElementById("hdSearch"), btn = document.getElementById("hdSearchBtn"); if (!f || !btn) return;
-        var inp = f.querySelector("input");
-        function set(o) { f.classList.toggle("open", o); btn.setAttribute("aria-expanded", o ? "true" : "false"); if (o) inp.focus(); }
-        btn.addEventListener("click", function () { if (f.classList.contains("open") && inp.value.trim()) f.submit(); else set(!f.classList.contains("open")); });
-        f.addEventListener("keydown", function (e) { if (e.key === "Escape") { set(false); btn.focus(); } });
-        document.addEventListener("click", function (e) { if (!f.contains(e.target)) f.classList.remove("open"); });
-    }
-
-    function boot() { try { initSearch(); } catch (e) { } try { initToc(); } catch (e) { } try { initConsent(); } catch (e) { } try { initMail(); } catch (e) { } }
+    function boot() { try { initToc(); } catch (e) { } try { initConsent(); } catch (e) { } try { initMail(); } catch (e) { } }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();

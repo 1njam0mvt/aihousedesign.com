@@ -1,6 +1,5 @@
 """Design catalog: thousands of parametric house designs, generated once at import."""
 import random
-import re
 from functools import lru_cache
 
 from .planner import STYLES, FACINGS, feasible, build_plan
@@ -122,10 +121,7 @@ _BLOBS = {d["id"]: _blob(d) for d in DESIGNS}
 
 def search(q="", style=None, beds=None, floors=None, facing=None, min_area=None, max_area=None,
            max_cost=None, sort="popular", predicate=None):
-    qtext = (q or "").lower().replace("×", "x")
-    phrases = [f"{n} bhk" for n in re.findall(r"(\d+)\s*bhk", qtext)]       # "3 bhk" / "3bhk" must match the bedroom count
-    qtext = re.sub(r"\d+\s*bhk", " ", qtext)
-    toks = [t for t in qtext.split() if t]
+    toks = [t for t in (q or "").lower().replace("×", "x").split() if t]
     out = []
     for d in DESIGNS:
         if style and d["style"] != style:
@@ -139,9 +135,7 @@ def search(q="", style=None, beds=None, floors=None, facing=None, min_area=None,
         if predicate and not predicate(d):
             continue
         blob = _BLOBS[d["id"]]
-        if phrases and not all(ph in blob for ph in phrases):
-            continue
-        if toks and not all((re.search(r"\b" + t + r"\b", blob) if t.isdigit() else t in blob) for t in toks):
+        if toks and not all(t in blob for t in toks):
             continue
         out.append(d)
     if min_area or max_area or max_cost or sort in ("cost_asc", "cost_desc", "area_asc", "area_desc"):

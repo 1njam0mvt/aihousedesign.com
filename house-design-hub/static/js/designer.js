@@ -53,8 +53,6 @@
   HD.ready.then(function () {
     bubble(HD.t('ai_hello'), 'bot', 'ai_hello');
     var p = new URLSearchParams(location.search), body = {};
-    var q = (p.get('q') || '').trim().slice(0, 300);
-    if (q) { bubble(q, 'me'); post('/api/chat', { message: q }); return; }
     ['style', 'beds', 'floors', 'w', 'd', 'facing', 'variant'].forEach(function (k) { if (p.get(k)) body[k] = p.get(k); });
     if (!Object.keys(body).length) body = { style: 'modern', beds: 3, floors: 2, w: 30, d: 40, facing: 'E' };
     post('/api/generate', body);
