@@ -6,8 +6,10 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
 <section class="hero hero-v4 reference-final-hero" aria-label="AI house design and construction preview">
   <div class="hero-v4-backdrop" aria-hidden="true"></div>
   <div class="hero-v4-copy">
-    <div class="eyebrow hero-v4-eyebrow">⌂ &nbsp; YOUR HOME, REIMAGINED</div>
-    <h1>Design your <em>dream house</em></h1>
+    <div class="eyebrow hero-v4-eyebrow"><svg class="ic" aria-hidden="true">
+        <use href="#i-home" />
+      </svg>YOUR HOME, REIMAGINED</div>
+    <h1><span class="h1-a">Design your</span> <em>dream house</em></h1>
     <p class="lead">From your idea to a 2D plan, 3D model and 4D construction timeline.</p>
     <form class="hero-v4-form" action="{{ url_for('designer') }}" method="get">
       <label class="sr-only" for="heroDesignPrompt">Describe your dream house</label>
@@ -15,8 +17,13 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
         placeholder="Describe your dream house..." maxlength="300" autocomplete="off">
       <button type="submit">Generate with AI &nbsp; →</button>
     </form>
-    <div class="hero-v4-trust"><span>✧ No signup required</span><span>⬡ 2D &amp; 3D previews</span><span>♧ Free to
-        explore</span></div>
+    <div class="hero-v4-trust"><span><svg class="ic" aria-hidden="true">
+          <use href="#i-zap" />
+        </svg>No signup required</span><span><svg class="ic" aria-hidden="true">
+          <use href="#i-box" />
+        </svg>2D &amp; 3D previews</span><span><svg class="ic" aria-hidden="true">
+          <use href="#i-gift" />
+        </svg>Free to explore</span></div>
   </div>
   <div class="hero-v4-experience" id="buildHero" data-step="0"
     aria-label="Six-stage conceptual house construction preview">
@@ -110,14 +117,27 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
           </svg></span>
       </div>
     </a>
-    <a class="sh-card" href="{{ url_for('designer') }}" aria-label="Open AI House Designer">
+    <div class="sh-card sh-card-ai">
+      <a class="sh-stretch" href="{{ url_for('designer') }}" aria-label="Open AI House Designer"></a>
       <div class="sh-media"><img src="{{ url_for('static', filename='img/feature-ai.webp') }}"
           alt="Modern house exterior design concept" loading="lazy" width="960" height="540">
         <span class="sh-tag"><svg class="ic" aria-hidden="true">
             <use href="#i-sparkles" />
           </svg>AI</span>
-        <span class="sh-styles" aria-hidden="true"><span class="on">⌂ Modern</span><span>⌂ Traditional</span><span>⌂
-            Minimalist</span><span>⌂ Luxury</span></span>
+        <span class="sh-styles" role="group" aria-label="Open the house designer with a style">
+          <button type="button" class="on" data-style-pick="modern"><svg class="ic" aria-hidden="true">
+              <use href="#i-home" />
+            </svg>Modern</button>
+          <button type="button" data-style-pick="traditional"><svg class="ic" aria-hidden="true">
+              <use href="#i-house-trad" />
+            </svg>Traditional</button>
+          <button type="button" data-style-pick="minimalist"><svg class="ic" aria-hidden="true">
+              <use href="#i-house-min" />
+            </svg>Minimalist</button>
+          <button type="button" data-style-pick="luxury"><svg class="ic" aria-hidden="true">
+              <use href="#i-gem" />
+            </svg>Luxury</button>
+        </span>
       </div>
       <div class="sh-foot">
         <div class="sh-txt">
@@ -127,7 +147,7 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
             <use href="#i-arrow" />
           </svg></span>
       </div>
-    </a>
+    </div>
   </div>
 </section>
 
