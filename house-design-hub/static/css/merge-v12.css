@@ -2124,3 +2124,225 @@ html[data-theme="dark"] .reference-final-hero .hero-v4-thumbs button:not(:last-c
         display: none
     }
 }
+
+/* ================================================================== FIXES (round 4: hero like the reference) */
+/* one rounded hero card the width of the page; the photo fills the whole card and fades softly into the text side (no hard edge) */
+.reference-final-hero {
+    width: auto !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, .08) !important;
+    background: var(--bg) !important;
+    min-height: clamp(540px, 43vw, 620px)
+}
+
+html[data-theme="dark"] .reference-final-hero {
+    border-color: #1e293b !important;
+    box-shadow: none !important
+}
+
+.reference-final-hero .hero-v4-experience {
+    left: 0 !important
+}
+
+.reference-final-hero .hero-v4-scene {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, transparent 6%, rgba(0, 0, 0, .22) 22%, rgba(0, 0, 0, .62) 38%, #000 54%) !important;
+    mask-image: linear-gradient(to right, transparent 0, transparent 6%, rgba(0, 0, 0, .22) 22%, rgba(0, 0, 0, .62) 38%, #000 54%) !important
+}
+
+.reference-final-hero .hero-v4-scene img {
+    object-position: 78% 50%
+}
+
+.reference-final-hero .hero-v4-copy {
+    width: 44% !important;
+    padding: clamp(28px, 4vw, 52px) 0 clamp(28px, 4vw, 52px) clamp(24px, 3.6vw, 52px) !important
+}
+
+.reference-final-hero .hero-v4-copy>* {
+    max-width: 100%
+}
+
+.reference-final-hero .hero-v4-stage-menu {
+    left: 39% !important
+}
+
+.reference-final-hero .hero-v4-thumbs {
+    left: 39% !important;
+    right: 18px !important;
+    bottom: 44px !important
+}
+
+.reference-final-hero .hero-v4-progress {
+    left: 39% !important;
+    right: 34px !important;
+    bottom: 32px !important
+}
+
+.reference-final-hero .hero-v4-play {
+    right: 24px !important
+}
+
+html[data-theme="dark"] .reference-final-hero .hero-v4-scene {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, transparent 6%, rgba(0, 0, 0, .2) 22%, rgba(0, 0, 0, .6) 38%, #000 54%) !important;
+    mask-image: linear-gradient(to right, transparent 0, transparent 6%, rgba(0, 0, 0, .2) 22%, rgba(0, 0, 0, .6) 38%, #000 54%) !important
+}
+
+@media(max-width:1000px) {
+    .reference-final-hero {
+        min-height: 0
+    }
+
+    .reference-final-hero .hero-v4-copy {
+        width: auto !important;
+        padding: 28px 22px 22px !important
+    }
+
+    .reference-final-hero .hero-v4-experience {
+        left: auto !important
+    }
+
+    .reference-final-hero .hero-v4-stage-menu,
+    .reference-final-hero .hero-v4-thumbs,
+    .reference-final-hero .hero-v4-progress {
+        left: 14px !important
+    }
+
+    .reference-final-hero .hero-v4-thumbs {
+        right: 14px !important;
+        bottom: 26px !important
+    }
+
+    .reference-final-hero .hero-v4-progress {
+        right: 14px !important;
+        bottom: 14px !important
+    }
+}
+
+.reference-final-hero .hero-v4-copy {
+    width: 40% !important
+}
+
+.reference-final-hero h1 {
+    font-size: clamp(2.4rem, 4.1vw, 3.9rem) !important;
+    line-height: 1.04 !important
+}
+
+.reference-final-hero .hero-v4-copy .lead {
+    font-size: clamp(.95rem, 1.15vw, 1.12rem) !important;
+    max-width: 100%
+}
+
+.reference-final-hero .hero-v4-form {
+    max-width: 100% !important;
+    width: 100%
+}
+
+.reference-final-hero .hero-v4-stage-menu,
+.reference-final-hero .hero-v4-thumbs,
+.reference-final-hero .hero-v4-progress {
+    left: 42% !important
+}
+
+@media(max-width:1000px) {
+    .reference-final-hero .hero-v4-copy {
+        width: auto !important
+    }
+
+    .reference-final-hero .hero-v4-stage-menu,
+    .reference-final-hero .hero-v4-thumbs,
+    .reference-final-hero .hero-v4-progress {
+        left: 14px !important
+    }
+}
+
+/* ================================================================== FIXES (round 5: stage menu blends into the photo) */
+/* no boxed container: just six soft frosted pills floating over the picture */
+.reference-final-hero .hero-v4-stage-menu {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    gap: 9px !important;
+    width: auto !important;
+    min-width: 158px
+}
+
+.reference-final-hero .hero-v4-stage-menu button {
+    background: rgba(255, 255, 255, .58) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(1.2);
+    backdrop-filter: blur(8px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, .55) !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, .14) !important;
+    color: #0f2a24 !important;
+    border-radius: 999px !important;
+    font-weight: 600;
+    transition: background .2s, transform .2s, box-shadow .2s
+}
+
+.reference-final-hero .hero-v4-stage-menu button:hover {
+    background: rgba(255, 255, 255, .8) !important;
+    transform: translateX(2px)
+}
+
+.reference-final-hero .hero-v4-stage-menu button span {
+    background: rgba(255, 255, 255, .92) !important;
+    color: #0f2a24 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .18)
+}
+
+.reference-final-hero .hero-v4-stage-menu button.is-active,
+.reference-final-hero .hero-v4-stage-menu button[aria-pressed="true"],
+.reference-final-hero .hero-v4-stage-menu button.on {
+    background: linear-gradient(135deg, #065f46, #064e3b) !important;
+    border-color: rgba(255, 255, 255, .35) !important;
+    color: #fff !important;
+    font-weight: 800;
+    box-shadow: 0 8px 20px rgba(6, 78, 59, .45) !important
+}
+
+.reference-final-hero .hero-v4-stage-menu button.is-active span,
+.reference-final-hero .hero-v4-stage-menu button[aria-pressed="true"] span,
+.reference-final-hero .hero-v4-stage-menu button.on span {
+    background: #fff !important;
+    color: #064e3b !important
+}
+
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu {
+    background: transparent !important;
+    border: 0 !important
+}
+
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu button {
+    background: rgba(15, 23, 42, .55) !important;
+    border: 1px solid rgba(148, 163, 184, .3) !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .35) !important
+}
+
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu button:hover {
+    background: rgba(30, 41, 59, .78) !important
+}
+
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu button span {
+    background: rgba(255, 255, 255, .95) !important;
+    color: #0f172a !important
+}
+
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu button.is-active,
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu button[aria-pressed="true"] {
+    background: linear-gradient(135deg, #065f46, #064e3b) !important;
+    border-color: rgba(110, 231, 183, .4) !important;
+    color: #fff !important
+}
+
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu button.is-active span,
+html[data-theme="dark"] .reference-final-hero .hero-v4-stage-menu button[aria-pressed="true"] span {
+    background: #fff !important;
+    color: #064e3b !important
+}

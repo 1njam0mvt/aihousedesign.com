@@ -49,7 +49,7 @@
         var on = b.dataset.lang === data.lang;
         b.classList.toggle('active', on);
         b.setAttribute('aria-selected', on);
-        if (on) { var cur = document.getElementById('langCurrent'); if (cur) cur.textContent = (b.getAttribute('data-lang') || b.textContent).toUpperCase(); }
+        if (on) { var cur = document.getElementById('langCurrent'); if (cur) { cur.textContent = (b.dataset.lang || '').toUpperCase(); var tg = document.getElementById('langToggle'); if (tg) tg.title = b.textContent; } }
       });
       HD.applyI18n();
       document.dispatchEvent(new CustomEvent('langchange', { detail: data.lang }));
