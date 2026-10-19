@@ -1,0 +1,186 @@
+/* v11: image containment and reliable style image painting */
+.style-choice-art,
+.collection-photo {
+    position: relative !important;
+    display: block !important;
+    width: 100%;
+    aspect-ratio: 16/10 !important;
+    height: auto !important;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #edf0f1
+}
+
+.style-choice-art img.architecture-photo,
+.collection-photo img.architecture-photo {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    transform: none;
+    transition: transform .25s ease
+}
+
+.style-choice:hover .style-choice-art img.architecture-photo,
+.collection-item:hover .collection-photo img.architecture-photo {
+    transform: scale(1.02)
+}
+
+/* Do not crop information-dense feature screenshots; the complete image must remain visible. */
+.premium-feature-image {
+    position: relative !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16/9 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    background: #f5f6f5 !important;
+    padding: 8px !important
+}
+
+.premium-feature-image>img {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    transform: none !important
+}
+
+.premium-feature-image .feature-styles {
+    right: 10px;
+    max-width: 42%;
+    font-size: clamp(9px, .8vw, 12px)
+}
+
+.premium-feature-image .feature-360,
+.premium-feature-image .feature-4d-badge {
+    right: 12px;
+    top: 12px
+}
+
+.premium-feature .txt {
+    padding: 16px 18px 20px !important
+}
+
+/* Keep 2D dimensions and construction timeline visible, even on narrow cards. */
+@media(max-width:700px) {
+    .premium-feature-image {
+        aspect-ratio: 16/10 !important
+    }
+
+    .style-choice-art,
+    .collection-photo {
+        aspect-ratio: 16/9 !important
+    }
+}
+
+/* Final audit: wide legal pages, balanced table of contents, and stable construction scene sizing. */
+main.wrap:has(.doc-layout) {
+    width: min(100% - 32px, 1440px);
+    max-width: 1440px;
+    padding-left: 0;
+    padding-right: 0
+}
+
+.doc-layout {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+    gap: clamp(22px, 3vw, 42px);
+    margin: 0;
+    padding: 0 12px;
+    box-sizing: border-box
+}
+
+.doc-layout>.doc {
+    max-width: 960px;
+    width: 100%;
+    min-width: 0
+}
+
+.doc-layout .doc p,
+.doc-layout .doc li {
+    line-height: 1.75
+}
+
+.doc-layout .doc h1 {
+    margin-top: 0
+}
+
+.doc-layout .doc-toc {
+    min-width: 0
+}
+
+.reference-final-hero .hero-v4-scene>img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    image-rendering: auto;
+    backface-visibility: hidden
+}
+
+.reference-final-hero .hero-v4-thumbs .thumb-photo {
+    overflow: hidden
+}
+
+.reference-final-hero .hero-v4-thumbs img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center
+}
+
+/* The large scene must not inherit any decorative carousel arrows from older style layers. */
+.reference-final-hero .hero-v4-scene:before,
+.reference-final-hero .hero-v4-scene:after {
+    content: none !important;
+    display: none !important
+}
+
+@media(max-width:900px) {
+    main.wrap:has(.doc-layout) {
+        width: 100%;
+        padding-left: 16px;
+        padding-right: 16px
+    }
+
+    .doc-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        padding: 0
+    }
+
+    .doc-layout>.doc {
+        max-width: none
+    }
+
+    .doc-toc {
+        width: 100%;
+        box-sizing: border-box
+    }
+}
+
+@media(max-width:520px) {
+    main.wrap:has(.doc-layout) {
+        padding-left: 12px;
+        padding-right: 12px
+    }
+
+    .doc-layout .doc h1 {
+        font-size: clamp(1.8rem, 7vw, 2.4rem)
+    }
+}

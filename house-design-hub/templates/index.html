@@ -3,29 +3,263 @@
 {% block desc %}Free AI house design generator: create 2D floor plans, 3D models and front elevation designs online in
 seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblock %}
 {% block content %}
-<section class="hero hero-split">
-  <div class="hero-copy">
-    <h1 data-i18n="hero_title">{{ T('hero_title') }}</h1>
-    <p class="lead" data-i18n="hero_sub">{{ T('hero_sub') }}</p>
-    <p class="count"><strong>{{ '{:,}'.format(stats.total) }}</strong> <span data-i18n="designs_count">{{
-        T('designs_count') }}</span> · 2D · 3D · 4D</p>
-    <div class="cta">
-      <a class="btn primary" href="{{ url_for('gallery') }}" data-i18n="cta_gallery">{{ T('cta_gallery') }}</a>
-      <a class="btn" href="{{ url_for('designer') }}" data-i18n="cta_ai">{{ T('cta_ai') }}</a>
-    </div>
+<section class="hero hero-v4 reference-final-hero" aria-label="AI house design and construction preview">
+  <div class="hero-v4-backdrop" aria-hidden="true"></div>
+  <div class="hero-v4-copy">
+    <div class="eyebrow hero-v4-eyebrow">⌂ &nbsp; YOUR HOME, REIMAGINED</div>
+    <h1>Design your <em>dream house</em></h1>
+    <p class="lead">From your idea to a 2D plan, 3D model and 4D construction timeline.</p>
+    <form class="hero-v4-form" action="{{ url_for('designer') }}" method="get">
+      <label class="sr-only" for="heroDesignPrompt">Describe your dream house</label>
+      <span aria-hidden="true">✦</span><input id="heroDesignPrompt" name="prompt"
+        placeholder="Describe your dream house..." maxlength="300" autocomplete="off">
+      <button type="submit">Generate with AI &nbsp; →</button>
+    </form>
+    <div class="hero-v4-trust"><span>✧ No signup required</span><span>⬡ 2D &amp; 3D previews</span><span>♧ Free to
+        explore</span></div>
   </div>
-  <div class="collage">
-    {% for k, cls in (('modern', 't1'), ('village', 't2'), ('villa', 't3'), ('duplex', 't4')) %}
-    <a class="tile {{ cls }}" href="{{ url_for('gallery') }}?style={{ k }}">
-      <div class="art" data-art="{{ k }}" {% if k=='duplex' %} data-dusk="1" {% endif %}>{{ art_img(k, hero=True) }}
-      </div>
-      <span class="tag" data-i18n="style.{{ k }}">{{ style_en(k) }}</span>
-    </a>
-    {% endfor %}
+  <div class="hero-v4-experience" id="buildHero" data-step="0"
+    aria-label="Six-stage conceptual house construction preview">
+    <div class="hero-v4-stage-menu" aria-label="Construction stages">
+      {% for label in ['Foundation','Structure','Walls','Roof','Finishing','Completed'] %}
+      <button type="button" data-build-step="{{ loop.index0 }}"><span>{{ loop.index }}</span>{{ label }}</button>
+      {% endfor %}
+    </div>
+    <div class="hero-v4-scene">
+      <img src="{{ url_for('static', filename='img/build-stage-3-hd.webp') }}"
+        alt="Modern two-storey house under construction" width="1376" height="768" fetchpriority="high"
+        decoding="async">
+      <div class="hero-v6-stage-picture" aria-hidden="true"></div>
+      <div class="hero-v4-scene-shade" aria-hidden="true"></div>
+      <div class="hero-v4-stage-badge" id="buildStageText" aria-live="polite">01 / Foundation</div>
+      <button type="button" class="hero-v4-play" id="buildToggle" data-state="play"
+        aria-label="Pause construction preview">Watch the Construction Process</button>
+    </div>
+    <div class="hero-v4-thumbs" aria-label="Choose construction stage">
+      {% for label in ['Foundation','Structure','Walls','Roof','Finishing','Completed'] %}
+      <button type="button" data-build-step="{{ loop.index0 }}"
+        data-build-image="{{ url_for('static', filename='img/build-stage-' ~ loop.index ~ '-hd.webp') }}"><span
+          class="thumb-photo"><img src="{{ url_for('static', filename='img/build-stage-' ~ loop.index ~ '.webp') }}"
+            alt="" loading="lazy" decoding="async"></span><span>{{ label }}</span></button>
+      {% endfor %}
+    </div>
+    <div class="hero-v4-progress" aria-hidden="true"><span id="buildProgress"></span></div>
   </div>
 </section>
 
-<section class="cinema-home">
+<section class="tools-v4">
+  <div class="tools-v4-heading">
+    <div>
+      <h2>2D · 3D · 4D · AI</h2>
+    </div>
+  </div>
+  <div class="sh-grid">
+    <a class="sh-card" href="{{ url_for('design', design_id=featured[0].id) }}#plan"
+      aria-label="Open interactive 2D floor plan">
+      <div class="sh-media sh-media-plan"><img src="{{ url_for('static', filename='img/feature-2d.webp') }}"
+          alt="Detailed colored architectural 2D floor plan" loading="lazy" width="960" height="540">
+        <span class="sh-tag"><svg class="ic" aria-hidden="true">
+            <use href="#i-layers" />
+          </svg>2D</span>
+      </div>
+      <div class="sh-foot">
+        <div class="sh-txt">
+          <h3>2D Floor Plan</h3>
+          <p>Detailed floor layout with dimensions</p>
+        </div><span class="sh-go" aria-hidden="true"><svg class="ic">
+            <use href="#i-arrow" />
+          </svg></span>
+      </div>
+    </a>
+    <a class="sh-card" href="{{ url_for('design', design_id=featured[0].id) }}#model"
+      aria-label="Open interactive 3D house model">
+      <div class="sh-media"><img src="{{ url_for('static', filename='img/feature-3d.webp') }}"
+          alt="Photorealistic architectural visualization of a modern two-storey house" loading="lazy" width="960"
+          height="540">
+        <span class="sh-tag"><svg class="ic" aria-hidden="true">
+            <use href="#i-rotate" />
+          </svg>3D</span>
+        <span class="sh-360"><svg class="ic" aria-hidden="true">
+            <use href="#i-rotate" />
+          </svg>360°</span>
+      </div>
+      <div class="sh-foot">
+        <div class="sh-txt">
+          <h3>3D Model</h3>
+          <p>Interactive 3D view with full rotation</p>
+        </div><span class="sh-go" aria-hidden="true"><svg class="ic">
+            <use href="#i-arrow" />
+          </svg></span>
+      </div>
+    </a>
+    <a class="sh-card" href="{{ url_for('design', design_id=featured[0].id) }}#timeline"
+      aria-label="Open interactive 4D construction timeline">
+      <div class="sh-media"><img src="{{ url_for('static', filename='img/feature-4d.webp') }}"
+          alt="Construction stages from foundation to completed house" loading="lazy" width="960" height="540">
+        <span class="sh-tag"><svg class="ic" aria-hidden="true">
+            <use href="#i-calendar" />
+          </svg>4D</span>
+        <span class="sh-4d">4D</span>
+      </div>
+      <div class="sh-foot">
+        <div class="sh-txt">
+          <h3>4D Timeline</h3>
+          <p>Step-by-step construction animation</p>
+        </div><span class="sh-go" aria-hidden="true"><svg class="ic">
+            <use href="#i-arrow" />
+          </svg></span>
+      </div>
+    </a>
+    <a class="sh-card" href="{{ url_for('designer') }}" aria-label="Open AI House Designer">
+      <div class="sh-media"><img src="{{ url_for('static', filename='img/feature-ai.webp') }}"
+          alt="Modern house exterior design concept" loading="lazy" width="960" height="540">
+        <span class="sh-tag"><svg class="ic" aria-hidden="true">
+            <use href="#i-sparkles" />
+          </svg>AI</span>
+        <span class="sh-styles" aria-hidden="true"><span class="on">⌂ Modern</span><span>⌂ Traditional</span><span>⌂
+            Minimalist</span><span>⌂ Luxury</span></span>
+      </div>
+      <div class="sh-foot">
+        <div class="sh-txt">
+          <h3>AI House Designer</h3>
+          <p>Generate &amp; customize your house</p>
+        </div><span class="sh-go" aria-hidden="true"><svg class="ic">
+            <use href="#i-arrow" />
+          </svg></span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="vh" id="villa-horizon" aria-labelledby="vhTitle" data-vh-now="3">
+  <script type="application/json" id="vhData">{{ BUILD_STAGES|tojson }}</script>
+  {% set st = BUILD_STAGES[2] %}
+  <div class="vh-head">
+    <div>
+      <span class="vh-pill"><svg class="ic" aria-hidden="true">
+          <use href="#i-dash" />
+        </svg>Project Hub &amp; Mobile Dashboard</span>
+      <h2 id="vhTitle">Villa Horizon — Construction &amp; AI Studio</h2>
+      <p class="vh-sub">Contractor sync, 4D stage tracking, CAD floor plans &amp; generative renders</p>
+    </div>
+    <a class="vh-btn" href="{{ url_for('designer') }}"><svg class="ic" aria-hidden="true">
+        <use href="#i-sparkles" />
+      </svg>New AI Render</a>
+  </div>
+
+  <div class="vh-kpis">
+    <div class="vh-kpi">
+      <div class="vh-kpi-top"><span>Active Stage</span><svg class="ic amber" aria-hidden="true">
+          <use href="#i-hardhat" />
+        </svg></div>
+      <strong id="vhKStage">{{ st.id }}. {{ st.name }}</strong><em class="green" id="vhKProg">{{ st.progress }}% Target
+        Completed</em>
+    </div>
+    <div class="vh-kpi">
+      <div class="vh-kpi-top"><span>Planned Budget</span><svg class="ic green" aria-hidden="true">
+          <use href="#i-dollar" />
+        </svg></div>
+      <strong>{{ BUILD_TOTAL_BUDGET }}</strong><em id="vhKCum">Cumulative: {{ st.cost }}</em>
+    </div>
+    <div class="vh-kpi">
+      <div class="vh-kpi-top"><span>Timeline</span><svg class="ic sky" aria-hidden="true">
+          <use href="#i-clock" />
+        </svg></div>
+      <strong id="vhKDays">{{ st.days }} / {{ BUILD_TOTAL_DAYS }} Days</strong><em class="sky" id="vhKPhase">On Schedule
+        (Phase {{ st.id }} of 6)</em>
+    </div>
+    <div class="vh-kpi">
+      <div class="vh-kpi-top"><span>Sustainability</span><svg class="ic green" aria-hidden="true">
+          <use href="#i-shield" />
+        </svg></div>
+      <strong class="green">A+ Net-Zero</strong><em>Passive Solar + Glulam</em>
+    </div>
+  </div>
+
+  <h3 class="vh-h3">Interactive Project Launchpad</h3>
+  <div class="vh-launch">
+    <a class="vh-lc" href="{{ url_for('design', design_id=featured[0].id) }}#plan"><span class="vh-lc-body"><span
+          class="vh-ico sky"><svg class="ic" aria-hidden="true">
+            <use href="#i-layers" />
+          </svg></span><strong>2D Floor Plan</strong><small>Inspect rooms, dimensions &amp; export CAD
+          drawings</small></span><svg class="ic vh-chev" aria-hidden="true">
+        <use href="#i-chev-r" />
+      </svg></a>
+    <a class="vh-lc" href="{{ url_for('design', design_id=featured[0].id) }}#model"><span class="vh-lc-body"><span
+          class="vh-ico green"><svg class="ic" aria-hidden="true">
+            <use href="#i-rotate" />
+          </svg></span><strong>3D Model (360°)</strong><small>Full Three.js WebGL rotation &amp; daylight
+          simulation</small></span><svg class="ic vh-chev" aria-hidden="true">
+        <use href="#i-chev-r" />
+      </svg></a>
+    <a class="vh-lc" href="{{ url_for('design', design_id=featured[0].id) }}#timeline"><span class="vh-lc-body"><span
+          class="vh-ico amber"><svg class="ic" aria-hidden="true">
+            <use href="#i-calendar" />
+          </svg></span><strong>4D Construction Timeline</strong><small>Step-by-step timelapse, milestones &amp;
+          materials</small></span><svg class="ic vh-chev" aria-hidden="true">
+        <use href="#i-chev-r" />
+      </svg></a>
+    <a class="vh-lc" href="{{ url_for('designer') }}"><span class="vh-lc-body"><span class="vh-ico purple"><svg
+            class="ic" aria-hidden="true">
+            <use href="#i-brain" />
+          </svg></span><strong>High-Thinking AI</strong><small>Gemini 4 Argon deep reasoning structural load
+          solver</small></span><svg class="ic vh-chev" aria-hidden="true">
+        <use href="#i-chev-r" />
+      </svg></a>
+  </div>
+
+  <div class="vh-stage">
+    <div class="vh-stage-top">
+      <div class="vh-stage-ttl">
+        <div class="vh-row"><span class="vh-num" id="vhNum">{{ st.id }}</span>
+          <h4 id="vhName">{{ st.name }}: {{ st.subtitle }}</h4>
+        </div>
+        <p id="vhDesc">{{ st.description }}</p>
+      </div>
+      <div class="vh-tabs" role="group" aria-label="Choose construction stage">
+        {% for x in BUILD_STAGES %}<button type="button" data-vh-stage="{{ x.id }}"
+          data-img="{{ url_for('static', filename='img/build-stage-' ~ x.id ~ '-hd.webp') }}"
+          aria-pressed="{{ 'true' if x.id == 3 else 'false' }}" class="{{ 'on' if x.id == 3 }}">{{ x.id }}. {{ x.name
+          }}</button>{% endfor %}
+      </div>
+    </div>
+    <div class="vh-cols">
+      <figure class="vh-fig"><img id="vhImg"
+          src="{{ url_for('static', filename='img/build-stage-' ~ st.id ~ '-hd.webp') }}"
+          data-base="{{ url_for('static', filename='img/') }}" alt="{{ st.name }} stage of the Villa Horizon build"
+          width="1376" height="768" loading="lazy" decoding="async"></figure>
+      <div>
+        <h5>Stage Milestones Checklist</h5>
+        <ul class="vh-mile" id="vhMile">{% for m in st.milestones %}<li><svg class="ic" aria-hidden="true">
+              <use href="#i-check" />
+            </svg><span>{{ m }}</span></li>{% endfor %}</ul>
+      </div>
+      <div>
+        <h5>Engineering Specifications</h5>
+        <dl class="vh-specs">
+          <div>
+            <dt>Concrete mix</dt>
+            <dd id="vhSpecC">{{ st.concrete }}</dd>
+          </div>
+          <div>
+            <dt>Structural steel</dt>
+            <dd id="vhSpecS">{{ st.steel }}</dd>
+          </div>
+          <div>
+            <dt>Safety protocol</dt>
+            <dd class="green" id="vhSpecF">{{ st.safety }}</dd>
+          </div>
+          <div>
+            <dt>Inspection sign-off</dt>
+            <dd id="vhSpecI">{{ st.inspection }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cinema-home editorial-section">
   <h2>See your home come to life</h2>
   <p class="muted">Scrub from blueprint to finished home, peel back the six roof layers, slide from morning to night, or
     take
@@ -33,71 +267,146 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
   <div id="videoExpMaster"></div>
 </section>
 
-<section>
-  <h2>2D · 3D · 4D · AI</h2>
-  <div class="features">
-    <div class="feat">
-      <div class="fart">
-        <div data-art="plan"></div>
+<section class="ce" id="cost-estimator" aria-labelledby="ceTitle">
+  <div class="ce-head">
+    <span class="vh-pill"><svg class="ic" aria-hidden="true">
+        <use href="#i-calc" />
+      </svg>Interactive Estimator</span>
+    <h2 id="ceTitle">Real-Time Construction Cost Estimator</h2>
+    <p>Calculate your building investment by square footage, finish tier, and 4D construction stages.</p>
+  </div>
+  <div class="ce-grid">
+    <div class="ce-panel" id="ceForm">
+      <div>
+        <div class="ce-row"><label for="ceArea">Total Floor Area (Living Space)</label><output id="ceAreaVal"
+            for="ceArea">3,850 sq ft (358 m²)</output></div>
+        <input type="range" id="ceArea" min="1500" max="8500" step="50" value="3850">
+        <div class="ce-scale"><span>1,500 sq ft</span><span>5,000 sq ft</span><span>8,500 sq ft</span></div>
       </div>
-      <div class="txt">
-        <h3 data-i18n="view_2d">{{ T('view_2d') }}</h3>
-        <p class="muted small" data-i18n="download_svg">{{ T('download_svg') }}</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="fart">
-        <div data-art="cube"></div>
-      </div>
-      <div class="txt">
-        <h3 data-i18n="view_3d">{{ T('view_3d') }}</h3>
-        <p class="muted small" data-i18n="drag_hint">{{ T('drag_hint') }}</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="fart stages">
-        {% for n, key in ((1, 'stage_foundation'), (2, 'stage_walls'), (3, 'stage_roof'), (4, 'stage_finish')) %}
-        <div class="stage-item">
-          <div data-stage="{{ n }}"></div><span data-i18n="{{ key }}">{{ T(key) }}</span>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="txt">
-        <h3 data-i18n="view_4d">{{ T('view_4d') }}</h3>
-        <p class="muted small" data-i18n="construction">{{ T('construction') }}</p>
-      </div>
-    </div>
-    <a class="feat" href="{{ url_for('designer') }}">
-      <div class="fart ai-demo">
-        <div class="bubble user"><i></i><i></i></div>
-        <div class="bubble bot">
-          <div data-art="contemporary"></div>
+      <div>
+        <p class="ce-lab" id="ceFloorsLab">Levels / Floors</p>
+        <div class="ce-btns3" role="group" aria-labelledby="ceFloorsLab">
+          <button type="button" data-floors="1" aria-pressed="false">1 Floor (Ranch)</button>
+          <button type="button" data-floors="2" aria-pressed="true" class="on">2 Floors</button>
+          <button type="button" data-floors="3" aria-pressed="false">3 Floors</button>
         </div>
       </div>
-      <div class="txt">
-        <h3 data-i18n="ai_title">{{ T('ai_title') }}</h3>
-        <p class="muted small" data-i18n="ai_hello">{{ T('ai_hello') }}</p>
+      <div>
+        <p class="ce-lab" id="ceTierLab">Architectural Finish Quality</p>
+        <div class="ce-btns3" role="group" aria-labelledby="ceTierLab">
+          <button type="button" data-tier="standard" data-rate="185" aria-pressed="false"><b>Standard</b><small>$185/sq
+              ft</small></button>
+          <button type="button" data-tier="luxury" data-rate="275" aria-pressed="true" class="on"><b>Luxury
+              Villa</b><small>$275/sq ft</small></button>
+          <button type="button" data-tier="ultra" data-rate="420" aria-pressed="false"><b>Ultra
+              High-End</b><small>$420/sq ft</small></button>
+        </div>
       </div>
-    </a>
+      <div class="ce-addons">
+        <label><span>Infinity Lap Pool &amp; Teak Deck (+$45,000)</span><input type="checkbox" id="cePool"
+            checked></label>
+        <label><span>Solar PV System &amp; Home Battery (+$22,000)</span><input type="checkbox" id="ceSolar"
+            checked></label>
+      </div>
+    </div>
+    <div class="ce-result">
+      <div>
+        <span class="ce-eyebrow">Estimated Turnkey Investment</span>
+        <div class="ce-total"><span id="ceTotal">$1,210,450</span><small>USD</small></div>
+        <p id="ceDesc">Estimated build cost for a 3850 sq ft luxury architectural home.</p>
+      </div>
+      <div class="ce-stages">
+        <span class="ce-eyebrow">Construction Stage Allocation</span>
+        <div><span>Stage 1: Foundation &amp; Excavation</span><b data-ce-stage="0.12">$137,214</b></div>
+        <div><span>Stage 2: Concrete Frame &amp; Structure</span><b data-ce-stage="0.22">$251,559</b></div>
+        <div><span>Stage 3: Thermal Brick Walls</span><b data-ce-stage="0.15">$171,518</b></div>
+        <div><span>Stage 4: Flat Roof Deck &amp; Waterproofing</span><b data-ce-stage="0.16">$182,952</b></div>
+        <div><span>Stage 5: Glazing &amp; Architectural Finishes</span><b data-ce-stage="0.25">$285,863</b></div>
+        <div><span>Stage 6: MEP, Electrical &amp; Smart Home</span><b data-ce-stage="0.10">$114,345</b></div>
+      </div>
+      <div class="ce-save">
+        <button type="button" id="ceSave"><svg class="ic" aria-hidden="true">
+            <use href="#i-sparkles" />
+          </svg>Save Estimate to Project</button>
+        <p id="ceSaved" role="status" aria-live="polite" hidden></p>
+      </div>
+    </div>
   </div>
 </section>
 
-<section>
-  <h2 data-i18n="styles">{{ T('styles') }}</h2>
-  <div class="showcase">
+
+<section id="styles" class="interactive-section">
+  <div class="section-intro">
+    <div><span class="section-kicker">FIND YOUR AESTHETIC</span>
+      <h2>Explore architectural styles</h2>
+      <p class="muted">Choose a style to explore matching homes or start designing with it.</p>
+    </div><a class="section-link" href="{{ url_for('gallery') }}">Browse all designs →</a>
+  </div>
+  {% set architecture_photos = {'modern':
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85', 'minimalist':
+  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85', 'contemporary':
+  'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85', 'village':
+  'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=85', 'assam':
+  'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=1200&q=85', 'traditional':
+  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85', 'duplex':
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85', 'passive':
+  'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85', 'loft':
+  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85', 'farmhouse':
+  'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1200&q=85', 'bungalow':
+  'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85', 'villa':
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85', 'lowcost':
+  'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=85', 'compact':
+  'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1200&q=85', 'mansion':
+  'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85'} %}
+  <div class="style-card-grid">
     {% for k in STYLE_KEYS %}
-    <a class="show-card" href="{{ url_for('gallery') }}?style={{ k }}">
-      <div class="art" data-art="{{ k }}">{{ art_img(k) }}</div>
-      <span data-i18n="style.{{ k }}">{{ style_en(k) }}</span>
-    </a>
+    <article class="style-choice" data-style="{{ k }}">
+      <a class="style-choice-main" href="{{ url_for('gallery') }}?style={{ k }}">
+        <div class="style-choice-art"><img class="architecture-photo" src="{{ architecture_photos[k] }}"
+            alt="{{ style_en(k) }} house architecture inspiration" width="1000" height="620" loading="lazy"
+            decoding="async" data-fallback="{{ url_for('static', filename='img/feature-3d.webp') }}"></div><strong>{{
+          style_en(k) }}</strong><span class="style-choice-arrow">↗</span>
+      </a>
+      <a class="preset-link"
+        href="{{ url_for('designer') }}?prompt={{ ('Design a ' ~ style_en(k) ~ ' 3 bedroom house on a 30x40 ft plot')|urlencode }}">✦
+        Try in AI Designer</a>
+    </article>
     {% endfor %}
   </div>
 </section>
 
-<section>
-  <h2 data-i18n="collections">{{ T('collections') }}</h2>
-  <div class="chips">
-    {% for t in TOPICS %}<a class="chip" href="{{ url_for('topic', slug=t.slug) }}">{{ t.title }}</a>{% endfor %}
+<section id="collections" class="interactive-section collections-section">
+  <div class="section-intro">
+    <div><span class="section-kicker">CURATED INSPIRATION</span>
+      <h2>Explore house collections</h2>
+      <p class="muted">Find the right inspiration for your plot and budget.</p>
+    </div>
+  </div>
+  <div class="collection-filter-bar" aria-label="Filter collections">
+    <button class="collection-filter active" data-collection-filter="all" aria-pressed="true">All collections</button>
+    <button class="collection-filter" data-collection-filter="budget" aria-pressed="false">Budget-friendly</button>
+    <button class="collection-filter" data-collection-filter="compact" aria-pressed="false">Compact plots</button>
+    <button class="collection-filter" data-collection-filter="vastu" aria-pressed="false">Vastu ideas</button>
+  </div>
+  <div class="collection-grid">
+    {% for t in TOPICS %}
+    {% set title_l = t.title|lower %}
+    {% set cat = 'budget' if ('cost' in title_l or 'budget' in title_l or 'low' in title_l) else ('compact' if ('small'
+    in title_l or '30x40' in title_l or 'compact' in title_l) else ('vastu' if ('vastu' in title_l or 'facing' in
+    title_l) else 'other')) %}
+    <article class="collection-item" data-category="{{ cat }}">
+      <div class="collection-photo"><img class="architecture-photo"
+          src="{{ architecture_photos['minimalist'] if cat == 'compact' else (architecture_photos['traditional'] if cat == 'vastu' else (architecture_photos['luxury'] if cat == 'budget' else architecture_photos['modern'])) }}"
+          alt="Architectural inspiration for {{ t.title }}" loading="lazy" decoding="async" width="1000" height="620"
+          data-fallback="{{ url_for('static', filename='img/feature-3d.webp') }}"></div><span class="collection-tag">{{
+        'Budget-friendly' if cat == 'budget' else ('Compact plot' if cat == 'compact' else ('Vastu inspiration' if cat
+        == 'vastu' else 'House ideas')) }}</span>
+      <h3><a href="{{ url_for('topic', slug=t.slug) }}">{{ t.title }}</a></h3>
+      <div class="collection-actions"><a href="{{ url_for('topic', slug=t.slug) }}">Explore →</a><a
+          href="{{ url_for('designer') }}?prompt={{ ('Design a house inspired by ' ~ t.title ~ ' on a 30x40 ft plot')|urlencode }}">✦
+          Try in AI Designer</a></div>
+    </article>
+    {% endfor %}
   </div>
 </section>
 
@@ -106,7 +415,7 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
   <div class="grid" id="featured" data-cards='{{ featured|tojson|forceescape }}'></div>
 </section>
 
-<section class="doc seo-text">
+<section class="doc seo-text" id="about">
   <h2>Free AI house design for every plot</h2>
   <p>{{ SITE_NAME }} is a free AI house design tool and a library of {{ '{:,}'.format(stats.total) }} ready-made house
     designs. Tell the AI designer your plot size, number of bedrooms, floors and style, and it draws a floor plan with
@@ -117,11 +426,67 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
     Compare options, download the plan and take your favourite to an architect.</p>
 </section>
 
-<section>
+<section id="guides">
   <h2>Explore house design ideas and guides</h2>
   <div class="explore">
     {% for e in explore %}
     <a class="explore-card" href="{{ e.path }}"><strong>{{ e.nav }}</strong><span>{{ e.lead }}</span></a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="bg" id="building-guides" aria-labelledby="bgTitle">
+  <div class="bg-head">
+    <span class="vh-pill"><svg class="ic" aria-hidden="true">
+        <use href="#i-book" />
+      </svg>Building Knowledge</span>
+    <h2 id="bgTitle">Architectural &amp; Building Guides</h2>
+    <p>Essential knowledge written by licensed architects and structural engineers.</p>
+  </div>
+  <div class="bg-list">
+    {% set bguides = [
+    ('Project Management', '4 min read', 'How 4D Construction Sequencing Prevents Budget Overruns', '4D BIM links 3D
+    spatial models directly to project scheduling. By simulating when concrete cures and when materials arrive,
+    contractors avoid costly trade congestion on site.', ['Establish the critical path: Excavation -> Slab Cure (14 days
+    minimum) -> Truss load bearing.', 'Sequence trades logically: Rough-in MEP (Mechanical, Electrical, Plumbing) prior
+    to insulation closure.', 'Buffer for adverse weather: Allow 10% contingency in foundation and roof phases.']),
+    ('Permits & Compliance', '6 min read', 'Zoning, Setbacks & Municipal Building Permit Checklist', 'Before pouring
+    footings, ensure your 2D plans comply with local maximum lot coverage, height limits, side-yard setbacks, and
+    environmental stormwater retention laws.', ['Obtain certified topographic land survey showing property boundary
+    markers.', 'Verify residential height restrictions (standard residential is typically 8.5m - 10.5m).', 'Submit
+    engineering stamped structural calculations and soil bearing pressure test certificates.']),
+    ('Sustainable Architecture', '5 min read', 'Designing for Passive Solar & Net-Zero Energy Performance', 'Harness
+    free environmental heating and cooling. Orient primary living zones and double-glazed facades within 15 degrees of
+    true solar south with calibrated cantilevered overhangs.', ['Calculate summer vs. winter sun angles to design eaves
+    that block high summer sun while inviting low winter warmth.', 'Specify High-SHGC glass on south facades and low-U
+    argon double/triple glazing on north exposures.', 'Incorporate thermal mass (such as polished concrete or stone) to
+    absorb daytime heat and radiate it at night.']),
+    ('Structural Engineering', '5 min read', 'Understanding Soil Load-Bearing Capacity for RAFT Foundations', 'A
+    building is only as sound as the ground it rests upon. Learn how geotechnical boreholes determine whether strip
+    footings, raft slabs, or deep friction piles are required.', ['Perform standard penetration tests (SPT) at minimum 3
+    plot corners down to 3 meters.', 'For clay soils with shrink-swell potential, specify a reinforced ribbed raft
+    footing.', 'Install perimeter geotextile French drains with gravity discharge away from foundations.'])
+    ] %}
+    {% for cat, mins, title, summary, steps in bguides %}
+    <article class="bg-item{{ ' open' if loop.first }}">
+      <button type="button" class="bg-toggle" id="bgBtn{{ loop.index }}"
+        aria-expanded="{{ 'true' if loop.first else 'false' }}" aria-controls="bgPanel{{ loop.index }}">
+        <span><span class="bg-meta"><b>{{ cat }}</b><i>•</i><span>{{ mins }}</span></span><strong>{{ title
+            }}</strong></span>
+        <span class="bg-chev" aria-hidden="true"><svg class="ic">
+            <use href="#i-chev-d" />
+          </svg></span>
+      </button>
+      <div class="bg-panel" id="bgPanel{{ loop.index }}" role="region" aria-labelledby="bgBtn{{ loop.index }}" {{ '' if
+        loop.first else ' hidden' }}>
+        <p>{{ summary }}</p>
+        <div class="bg-take"><span>Core Takeaways</span>
+          <ul>{% for st in steps %}<li><svg class="ic" aria-hidden="true">
+                <use href="#i-check" />
+              </svg>{{ st }}</li>{% endfor %}</ul>
+        </div>
+      </div>
+    </article>
     {% endfor %}
   </div>
 </section>
@@ -141,6 +506,12 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
 <script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 <script src="{{ url_for('static', filename='js/showcase.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cinematic.js') }}"></script>
+<script src="{{ url_for('static', filename='js/build-hero.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reference-final.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/ux-v8.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/architecture-photos.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/vendor/three.r128.min.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/construction-3d.js') }}"></script>
 <script>
   (function () {
     var el = document.getElementById('featured');

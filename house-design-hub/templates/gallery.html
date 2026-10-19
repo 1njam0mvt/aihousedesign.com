@@ -5,7 +5,18 @@ Every plan has a 2D floor plan, 3D model and cost estimate.{% endblock %}
 {% block content %}
 <h1 data-i18n="nav_gallery">{{ T('nav_gallery') }}</h1>
 
-<form class="filters" id="filters" onsubmit="return false">
+<div class="gallery-toolbar">
+  <div class="quick-filter-bar" role="group" aria-label="Quick filters">
+    <button type="button" class="quick-filter active" data-quick="all" aria-pressed="true">All</button>
+    <button type="button" class="quick-filter" data-quick="1" aria-pressed="false">1 BHK</button>
+    <button type="button" class="quick-filter" data-quick="2" aria-pressed="false">2 BHK</button>
+    <button type="button" class="quick-filter" data-quick="3" aria-pressed="false">3 BHK</button>
+    <button type="button" class="quick-filter" data-quick="north" aria-pressed="false">North Facing</button>
+    <button type="button" class="quick-filter" data-quick="low" aria-pressed="false">Low Cost</button>
+    <button type="button" class="quick-filter" data-quick="modern" aria-pressed="false">Modern</button>
+  </div>
+</div>
+<form class="filters gallery-advanced" id="filters" onsubmit="return false">
   <input type="search" id="q" data-i18n-ph="search_ph" placeholder="{{ T('search_ph') }}" aria-label="Search">
   <select id="style" aria-label="Style">
     <option value="" data-i18n="all">{{ T('all') }}</option>
@@ -39,4 +50,5 @@ Every plan has a 2D floor plan, 3D model and cost estimate.{% endblock %}
 <script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cards.js') }}"></script>
 <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/ux-v8.js') }}"></script>
 {% endblock %}

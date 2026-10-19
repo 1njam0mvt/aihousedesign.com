@@ -1,0 +1,188 @@
+/* v10: Architecture photography and clean theme — loaded after v9 */
+:root {
+    --polish-page: #fcfcfb;
+    --polish-card: #fff;
+    --polish-stroke: #e4e8e7;
+    --polish-gutter: clamp(16px, 3vw, 40px)
+}
+
+[data-theme="dark"] {
+    --polish-page: #101918;
+    --polish-card: #1b2826;
+    --polish-stroke: #374b46
+}
+
+body {
+    background: var(--polish-page)
+}
+
+main.wrap,
+.site-header .bar,
+.site-footer>.wrap {
+    width: min(calc(100% - 2 * var(--polish-gutter)), 1440px);
+    max-width: 1440px;
+    margin-inline: auto
+}
+
+main.wrap>section {
+    max-width: 100%;
+    min-width: 0
+}
+
+/* Avoid global image height/object-fit: logos, plans and screenshots need distinct sizing. */
+.style-choice-art,
+.collection-photo {
+    position: relative;
+    overflow: hidden;
+    background: #e9edeb;
+    border-radius: 12px;
+    aspect-ratio: 16 / 10;
+    height: auto
+}
+
+.style-choice-art img.architecture-photo,
+.collection-photo img.architecture-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .35s ease;
+    image-rendering: auto
+}
+
+.style-choice:hover .architecture-photo,
+.collection-item:hover .architecture-photo {
+    transform: scale(1.035)
+}
+
+.style-choice,
+.collection-item {
+    background: var(--polish-card) !important;
+    border: 1px solid var(--polish-stroke) !important;
+    overflow: hidden
+}
+
+.style-choice-art {
+    display: block
+}
+
+.collection-photo {
+    margin-bottom: 15px
+}
+
+.collection-item {
+    padding: 13px
+}
+
+.collection-item h3,
+.collection-item .collection-actions,
+.collection-item .collection-tag {
+    margin-left: 5px;
+    margin-right: 5px
+}
+
+/* Preserve full 2D floor plan, no clipping of dimensions. */
+.premium-feature-image {
+    overflow: hidden;
+    background: var(--polish-card)
+}
+
+.premium-feature-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block
+}
+
+.premium-feature:first-child .premium-feature-image img {
+    object-fit: contain;
+    background: #f7f8f7
+}
+
+.reference-final-hero .hero-v4-scene>img {
+    object-fit: contain;
+    object-position: center
+}
+
+.reference-final-hero .hero-v4-form {
+    background: var(--polish-card);
+    border-color: var(--polish-stroke)
+}
+
+.reference-final-hero .hero-v4-form input {
+    min-width: 0;
+    align-self: center
+}
+
+.reference-final-hero .hero-v4-form:focus-within {
+    box-shadow: 0 0 0 3px rgba(13, 113, 83, .15)
+}
+
+/* Don't force light colors on dark mode. */
+[data-theme="dark"] .style-choice-art,
+[data-theme="dark"] .collection-photo {
+    background: #273935
+}
+
+[data-theme="dark"] .reference-final-hero .hero-v4-form {
+    background: #223734
+}
+
+@media(max-width:1100px) {
+    .site-header .bar {
+        grid-template-columns: minmax(0, 1fr) auto !important
+    }
+
+    .site-header .nav {
+        display: none !important
+    }
+
+    .site-header .menu-btn {
+        display: inline-flex !important
+    }
+}
+
+@media(max-width:720px) {
+
+    .style-card-grid,
+    .collection-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .site-header .bar {
+        gap: 8px
+    }
+
+    .site-header .tools {
+        gap: 6px
+    }
+
+    .reference-final-hero .hero-v4-form {
+        flex-wrap: wrap
+    }
+}
+
+@media(max-width:480px) {
+
+    .style-card-grid,
+    .collection-grid {
+        grid-template-columns: 1fr
+    }
+
+    .style-choice-art,
+    .collection-photo {
+        aspect-ratio: 16/9
+    }
+
+    .site-header .brand-text {
+        font-size: .9rem
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .architecture-photo {
+        transition: none !important
+    }
+}

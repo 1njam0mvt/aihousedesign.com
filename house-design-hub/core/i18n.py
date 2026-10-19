@@ -207,4 +207,4 @@ def style_names():
         for k, n in table.items():
             if k.startswith("style."):
                 names[n.lower()] = k[len("style."):]
-    return names
+    return names 

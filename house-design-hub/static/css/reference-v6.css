@@ -1,0 +1,185 @@
+/* v6: Reference-matched cinematic homepage; scoped to avoid breaking inner pages. */
+@media(min-width:1101px) {
+    .site-header .bar {
+        max-width: 1640px;
+        width: calc(100% - 56px);
+        gap: 18px;
+        flex-wrap: nowrap
+    }
+
+    .site-header .brand {
+        min-width: 210px;
+        flex-shrink: 0;
+        white-space: nowrap
+    }
+
+    .site-header .brand-text {
+        white-space: nowrap;
+        font-size: 1.05rem
+    }
+
+    .site-header .nav {
+        display: flex;
+        gap: clamp(12px, 1.5vw, 28px);
+        flex: 1;
+        justify-content: center;
+        min-width: 0
+    }
+
+    .site-header .nav a {
+        white-space: nowrap;
+        font-size: .82rem
+    }
+
+    .site-header .tools {
+        flex-shrink: 0;
+        gap: 9px
+    }
+
+    .site-header .nav a:nth-child(n+4) {
+        display: inline-flex
+    }
+}
+
+main.wrap>.hero-v4 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    min-height: 475px;
+    border-radius: 0 0 24px 24px;
+    grid-template-columns: 39% 61%;
+    border: 0
+}
+
+.hero-v4-backdrop {
+    background: linear-gradient(90deg, #fffefa 0%, rgba(255, 254, 250, .98) 27%, rgba(255, 254, 250, .79) 41%, transparent 62%), url('../img/hero-premium-v6.webp') center/cover
+}
+
+.hero-v4-copy {
+    padding-left: clamp(28px, 3.5vw, 64px);
+    padding-right: 16px
+}
+
+.hero-v4 h1 {
+    font-size: clamp(3.1rem, 4.5vw, 5rem);
+    line-height: 1.05
+}
+
+.hero-v4-form {
+    width: 100%;
+    max-width: 550px
+}
+
+.hero-v4-scene>img {
+    object-position: center;
+    transform: scale(1);
+    filter: none !important;
+    transition: opacity .3s, transform .7s
+}
+
+.hero-v4-experience[data-step='5'] .hero-v4-scene>img {
+    transform: scale(1.015)
+}
+
+.hero-v4-blueprint,
+.hero-v4-stage-badge {
+    display: none
+}
+
+.hero-v4-scene-shade {
+    background: linear-gradient(0deg, rgba(0, 27, 21, .22), transparent 42%)
+}
+
+.hero-v4-stage-menu {
+    top: 36px;
+    left: 10px
+}
+
+.hero-v4-play {
+    top: 30px;
+    right: 18px
+}
+
+.hero-v4-thumbs {
+    margin-left: 5px;
+    margin-right: 3px;
+    background: rgba(255, 255, 255, .9)
+}
+
+.hero-v4-thumbs button {
+    font-size: .7rem
+}
+
+.hero-v4-thumbs .thumb-photo {
+    aspect-ratio: 1.5
+}
+
+.hero-v4-thumbs img {
+    filter: none !important
+}
+
+.tools-v4 .premium-feature-image {
+    height: clamp(150px, 13vw, 225px)
+}
+
+.tools-v4 .premium-feature-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+}
+
+.tools-v4 .premium-feature {
+    transition: transform .25s, box-shadow .25s
+}
+
+.tools-v4 .premium-feature:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 42px rgba(0, 55, 40, .16)
+}
+
+[data-theme='dark'] .hero-v4-backdrop {
+    background: linear-gradient(90deg, #102b2a 0%, rgba(16, 43, 42, .96) 29%, rgba(16, 43, 42, .5) 50%, transparent 73%), url('../img/hero-premium-v6.webp') center/cover
+}
+
+@media(max-width:1100px) {
+    .hero-v4 {
+        grid-template-columns: 43% 57%
+    }
+}
+
+@media(max-width:750px) {
+    main.wrap>.hero-v4 {
+        border-radius: 18px;
+        display: flex
+    }
+
+    .hero-v4-copy {
+        padding: 28px 22px
+    }
+
+    .hero-v4-backdrop {
+        background: #f8faf6
+    }
+
+    .hero-v4-experience {
+        min-height: 410px
+    }
+
+    .hero-v4-thumbs {
+        overflow-x: auto;
+        grid-template-columns: repeat(6, minmax(75px, 1fr))
+    }
+
+    .hero-v4-stage-menu {
+        top: 12px
+    }
+
+    .hero-v4-play {
+        top: 115px
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .tools-v4 .premium-feature {
+        transition: none
+    }
+}

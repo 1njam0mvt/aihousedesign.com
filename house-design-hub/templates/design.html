@@ -36,7 +36,7 @@ if d.floors > 1 }}{% endblock %}
 </section>
 {% endblock %}
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="{{ url_for('static', filename='js/vendor/three.r128.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/viewer3d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cinematic.js') }}"></script>
@@ -47,6 +47,13 @@ if d.floors > 1 }}{% endblock %}
     var id = document.getElementById('view').dataset.id;
     fetch('/api/design/' + id).then(function (r) { return r.json() }).then(function (data) {
       HD.mountView(document.getElementById('view'), data);
+      // Deep-link from the homepage directly to the requested working viewer tab.
+      var initialTab = ({ '#plan': '2d', '#model': '3d', '#timeline': '4d' })[window.location.hash];
+      if (initialTab) {
+        var tabButton = document.querySelector('#view .tab[data-tab="' + initialTab + '"]');
+        if (tabButton) tabButton.click();
+        document.getElementById('view').scrollIntoView({ block: 'start' });
+      }
       var t = document.getElementById('title');
       function title() { t.textContent = HD.designName(data.meta); }
       title(); document.addEventListener('langchange', title);

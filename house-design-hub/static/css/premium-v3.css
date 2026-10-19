@@ -1,0 +1,261 @@
+/* Premium visual upgrade; existing logo, routes and functional viewers are preserved. */
+.build-hero-premium {
+    padding: 0 !important;
+    overflow: hidden;
+    background: #102b2b !important;
+    border-radius: 25px !important;
+    box-shadow: 0 24px 70px rgba(9, 43, 40, .25) !important
+}
+
+.build-photo-scene {
+    height: clamp(290px, 31vw, 465px);
+    position: relative;
+    overflow: hidden;
+    background: #142e2e
+}
+
+.build-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.06);
+    animation: cinematicDrift 15s ease-in-out infinite alternate;
+    filter: saturate(1.08) contrast(1.05)
+}
+
+.build-photo-scene:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(4, 25, 25, .06), transparent 45%, rgba(4, 25, 25, .6));
+    pointer-events: none
+}
+
+.build-scene-caption {
+    position: absolute;
+    bottom: 16px;
+    right: 18px;
+    color: #fff;
+    font-size: .65rem;
+    letter-spacing: .14em;
+    z-index: 3;
+    text-shadow: 0 2px 6px #000
+}
+
+.build-overlay-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none
+}
+
+.build-overlay-grid {
+    position: absolute;
+    inset: 13% 12%;
+    opacity: .6;
+    background: repeating-linear-gradient(0deg, transparent 0 33px, rgba(154, 244, 215, .32) 34px), repeating-linear-gradient(90deg, transparent 0 33px, rgba(154, 244, 215, .32) 34px);
+    transform: perspective(360px) rotateX(55deg);
+    transition: opacity .7s
+}
+
+.build-overlay-frame {
+    position: absolute;
+    inset: 14% 15% 17%;
+    border: 3px solid rgba(133, 235, 200, .75);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .5), 0 0 20px rgba(133, 235, 200, .45);
+    opacity: 0;
+    transition: opacity .7s
+}
+
+.build-overlay-walls {
+    position: absolute;
+    inset: 18% 15% 18%;
+    background: linear-gradient(110deg, rgba(232, 224, 201, .6), rgba(255, 255, 255, .1));
+    opacity: 0;
+    transition: opacity .7s
+}
+
+.build-overlay-roof {
+    position: absolute;
+    left: 14%;
+    right: 15%;
+    top: 8%;
+    height: 20%;
+    background: linear-gradient(140deg, rgba(36, 77, 67, .7), transparent);
+    clip-path: polygon(10% 100%, 50% 0, 95% 100%);
+    opacity: 0;
+    transition: opacity .7s
+}
+
+.build-hero-premium[data-step="0"] .build-photo {
+    filter: grayscale(.75) brightness(.62)
+}
+
+.build-hero-premium[data-step="1"] .build-photo {
+    filter: grayscale(.45) brightness(.75)
+}
+
+.build-hero-premium[data-step="2"] .build-overlay-frame {
+    opacity: 1
+}
+
+.build-hero-premium[data-step="3"] .build-overlay-walls {
+    opacity: .55
+}
+
+.build-hero-premium[data-step="4"] .build-overlay-roof {
+    opacity: .75
+}
+
+.build-hero-premium[data-step="5"] .build-photo {
+    filter: saturate(1.22) contrast(1.07)
+}
+
+.build-hero-premium[data-step="5"] .build-overlay-grid,
+.build-hero-premium[data-step="4"] .build-overlay-grid,
+.build-hero-premium[data-step="3"] .build-overlay-grid {
+    opacity: 0
+}
+
+.build-hero-premium .build-stage-label {
+    z-index: 4
+}
+
+.build-hero-premium .build-controls,
+.build-hero-premium .build-phases {
+    background: #102b2b;
+    color: #fff;
+    padding-left: 15px;
+    padding-right: 15px
+}
+
+.build-hero-premium .build-kicker {
+    color: #d5e8dd
+}
+
+.build-hero-premium .build-phases button {
+    color: #e6f5ed;
+    border-color: rgba(255, 255, 255, .18)
+}
+
+.build-hero-premium .build-phases button.active {
+    background: #d4f3e4;
+    color: #103b30
+}
+
+.premium-features {
+    align-items: stretch;
+    gap: 20px
+}
+
+.premium-feature {
+    position: relative;
+    transition: transform .35s, box-shadow .35s !important
+}
+
+.premium-feature:hover,
+.premium-feature:focus-visible {
+    transform: translateY(-10px) !important;
+    box-shadow: 0 24px 55px rgba(20, 70, 55, .18) !important
+}
+
+.premium-feature-image {
+    height: clamp(160px, 16vw, 235px);
+    position: relative;
+    overflow: hidden;
+    background: #e6eee9
+}
+
+.premium-feature-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .7s cubic-bezier(.2, .8, .2, 1), filter .5s
+}
+
+.premium-feature:hover img,
+.premium-feature:focus-visible img {
+    transform: scale(1.12);
+    filter: saturate(1.18)
+}
+
+.feature-overlay {
+    position: absolute;
+    inset: auto 12px 12px;
+    display: block;
+    padding: 10px 13px;
+    border-radius: 10px;
+    background: rgba(12, 67, 53, .9);
+    color: white;
+    font-size: .8rem;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all .3s
+}
+
+.premium-feature:hover .feature-overlay,
+.premium-feature:focus-visible .feature-overlay {
+    opacity: 1;
+    transform: translateY(0)
+}
+
+.premium-feature .txt {
+    padding: 17px !important
+}
+
+.premium-feature h3 {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px
+}
+
+@keyframes cinematicDrift {
+    from {
+        transform: scale(1.06) translateX(-1%)
+    }
+
+    to {
+        transform: scale(1.16) translateX(1%)
+    }
+}
+
+@media(max-width:850px) {
+    .premium-features {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .build-photo-scene {
+        height: 360px
+    }
+}
+
+@media(max-width:520px) {
+    .premium-features {
+        grid-template-columns: 1fr
+    }
+
+    .premium-feature-image {
+        height: 215px
+    }
+
+    .build-photo-scene {
+        height: 270px
+    }
+
+    .build-scene-caption {
+        font-size: .5rem
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+
+    .build-photo,
+    .premium-feature-image img {
+        animation: none !important;
+        transition: none !important
+    }
+}

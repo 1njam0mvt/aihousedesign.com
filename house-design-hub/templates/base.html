@@ -8,10 +8,10 @@
   <meta name="description"
     content="{% block desc %}Free AI house design: generate a floor plan, 3D model and cost estimate in seconds, or browse thousands of modern, village, duplex and low cost house designs.{% endblock %}">
   <meta name="theme-color" content="#235d42" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#14262a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
   <meta name="google-site-verification" content="fCLh1uNDUo7OuJLkJLKrw1Lq1icU77w4IEu3rPpxOZ8">
   <meta name="msvalidate.01" content="1545E47A6B145F28F5BCD1CD76F2664D">
-  <script>window.HD_IMG = {{ IMG | tojson }};</script>
+  <script>window.HD_IMG = {{ IMG | tojson }}; window.HD_ASSET = {{ ASSET_BASE | tojson }};</script>
   <link rel="canonical" href="{{ canonical }}">
   <meta name="robots" content="{{ robots|default('index,follow,max-image-preview:large') }}">
   <meta property="og:type" content="{% block ogtype %}website{% endblock %}">
@@ -38,14 +38,8 @@
   {% for item in ld|default([]) %}
   <script type="application/ld+json">{{ item|tojson }}</script>
   {% endfor %}
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-47YFCBR5Z2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-47YFCBR5Z2');
-  </script>
+  <!-- Google Analytics is loaded by site-ui.js only after the visitor accepts analytics cookies -->
+  <script>window.HD_GA_ID = 'G-47YFCBR5Z2';</script>
   <script>
     /* apply saved theme before paint to avoid a flash */
     (function () {
@@ -56,25 +50,146 @@
     })();
   </script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/redesign.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/premium-v3.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cinematic-v4.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reference-v6.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reference-final.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ux-v8.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/final-polish-v9.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/architecture-v10.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/architecture-v11.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/merge-v12.css') }}">
   {% block head %}{% endblock %}
 </head>
 
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </symbol>
+      <symbol id="i-x" viewBox="0 0 24 24">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24">
+        <path
+          d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
+        <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
+        <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
+      </symbol>
+      <symbol id="i-rotate" viewBox="0 0 24 24">
+        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+        <path d="M21 3v5h-5" />
+      </symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24">
+        <path d="M8 2v4" />
+        <path d="M16 2v4" />
+        <rect width="18" height="18" x="3" y="4" rx="2" />
+        <path d="M3 10h18" />
+      </symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24">
+        <path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+        <path d="M20 3v4" />
+        <path d="M22 5h-4" />
+        <path d="M4 17v2" />
+        <path d="M5 18H3" />
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24">
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
+      </symbol>
+      <symbol id="i-chev-r" viewBox="0 0 24 24">
+        <path d="m9 18 6-6-6-6" />
+      </symbol>
+      <symbol id="i-chev-d" viewBox="0 0 24 24">
+        <path d="m6 9 6 6 6-6" />
+      </symbol>
+      <symbol id="i-hardhat" viewBox="0 0 24 24">
+        <path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5" />
+        <path d="M14 6a6 6 0 0 1 6 6v3" />
+        <path d="M4 15v-3a6 6 0 0 1 6-6" />
+        <rect x="2" y="15" width="20" height="4" rx="1" />
+      </symbol>
+      <symbol id="i-dollar" viewBox="0 0 24 24">
+        <line x1="12" x2="12" y1="2" y2="22" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24">
+        <path
+          d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+        <path d="m9 12 2 2 4-4" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m9 12 2 2 4-4" />
+      </symbol>
+      <symbol id="i-brain" viewBox="0 0 24 24">
+        <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
+        <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
+        <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+      </symbol>
+      <symbol id="i-dash" viewBox="0 0 24 24">
+        <rect width="7" height="9" x="3" y="3" rx="1" />
+        <rect width="7" height="5" x="14" y="3" rx="1" />
+        <rect width="7" height="9" x="14" y="12" rx="1" />
+        <rect width="7" height="5" x="3" y="16" rx="1" />
+      </symbol>
+      <symbol id="i-calc" viewBox="0 0 24 24">
+        <rect width="16" height="20" x="4" y="2" rx="2" />
+        <line x1="8" x2="16" y1="6" y2="6" />
+        <path d="M16 14v4" />
+        <path d="M16 10h.01" />
+        <path d="M12 10h.01" />
+        <path d="M8 10h.01" />
+        <path d="M12 14h.01" />
+        <path d="M8 14h.01" />
+        <path d="M12 18h.01" />
+        <path d="M8 18h.01" />
+      </symbol>
+      <symbol id="i-book" viewBox="0 0 24 24">
+        <path d="M12 7v14" />
+        <path
+          d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+      </symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+        <path d="M2 12h20" />
+      </symbol>
+    </defs>
+  </svg>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="{{ url_for('index') }}"><img class="logo"
           src="{{ url_for('static', filename='img/favicon-96x96.png') }}" alt="" width="34" height="34"> <span
           class="brand-text">{{ SITE_NAME }}</span></a>
-      <nav class="nav" id="nav">
+      <nav class="nav" id="nav" aria-label="Primary navigation">
         <a href="{{ url_for('index') }}" data-i18n="nav_home">{{ T('nav_home') }}</a>
         <a href="{{ url_for('gallery') }}" data-i18n="nav_gallery">{{ T('nav_gallery') }}</a>
         <a href="{{ url_for('designer') }}" data-i18n="nav_designer">{{ T('nav_designer') }}</a>
+        <a href="{{ url_for('styles') if false else url_for('gallery') }}#styles">Styles</a>
+        <a href="{{ url_for('index') }}#cost-estimator">Cost Estimator</a>
+        <a href="{{ url_for('index') }}#guides">Guides</a>
+        <a href="{{ url_for('index') }}#about">About</a>
       </nav>
       <div class="tools">
+        <button class="icon-btn header-search" id="headerSearchBtn" type="button" aria-label="Search house designs"
+          aria-expanded="false" aria-haspopup="dialog" aria-controls="hdSearch">⌕</button>
         <div class="lang-dd" id="langDd">
           <button type="button" class="lang-toggle" id="langToggle" aria-haspopup="listbox" aria-expanded="false"
             aria-label="Language" title="Language">
-            <span id="langCurrent">English</span>
+            <svg class="lang-globe" aria-hidden="true">
+              <use href="#i-globe" />
+            </svg><span id="langCurrent">EN</span><span class="lang-caret" aria-hidden="true">▾</span>
           </button>
           <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language" hidden>
             {% for code, name, dir in LANGS %}
@@ -84,14 +199,87 @@
             {% endfor %}
           </div>
         </div>
-        <button class="icon-btn" id="themeBtn" aria-label="Toggle dark / light theme" title="Theme">
+        <button class="icon-btn theme-switch-v4" id="themeBtn" aria-label="Toggle dark / light theme" title="Theme">
           <span class="sun">☀</span><span class="moon">☾</span>
         </button>
+        <a class="header-start-v4" href="{{ url_for('designer') }}">Start Designing →</a>
         <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
       </div>
     </div>
+
   </header>
-  <main class="wrap">{% block content %}{% endblock %}</main>
+  <!-- search pop-up (opened from the header search button) -->
+  <div class="hd-search" id="hdSearch" role="dialog" aria-modal="true" aria-label="Search plans, stages and styles"
+    hidden>
+    <div class="hd-search-box">
+      <form class="hd-search-bar" id="hdSearchForm" action="{{ url_for('gallery') }}" method="get">
+        <svg class="ic" aria-hidden="true">
+          <use href="#i-search" />
+        </svg>
+        <input id="hdSearchInput" name="q" type="search" autocomplete="off"
+          placeholder="Search plans, stages (Foundation, Walls), 3D, styles, materials..." aria-label="Search">
+        <button class="hd-search-close" id="hdSearchClose" type="button" aria-label="Close search"><svg class="ic"
+            aria-hidden="true">
+            <use href="#i-x" />
+          </svg></button>
+      </form>
+      <div class="hd-search-body" id="hdSearchBody">
+        <p class="hd-search-h" data-group="show">Core architectural showcases</p>
+        <a class="hd-search-item" data-group="show" data-text="2d plan floor plan layout dimensions drawing"
+          href="{{ url_for('design', design_id=FIRST_DESIGN_ID) }}#plan">
+          <img src="{{ url_for('static', filename='img/feature-2d.webp') }}" alt="" width="64" height="64"
+            loading="lazy" decoding="async">
+          <span class="hd-search-tag">2D</span><span class="hd-search-t"><strong>2D Plan</strong><small>Detailed floor
+              layout with dimensions</small></span><svg class="ic hd-search-go" aria-hidden="true">
+            <use href="#i-arrow" />
+          </svg>
+        </a>
+        <a class="hd-search-item" data-group="show" data-text="3d model interactive rotation 360 view"
+          href="{{ url_for('design', design_id=FIRST_DESIGN_ID) }}#model">
+          <img src="{{ url_for('static', filename='img/feature-3d.webp') }}" alt="" width="64" height="64"
+            loading="lazy" decoding="async">
+          <span class="hd-search-tag">3D</span><span class="hd-search-t"><strong>3D Model</strong><small>Interactive 3D
+              view with full rotation</small></span><svg class="ic hd-search-go" aria-hidden="true">
+            <use href="#i-arrow" />
+          </svg>
+        </a>
+        <a class="hd-search-item" data-group="show" data-text="4d timeline construction animation step by step"
+          href="{{ url_for('design', design_id=FIRST_DESIGN_ID) }}#timeline">
+          <img src="{{ url_for('static', filename='img/feature-4d.webp') }}" alt="" width="64" height="64"
+            loading="lazy" decoding="async">
+          <span class="hd-search-tag">4D</span><span class="hd-search-t"><strong>4D Timeline</strong><small>Step-by-step
+              construction animation</small></span><svg class="ic hd-search-go" aria-hidden="true">
+            <use href="#i-arrow" />
+          </svg>
+        </a>
+        <a class="hd-search-item" data-group="show"
+          data-text="ai house designer generate customize styles modern traditional minimalist luxury"
+          href="{{ url_for('designer') }}">
+          <img src="{{ url_for('static', filename='img/feature-ai.webp') }}" alt="" width="64" height="64"
+            loading="lazy" decoding="async">
+          <span class="hd-search-tag">AI</span><span class="hd-search-t"><strong>AI House
+              Designer</strong><small>Generate &amp; customize your house</small></span><svg class="ic hd-search-go"
+            aria-hidden="true">
+            <use href="#i-arrow" />
+          </svg>
+        </a>
+        <p class="hd-search-h" data-group="stage">Construction stages (1-6)</p>
+        {% for st in BUILD_STAGES %}
+        <a class="hd-search-item" data-group="stage" data-sstage="{{ st.id }}"
+          data-text="{{ (st.name ~ ' ' ~ st.subtitle ~ ' ' ~ st.materials|join(' '))|lower|forceescape }}"
+          href="{{ url_for('index') }}?stage={{ st.id }}#villa-horizon">
+          <img src="{{ url_for('static', filename='img/build-stage-' ~ st.id ~ '.webp') }}" alt="" width="64"
+            height="64" loading="lazy" decoding="async">
+          <span class="hd-search-num">{{ st.id }}</span><span class="hd-search-t"><strong>{{ st.name }} ({{ st.phase
+              }})</strong><small>{{ st.subtitle }}</small></span><span class="hd-search-cost">{{ st.cost }}</span>
+        </a>
+        {% endfor %}
+        <p class="hd-search-empty" id="hdSearchEmpty" hidden>No matching plans or stages. Press Enter to search all
+          house designs.</p>
+      </div>
+    </div>
+  </div>
+  <main class="wrap" id="main-content">{% block content %}{% endblock %}</main>
 
   <footer class="site-footer">
     <div class="wrap">
@@ -119,6 +307,7 @@
             <li><a href="{{ url_for('terms') }}" data-i18n="foot_terms">{{ T('foot_terms') }}</a></li>
             <li><a href="{{ url_for('privacy') }}" data-i18n="foot_privacy">{{ T('foot_privacy') }}</a></li>
             <li><a href="{{ url_for('cookies') }}" data-i18n="foot_cookies">{{ T('foot_cookies') }}</a></li>
+            <li><a href="#" data-cookie-settings>Cookie settings</a></li>
           </ul>
         </nav>
         <div class="foot-col foot-brand">
@@ -139,6 +328,8 @@
   </footer>
 
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/site-ui.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/merge-v12.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 

@@ -11,6 +11,7 @@ from markupsafe import Markup, escape
 from flask import Flask, send_from_directory, abort, jsonify, redirect, render_template, request, Response, url_for
 
 from core import ai, catalog, seo, topics
+from core.stages import BUILD_STAGES, BUILD_TOTAL_BUDGET, BUILD_TOTAL_DAYS
 from core.i18n import LANGS, get_dict
 from core.planner import STYLES, FACINGS
 
@@ -113,7 +114,9 @@ def inject():
                 SITE_NAME=SITE_NAME, CONTACT_EMAIL=CONTACT_EMAIL, LEGAL_UPDATED=LEGAL_UPDATED,
                 YEAR=time.localtime().tm_year, IMG=img_manifest(), ASSET_BASE=ASSET_BASE_URL, art_img=art_img,
                 SITE_URL=seo.SITE_URL, canonical=seo.SITE_URL + request.path, site_ld=seo.site_ld(SITE_NAME),
-                SEO_LINKS=[(v["nav"], v["path"]) for v in seo.ALL_PAGES.values() if v["kind"] == "landing"])
+                SEO_LINKS=[(v["nav"], v["path"]) for v in seo.ALL_PAGES.values() if v["kind"] == "landing"],
+                BUILD_STAGES=BUILD_STAGES, BUILD_TOTAL_BUDGET=BUILD_TOTAL_BUDGET, BUILD_TOTAL_DAYS=BUILD_TOTAL_DAYS,
+                FIRST_DESIGN_ID=catalog.DESIGNS[0]["id"])
 
 
 def _int(name, default=None, lo=None, hi=None):
