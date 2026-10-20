@@ -3288,3 +3288,17 @@ html[data-theme="dark"] .ast-panel {
 html[data-theme="dark"] .reference-final-hero h1 .h1-a {
     color: #f8fafc !important
 }
+
+.ast-logo {
+    background: transparent !important;
+    overflow: hidden;
+    padding: 0
+}
+
+.ast-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 13px;
+    object-fit: cover
+}

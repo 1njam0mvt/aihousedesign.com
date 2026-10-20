@@ -269,7 +269,7 @@
     /* ---------------------------------------------------------------- shell */
     function build() {
         root = document.createElement('div'); root.className = 'ast'; root.id = 'houseDesigner'; root.hidden = true; root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true'); root.setAttribute('aria-labelledby', 'astTitle');
-        root.innerHTML = '<div class="ast-box"><header class="ast-head"><span class="ast-logo">' + ic('sparkles') + '</span><div><h2 id="astTitle">AI House Designer</h2><p>Design, edit, animate and analyze your house, all in one place</p></div><button type="button" class="ast-x" id="astClose" aria-label="Close">' + ic('x') + '</button></header>' +
+        root.innerHTML = '<div class="ast-box"><header class="ast-head"><span class="ast-logo"><img src="' + IMG + 'favicon-96x96.png" alt="" width="42" height="42"></span><div><h2 id="astTitle">AI House Designer</h2><p>Design, edit, animate and analyze your house, all in one place</p></div><button type="button" class="ast-x" id="astClose" aria-label="Close">' + ic('x') + '</button></header>' +
             '<nav class="ast-tabs" role="tablist">' + TABS.map(function (t, i) { return '<button type="button" role="tab" id="astTab' + i + '" aria-selected="false" data-tab="' + i + '">' + ic(t[0]) + t[1] + '</button>'; }).join('') + '</nav><div class="ast-body" id="astBody" role="tabpanel"></div></div>';
         document.body.appendChild(root);
         root.addEventListener('mousedown', function (e) { if (e.target === root) close(); });
@@ -284,9 +284,13 @@
     function open(style) {
         if (!root) build();
         state.style = STYLES[style] ? style : 'luxury'; state.src = null; state.last = null; state.lastFocus = document.activeElement;
-        root.hidden = false; document.documentElement.classList.add('hd-search-open'); setTab(0); $('#astClose').focus();
+        root.hidden = false; document.documentElement.classList.add('hd-search-open');
+        var start = { modern: 0, traditional: 1, minimalist: 2, luxury: 3 }[state.style] || 0;   // each style opens its own tab
+        setTab(start);
+        if (start === 0) { var go = $('#gGo'); if (go) go.click(); }                              // tab 1 shows this style's render straight away
+        $('#astClose').focus();
     }
     function close() { if (!root || root.hidden) return; if (state.stopVideo) state.stopVideo(); root.hidden = true; document.documentElement.classList.remove('hd-search-open'); if (state.lastFocus && state.lastFocus.focus) state.lastFocus.focus(); }
     document.addEventListener('keydown', function (e) { if (root && !root.hidden && e.key === 'Escape') { e.stopPropagation(); close(); } });
-    Array.prototype.forEach.call(chips, function (b) { b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); open(b.getAttribute('data-style-pick')); }); });
+    Array.prototype.forEach.call(chips, function (b) { b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); Array.prototype.forEach.call(chips, function (c) { c.classList.toggle('on', c === b); }); open(b.getAttribute('data-style-pick')); }); });
 })();
