@@ -1,6 +1,6 @@
 {
-  "name": "AI Houses Design",
-  "short_name": "AI Houses",
+  "name": "AI House Design",
+  "short_name": "AI House",
   "description": "Free AI house design: 2D floor plans, 3D models and cost estimates in seconds.",
   "id": "/",
   "start_url": "/",
@@ -9,11 +9,35 @@
   "orientation": "portrait-primary",
   "background_color": "#14262a",
   "theme_color": "#235d42",
-  "categories": ["design", "productivity", "lifestyle"],
+  "categories": [
+    "design",
+    "productivity",
+    "lifestyle"
+  ],
   "icons": [
-    { "src": "/static/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/static/img/icon-256.png", "sizes": "256x256", "type": "image/png", "purpose": "any" },
-    { "src": "/static/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/static/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/static/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/img/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/img/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

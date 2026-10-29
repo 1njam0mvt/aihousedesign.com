@@ -191,7 +191,7 @@
                     $('#gActs').hidden = false; btn.disabled = false;
                 });
             };
-            $('#gDl').onclick = function () { if (state.last) save(state.last, 'ai-houses-render.png'); };
+            $('#gDl').onclick = function () { if (state.last) save(state.last, 'ai-house-render.png'); };
             $('#gUse').onclick = function () { setTab(2); };
         },
         function () {
@@ -203,7 +203,7 @@
                 if (!cur) return; var b = $('#eGo'); b.disabled = true; $('#eActs').hidden = true;
                 progress(out, 'Applying edit…', 1300).then(function () { var cv = document.createElement('canvas'), k = Math.min(1, 1600 / cur.width); paint(cv, cur, Math.round(cur.width * k), Math.round(cur.height * k), $('#ePrompt').value); cv.className = 'ast-cv'; out.innerHTML = ''; out.appendChild(cv); state.last = cv; $('#eActs').hidden = false; b.disabled = false; });
             };
-            $('#eDl').onclick = function () { if (state.last) save(state.last, 'ai-houses-edit.png'); };
+            $('#eDl').onclick = function () { if (state.last) save(state.last, 'ai-house-edit.png'); };
         },
         function () {
             var asp = '16:9', out = $('#vOut'), raf = 0, stop = false, cv = null;
@@ -215,7 +215,7 @@
                 (function frame(now) {
                     var u = ((now || performance.now()) - t0) % D / D, e = .5 - Math.cos(u * Math.PI * 2) / 2; x.fillStyle = '#000'; x.fillRect(0, 0, w, h);
                     if (mode === 'aerial') cover(x, img, w, h, 1.34 - .22 * e, 0, -.03 * e); else if (mode === 'push') cover(x, img, w, h, 1.06 + .3 * e, 0, 0); else cover(x, img, w, h, 1.2 + .05 * e, (e - .5) * .1, 0);
-                    x.fillStyle = 'rgba(255,255,255,.88)'; x.font = '600 ' + Math.round(w / 48) + 'px sans-serif'; x.fillText('AI Houses Design · ' + (mode === 'aerial' ? 'Aerial flythrough' : mode === 'push' ? 'Walkthrough' : 'Orbit flythrough'), w * .03, h - h * .04);
+                    x.fillStyle = 'rgba(255,255,255,.88)'; x.font = '600 ' + Math.round(w / 48) + 'px sans-serif'; x.fillText('AI House Design · ' + (mode === 'aerial' ? 'Aerial flythrough' : mode === 'push' ? 'Walkthrough' : 'Orbit flythrough'), w * .03, h - h * .04);
                     raf = requestAnimationFrame(frame);
                 })();
             }
@@ -223,7 +223,7 @@
             $('#vDl').onclick = function () {
                 if (!cv || !cv.captureStream || !window.MediaRecorder) { alert('Video export is not supported in this browser.'); return; }
                 var rec = new MediaRecorder(cv.captureStream(30), { mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm' }), parts = [], b = $('#vDl'); b.disabled = true; b.textContent = 'Recording 6 s…';
-                rec.ondataavailable = function (e) { parts.push(e.data); }; rec.onstop = function () { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(parts, { type: 'video/webm' })); a.download = 'ai-houses-flythrough.webm'; document.body.appendChild(a); a.click(); a.remove(); b.disabled = false; b.innerHTML = ic('download') + 'Download video'; };
+                rec.ondataavailable = function (e) { parts.push(e.data); }; rec.onstop = function () { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(parts, { type: 'video/webm' })); a.download = 'ai-house-flythrough.webm'; document.body.appendChild(a); a.click(); a.remove(); b.disabled = false; b.innerHTML = ic('download') + 'Download video'; };
                 rec.start(); setTimeout(function () { rec.stop(); }, 6000);
             };
             state.stopVideo = function () { cancelAnimationFrame(raf); };

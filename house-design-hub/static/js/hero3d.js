@@ -165,7 +165,7 @@
             wrap: tex(256, 256, function (g, w, h) {
                 g.fillStyle = "#e9e8e2"; g.fillRect(0, 0, w, h); var r = rnd(4);
                 for (var i = 0; i < 700; i++) { g.fillStyle = "rgba(120,120,110," + (r() * .05) + ")"; g.fillRect(r() * w, r() * h, 40 + r() * 80, 1); }
-                g.fillStyle = "rgba(190,60,40,.5)"; g.font = "bold 20px sans-serif"; g.fillText("AIHOUSES", 14, 60); g.fillText("AIHOUSES", 130, 190);
+                g.fillStyle = "rgba(190,60,40,.5)"; g.font = "bold 20px sans-serif"; g.fillText("AIHOUSE", 14, 60); g.fillText("AIHOUSE", 130, 190);
                 g.fillStyle = "rgba(70,110,170,.55)"; g.fillRect(0, h * .5, w, 3);
             }, .4, .4),
             shingle: tex(256, 256, function (g, w, h) {
