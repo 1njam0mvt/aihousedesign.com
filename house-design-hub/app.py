@@ -1,4 +1,4 @@
-"""AI Houses Design: Flask app (pages + JSON API)."""
+"""AI House Design: Flask app (pages + JSON API)."""
 import json
 import os
 import re
@@ -47,9 +47,9 @@ def hero_photos():
     return out
 
 # Shown on the legal pages. Set these env vars before going live.
-SITE_NAME = os.getenv("SITE_NAME", "AI Houses Design")
+SITE_NAME = os.getenv("SITE_NAME", "AI House Design")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "support@aihousesdesign.com")  # create this mailbox / forwarder
-LEGAL_UPDATED = "9 October 2026"
+LEGAL_UPDATED = "27 October 2026"
 
 
 # ---------- real images: kept OUT of the UI code, looked up by ID --------------------------------------------------------
@@ -453,7 +453,7 @@ def webmanifest():
     icon = lambda name, size, purpose: {"src": url_for("static", filename=f"img/{name}"), "sizes": f"{size}x{size}",
                                         "type": "image/png", "purpose": purpose}
     data = {
-        "name": SITE_NAME, "short_name": "AI Houses",
+        "name": SITE_NAME, "short_name": "AI House",
         "description": "Free AI house design: 2D floor plans, 3D models and cost estimates in seconds.",
         "id": "/", "start_url": "/", "scope": "/", "display": "standalone", "orientation": "portrait-primary",
         "background_color": "#14262a", "theme_color": "#235d42",
