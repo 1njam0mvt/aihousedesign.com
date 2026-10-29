@@ -60,7 +60,7 @@ FAQ_SEARCH = [
      ("How to design a house with AI, step by step", "/guides/how-to-design-a-house-with-ai/")),
     ('What is passive house design, and how do you design a passive house?',
      'Passive house design focuses on high energy efficiency to maintain comfortable indoor temperatures with minimal heating or cooling. Key principles include airtight construction, continuous high-performance insulation, triple-glazed windows, thermal-bridge-free detailing, and mechanical heat recovery ventilation (HRV).',
-     ("Passive house design plans and principles", "/passive-houses-design/")),
+     ("Passive house design plans and principles", "/passive-house-design/")),
     ('What software and apps do professional architects use to design houses?',
      'Architects standardly use CAD and BIM software including AutoCAD, Revit, and ArchiCAD for construction drawings, along with SketchUp, Rhino, Lumion, and Enscape for 3D visualization. Generative AI tools are used early in the process for rapid layout prototyping.',
      ("What software do architects use?", "/guides/software-architects-use/")),
@@ -72,13 +72,13 @@ FAQ_SEARCH = [
      ("Indian village house design plans", "/indian-village-house-design/")),
     ('How do you design small or tiny houses to maximize space?',
      'Use open-concept floor plans that combine living, kitchen, and dining zones, build vertically with lofts or second floors, install multi-functional built-in storage, and place windows across from each other to maximize natural light and airflow.',
-     ("Small houses design for small plots", "/small-houses-design/")),
+     ("Small houses design for small plots", "/small-house-design/")),
     ('What is the difference between house design and home design?',
      'House design primarily focuses on the structural architecture, footprint, exterior elevation, and room layout of the building. Home design expands into interior decor, color palettes, and furnishings.',
      ("House front elevation and 3D exterior design", "/elevation-design/")),
     ('What are setbacks, and why do they matter when planning a house?',
      'Setbacks are the open spaces your local authority requires between the building and the plot boundary on the front, sides and back. They decide how much of the plot you can actually build on, so check the rules for your area before you finalise any plan.',
-     ("Small houses design for small plots", "/small-houses-design/")),
+     ("Small houses design for small plots", "/small-house-design/")),
     ('How do I choose between a single-floor house and a duplex?',
      'A single-floor home avoids stairs and is usually cheaper per square foot, but needs more land. A duplex fits more rooms on a small plot and costs more because of the staircase, extra structure and a bigger roof and foundation load. Choose by plot size, budget and who will live there.',
      ("House designs in every style", "/gallery")),
@@ -96,7 +96,7 @@ FAQ_SEARCH = [
      ("How to design a house with AI, step by step", "/guides/how-to-design-a-house-with-ai/")),
     ('Which house style suits a small family on a limited budget?',
      'A compact single-floor 2 BHK or a small low-cost design is usually the best fit: fewer corridors, shared walls and a simple roof keep the cost down. If you expect the family to grow, pick a plan that allows a second floor to be added later.',
-     ("Small houses design for small plots", "/small-houses-design/")),
+     ("Small houses design for small plots", "/small-house-design/")),
 ]
 
 # ---------------------------------------------------------------- landing pages (one search intent per URL)
@@ -171,9 +171,9 @@ LANDING = {
              "Enter your plot size, bedrooms, floors and style in the designer. It lays out the rooms to fit the plot and shows the 2D plan with room sizes, "
              "which you can also view in 3D and download as an SVG file."),
         ],
-        related=["free-ai-house-design", "small-houses-design", "indian-village-house-design", "guides/how-to-design-a-house-with-ai"],
+        related=["free-ai-house-design", "small-house-design", "indian-village-house-design", "guides/how-to-design-a-house-with-ai"],
     ),
-    "modern-houses-design": dict(
+    "modern-house-design": dict(
         nav="Modern Houses Design",
         title="Modern Houses Design: Ideas, Floor Plans and 3D Models",
         desc="Browse modern, contemporary and minimalist houses design ideas with 2D floor plans, 3D models and cost estimates. Open any design or generate your own.",
@@ -199,7 +199,7 @@ LANDING = {
                "Two-storey modern homes with a flat roof, a balcony above the entrance and large front windows are very common. Single-floor minimalist designs are popular on smaller plots."),
               ("Can I customise a modern house plan?",
                "Yes. Open the AI designer, keep the modern style and change the plot size, bedrooms, floors or the direction the house faces to get a new plan.")],
-        related=["small-houses-design", "elevation-design", "passive-houses-design", "free-ai-house-design"],
+        related=["small-house-design", "elevation-design", "passive-house-design", "free-ai-house-design"],
     ),
     "elevation-design": dict(
         nav="Front Elevation Design",
@@ -225,9 +225,9 @@ LANDING = {
                "Start with the roof type and the entrance feature (balcony, verandah or porch), then balance walls and windows and choose a simple colour scheme. Rotate the 3D model of a design to test each choice."),
               ("Can I see a house in 3D before building?",
                "Yes. Every design has a 3D model you can rotate and zoom, with a roof cutaway and a day and night view.")],
-        related=["modern-houses-design", "free-ai-house-design", "indian-village-house-design", "guides/how-to-design-a-house-with-ai"],
+        related=["modern-house-design", "free-ai-house-design", "indian-village-house-design", "guides/how-to-design-a-house-with-ai"],
     ),
-    "small-houses-design": dict(
+    "small-house-design": dict(
         nav="Small Houses Design",
         title="Small Houses Design: Compact Home Plans for Small Plots",
         desc="Small houses design ideas: compact, low cost and loft home plans for small plots, with 2D floor plans, 3D models and cost estimates you can compare.",
@@ -249,9 +249,9 @@ LANDING = {
         ],
         faqs=[("How do I design a small house?",
                "Keep the footprint simple, merge living and dining, build up rather than out, and plan storage early. Enter a small plot size in the designer to see layouts that fit.")],
-        related=["indian-village-house-design", "floor-plan-creator", "modern-houses-design", "free-ai-house-design"],
+        related=["indian-village-house-design", "floor-plan-creator", "modern-house-design", "free-ai-house-design"],
     ),
-    "passive-houses-design": dict(
+    "passive-house-design": dict(
         nav="Passive Houses Design",
         title="Passive House Design: Energy Efficient Home Plans and Principles",
         desc="What passive house design is, how to design one, and energy efficient home plans to explore in 2D and 3D. Learn the five principles and browse eco designs.",
@@ -276,7 +276,7 @@ LANDING = {
                "continuous insulation, high-performance windows, thermal-bridge-free detailing and heat recovery ventilation."),
               ("Is a passive house expensive to build?",
                "Insulation, windows and ventilation can raise upfront cost, but lower energy bills often repay it over time. Costs depend on climate and location, so get a local estimate.")],
-        related=["modern-houses-design", "small-houses-design", "free-ai-house-design", "guides/how-to-design-a-house-with-ai"],
+        related=["modern-house-design", "small-house-design", "free-ai-house-design", "guides/how-to-design-a-house-with-ai"],
     ),
     "indian-village-house-design": dict(
         nav="Indian Village House Design",
@@ -304,7 +304,7 @@ LANDING = {
                "A 2D floor planner helps you make the most of carpet area."),
               ("How much does a low cost village house cost?",
                "Cost varies by area, materials and location. Each design on this site shows a rough estimate in lakh, which is a good starting point before you ask a local engineer for a quote.")],
-        related=["small-houses-design", "floor-plan-creator", "free-ai-house-design", "elevation-design"],
+        related=["small-house-design", "floor-plan-creator", "free-ai-house-design", "elevation-design"],
     ),
 }
 
@@ -371,7 +371,7 @@ GUIDES = {
                "A good prompt includes the number of bedrooms, the style, the plot size and the number of floors, for example: 3 bedroom modern house 30x40 two floors."),
               ("Do I need a special prompt format?",
                "No. Plain sentences work. The designer picks out the numbers and style words and fills in anything missing with sensible defaults.")],
-        related=["guides/how-to-design-a-house-with-ai", "free-ai-house-design", "modern-houses-design", "indian-village-house-design"],
+        related=["guides/how-to-design-a-house-with-ai", "free-ai-house-design", "modern-house-design", "indian-village-house-design"],
     ),
     "software-architects-use": dict(
         nav="Software architects use",
