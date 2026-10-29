@@ -482,8 +482,8 @@ def _lastmod():
 _SM = {
     "/": (1.0, "daily"), "/designer": (0.9, "weekly"), "/gallery": (0.8, "weekly"), "/faq": (0.8, "weekly"), "/contact": (0.5, "monthly"),
     "/free-ai-house-design/": (0.9, "weekly"), "/floor-plan-creator/": (0.9, "weekly"),
-    "/modern-houses-design/": (0.8, "weekly"), "/elevation-design/": (0.8, "weekly"), "/small-houses-design/": (0.8, "weekly"),
-    "/passive-houses-design/": (0.8, "weekly"), "/indian-village-house-design/": (0.8, "weekly"),
+    "/modern-house-design/": (0.8, "weekly"), "/elevation-design/": (0.8, "weekly"), "/small-house-design/": (0.8, "weekly"),
+    "/passive-house-design/": (0.8, "weekly"), "/indian-village-house-design/": (0.8, "weekly"),
     "/guides/": (0.7, "weekly"),
 }
 
