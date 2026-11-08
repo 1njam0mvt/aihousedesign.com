@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}{{ SITE_NAME }} | Free 3D House Builder & PDF Blueprint{% endblock %}
+{% block desc %}Free AI house maker and 3D house builder: pick a floor layout, boundary, furniture, marble or wood
+finishes, a roof and a sea-view balcony, then download your dream house as a PNG, JPG or PDF blueprint.{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/builder.css') }}">{% endblock %}
+{% block content %}
+<section class="bd" id="builder" aria-labelledby="bdTitle">
+    <header class="bd-head">
+        <span class="vh-pill"><svg class="ic" aria-hidden="true">
+                <use href="#i-box" />
+            </svg>Custom Dream House 3D Builder</span>
+        <h1 id="bdTitle">Build your dream house in 3D, then print the blueprint</h1>
+        <p>Choose a floor layout, add boundaries and furniture, pick marble, wood and paint finishes, set the roof and a
+            sea-view balcony, then download your design as an image or a PDF report with cost allocation.</p>
+    </header>
+
+    <div class="bd-grid">
+        <aside class="bd-panel" aria-label="Design steps">
+            <ol class="bd-steps" id="bdSteps"></ol>
+
+            <section class="bd-step" data-step="0">
+                <h2>1. Base floor layout</h2>
+                <p class="bd-sub">Pick one of 7 floor grids. Each cell is 0.75 m.</p>
+                <div class="bd-cards" id="bdLayouts"></div>
+            </section>
+
+            <section class="bd-step" data-step="1" hidden>
+                <h2>2. Boundary and border</h2>
+                <p class="bd-sub">16 wall, fence and hedge styles around your plot.</p>
+                <div class="bd-cards bd-cards-3" id="bdBounds"></div>
+            </section>
+
+            <section class="bd-step" data-step="2" hidden>
+                <h2>3. Furniture and appliances</h2>
+                <p class="bd-sub">Pick an item, then click the floor to place it. Drag to move. R rotates, Delete
+                    removes.</p>
+                <div class="bd-tabs" id="bdCats" role="tablist"></div>
+                <div class="bd-cards bd-cards-3" id="bdFurn"></div>
+                <div class="bd-placed">
+                    <h3>Placed items <span id="bdPlacedCount">0</span></h3>
+                    <ul id="bdPlaced"></ul>
+                </div>
+            </section>
+
+            <section class="bd-step" data-step="3" hidden>
+                <h2>4. Surface finishes</h2>
+                <p class="bd-sub">Wall paint, luxury marble and hardwood floors.</p>
+                <h3>Wall paint</h3>
+                <div class="bd-swatches" id="bdWalls"></div>
+                <label class="bd-custom">Custom colour <input type="color" id="bdWallCustom" value="#f4efe6"></label>
+                <h3>Flooring</h3>
+                <div class="bd-seg" id="bdFloorType" role="group" aria-label="Floor type"><button type="button"
+                        data-v="marble" aria-pressed="true">Luxury marble</button><button type="button" data-v="wood"
+                        aria-pressed="false">Hardwood</button></div>
+                <div class="bd-cards bd-cards-3" id="bdFloors"></div>
+            </section>
+
+            <section class="bd-step" data-step="4" hidden>
+                <h2>5. Exterior, roof and sea view</h2>
+                <p class="bd-sub">Roof style and colour, facade, and an optional coastal balcony.</p>
+                <h3>Roof style</h3>
+                <div class="bd-cards bd-cards-3" id="bdRoofs"></div>
+                <h3>Roof colour</h3>
+                <div class="bd-swatches" id="bdRoofCols"></div>
+                <h3>Exterior facade</h3>
+                <div class="bd-swatches" id="bdFacade"></div>
+                <label class="bd-check"><input type="checkbox" id="bdShowRoof"> Show roof on the model</label>
+                <label class="bd-check"><input type="checkbox" id="bdSeeThru" checked> See-through roof (keeps the rooms
+                    visible)</label>
+                <label class="bd-check bd-sea"><input type="checkbox" id="bdSea"> <span><b>Sea-facing
+                            apartment</b><small>Adds a coastal view balcony with glass railing and the sea behind your
+                            plot.</small></span></label>
+            </section>
+
+            <section class="bd-step" data-step="5" hidden>
+                <h2>6. Your inspiration image</h2>
+                <p class="bd-sub">Upload a dream house photo. It is shown beside the 3D builder and included in your
+                    downloads.</p>
+                <label class="bd-drop" id="bdDrop" for="bdFile"><svg class="ic" aria-hidden="true">
+                        <use href="#i-upload" />
+                    </svg><b>Drop an image or click to upload</b><small>JPG, PNG or WebP, processed in your
+                        browser</small></label>
+                <input type="file" id="bdFile" accept="image/*" hidden>
+                <button type="button" class="bd-btn bd-btn-ghost" id="bdRemoveInsp" hidden>Remove image</button>
+            </section>
+
+            <div class="bd-nav"><button type="button" class="bd-btn bd-btn-ghost" id="bdBack">Back</button><button
+                    type="button" class="bd-btn" id="bdNext">Next step</button></div>
+        </aside>
+
+        <div class="bd-stage">
+            <div class="bd-toolbar" role="toolbar" aria-label="Model tools">
+                <button type="button" id="bdRotate" disabled>Rotate (R)</button>
+                <button type="button" id="bdDelete" disabled>Delete</button>
+                <button type="button" id="bdUndo" disabled>Undo</button>
+                <button type="button" id="bdClear">Clear furniture</button>
+                <span class="bd-toolbar-hint" id="bdHint">Pick an item in step 3, then click the floor.</span>
+            </div>
+            <div class="bd-view">
+                <canvas id="bdCanvas" width="1100" height="700" tabindex="0"
+                    aria-label="Interactive 3D house builder preview"></canvas>
+            </div>
+            <figure class="bd-insp" id="bdInsp" hidden><img id="bdInspImg" alt="Your dream house inspiration image">
+                <figcaption>Your inspiration image</figcaption>
+            </figure>
+
+            <div class="bd-bottom">
+                <div class="bd-cost" aria-live="polite">
+                    <h3>Estimated cost</h3>
+                    <dl id="bdCostList"></dl>
+                    <div class="bd-total"><span>Total</span><b id="bdTotal">$0</b></div>
+                    <p class="bd-fine">Rough indicative estimate in USD. Excludes land, permits and fees.</p>
+                </div>
+                <div class="bd-export">
+                    <h3>Download</h3>
+                    <button type="button" class="bd-btn" id="bdPng"><svg class="ic" aria-hidden="true">
+                            <use href="#i-download" />
+                        </svg>Image (PNG)</button>
+                    <button type="button" class="bd-btn bd-btn-ghost" id="bdJpg"><svg class="ic" aria-hidden="true">
+                            <use href="#i-download" />
+                        </svg>Image (JPG)</button>
+                    <button type="button" class="bd-btn bd-btn-pdf" id="bdPdf"><svg class="ic" aria-hidden="true">
+                            <use href="#i-filevideo" />
+                        </svg>PDF blueprint report</button>
+                    <p class="bd-fine">The PDF has your specifications, cost allocation and rendered views. A quick free
+                        check-in unlocks it.</p>
+                    <button type="button" class="bd-link" id="bdReset">Reset whole design</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bd-modal" id="bdModal" role="dialog" aria-modal="true" aria-labelledby="bdModalTitle" hidden>
+        <form class="bd-modal-box" id="bdCheckin" novalidate>
+            <button type="button" class="bd-modal-x" id="bdModalX" aria-label="Close"><svg class="ic"
+                    aria-hidden="true">
+                    <use href="#i-x" />
+                </svg></button>
+            <h2 id="bdModalTitle">Quick check-in to unlock your PDF</h2>
+            <p>Tell us who the blueprint is for. It takes ten seconds, and your PDF downloads straight away.</p>
+            <label>Full name<input name="name" type="text" autocomplete="name" maxlength="80" required></label>
+            <label>Email<input name="email" type="email" autocomplete="email" maxlength="120" required></label>
+            <div class="bd-two"><label>Phone <small>(optional)</small><input name="phone" type="tel" autocomplete="tel"
+                        maxlength="25"></label><label>City <small>(optional)</small><input name="city" type="text"
+                        autocomplete="address-level2" maxlength="60"></label></div>
+            <label class="bd-check"><input name="consent" type="checkbox" required> <span>I agree that {{ SITE_NAME }}
+                    may store these details to prepare my report and contact me about my design. See the <a
+                        href="{{ url_for('privacy') }}" target="_blank" rel="noopener">privacy
+                        policy</a>.</span></label>
+            <p class="bd-error" id="bdError" role="alert" hidden></p>
+            <button type="submit" class="bd-btn" id="bdSubmit">Check in and download PDF</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/builder.js') }}"></script>{% endblock %}

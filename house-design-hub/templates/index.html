@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}AI House Design &amp; Floor Plan Generator | {{ SITE_NAME }}{% endblock %}
-{% block desc %}Free AI house design generator: create 2D floor plans, 3D models and front elevation designs online in
-seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblock %}
+{% block title %}{{ SITE_NAME }} | Free AI 3D House &amp; Floor Plan Generator{% endblock %}
+{% block desc %}Free AI house design generator online: create 2D floor plans, 3D house plans and exterior designs in
+seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans or build your own in 3D.{% endblock %}
 {% block content %}
 <section class="hero hero-v4 reference-final-hero" aria-label="AI house design and construction preview">
   <div class="hero-v4-backdrop" aria-hidden="true"></div>
@@ -354,6 +354,44 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
   </div>
 </section>
 
+<section class="bdp" id="house-builder" aria-labelledby="bdpTitle">
+  <div>
+    <span class="vh-pill"><svg class="ic" aria-hidden="true">
+        <use href="#i-box" />
+      </svg>New · 3D House Builder</span>
+    <h2 id="bdpTitle">Build your dream house in 3D and download the blueprint</h2>
+    <p>Free AI house maker: start from 7 base floors, add 16 boundary styles, over 30 pieces of furniture and
+      appliances, marble, wood and paint finishes, then add a sea-view balcony. Save it as an image or a PDF report with
+      your cost allocation.</p>
+    <ul>
+      <li><svg class="ic" aria-hidden="true">
+          <use href="#i-check" />
+        </svg>7 base floor layouts</li>
+      <li><svg class="ic" aria-hidden="true">
+          <use href="#i-check" />
+        </svg>16 walls, fences and hedges</li>
+      <li><svg class="ic" aria-hidden="true">
+          <use href="#i-check" />
+        </svg>Sofas, beds, kitchen, bath</li>
+      <li><svg class="ic" aria-hidden="true">
+          <use href="#i-check" />
+        </svg>Marble, wood and paint</li>
+      <li><svg class="ic" aria-hidden="true">
+          <use href="#i-check" />
+        </svg>Roof styles and sea view</li>
+      <li><svg class="ic" aria-hidden="true">
+          <use href="#i-check" />
+        </svg>PNG, JPG and PDF export</li>
+    </ul>
+    <a class="bdp-cta" href="{{ url_for('builder') }}">Open the 3D builder<svg class="ic" aria-hidden="true">
+        <use href="#i-arrow" />
+      </svg></a>
+  </div>
+  <a class="bdp-art" href="{{ url_for('builder') }}" aria-label="Open the 3D house builder"><img
+      src="{{ url_for('static', filename='img/builder-preview.webp') }}"
+      alt="3D house builder showing a furnished house with a boundary wall" loading="lazy" width="960" height="600"></a>
+</section>
+
 
 <section id="styles" class="interactive-section">
   <div class="section-intro">
@@ -441,7 +479,7 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
     designs. Tell the AI designer your plot size, number of bedrooms, floors and style, and it draws a floor plan with
     room sizes, a 3D model you can rotate and a rough construction cost in seconds. There is no login and nothing to
     install.</p>
-  <p>Whether you are looking for modern house design ideas, a small house design for a compact plot, a simple single
+  <p>Whether you are looking for modern houses design ideas, a small house design for a compact plot, a simple single
     floor home design or a low cost village house plan, every design opens in 2D, 3D and as a 4D construction timeline.
     Compare options, download the plan and take your favourite to an architect.</p>
 </section>
@@ -518,6 +556,20 @@ seconds. No login. Browse {{ '{:,}'.format(stats.total) }} house plans.{% endblo
       <summary>{{ q }}</summary>
       <p>{{ a }}</p>
       </details>{% endfor %}
+  </div>
+</section>
+
+<section class="popsearch" aria-label="Popular searches">
+  <h3>Popular searches</h3>
+  <div>
+    <a href="{{ url_for('designer') }}">AI house design free</a>
+    <a href="{{ url_for('gallery') }}">3D house design AI free</a>
+    <a href="{{ url_for('designer') }}">AI home exterior design free</a>
+    <a href="{{ url_for('designer') }}">AI house design generator</a>
+    <a href="{{ url_for('gallery') }}">Generate 3D house plans with AI</a>
+    <a href="{{ url_for('builder') }}">AI house maker free</a>
+    <a href="{{ url_for('builder') }}">AI house creator</a>
+    <a href="{{ url_for('designer') }}">AI house design online</a>
   </div>
 </section>
 {% endblock %}

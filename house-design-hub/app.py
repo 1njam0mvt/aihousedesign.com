@@ -1,4 +1,4 @@
-"""AI House Design: Flask app (pages + JSON API)."""
+"""AI Houses Design: Flask app (pages + JSON API)."""
 import json
 import os
 import re
@@ -12,6 +12,8 @@ from flask import Flask, send_from_directory, abort, jsonify, redirect, render_t
 
 from core import ai, catalog, seo, topics
 from core.stages import BUILD_STAGES, BUILD_TOTAL_BUDGET, BUILD_TOTAL_DAYS
+from core import pdfmini
+import base64, hashlib, hmac
 from core.i18n import LANGS, get_dict
 from core.planner import STYLES, FACINGS
 
@@ -49,7 +51,7 @@ def hero_photos():
 # Shown on the legal pages. Set these env vars before going live.
 SITE_NAME = os.getenv("SITE_NAME", "AI House Design")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "support@aihousesdesign.com")  # create this mailbox / forwarder
-LEGAL_UPDATED = "27 October 2026"
+LEGAL_UPDATED = "9 October 2026"
 
 
 # ---------- real images: kept OUT of the UI code, looked up by ID --------------------------------------------------------
@@ -248,6 +250,104 @@ FAQS = [
     ("I found a mistake or have a suggestion. What do I do?",
      "Please use the Contact page. Reports about wrong plans, translations or broken pages are very welcome."),
 ]
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# Custom Dream House 3D Builder: page, PDF check-in and PDF export
+# ----------------------------------------------------------------------------------------------------------------
+def _load_ck_key():
+    k = os.getenv("SECRET_KEY")
+    if k:
+        return k.encode()
+    path = os.path.join(app.instance_path, ".builder_key")  # shared by all workers, survives restarts
+    try:
+        os.makedirs(app.instance_path, exist_ok=True)
+        try:
+            with open(path, "xb") as fh:
+                key = os.urandom(32).hex().encode()
+                fh.write(key)
+                return key
+        except FileExistsError:
+            with open(path, "rb") as fh:
+                return fh.read().strip()
+    except OSError:
+        return os.urandom(32).hex().encode()
+
+
+_CK_KEY = _load_ck_key()
+_CK_TTL = 12 * 3600
+_ck_hits = {}
+
+
+def _ck_token(name, email):
+    payload = base64.urlsafe_b64encode(json.dumps({"n": name, "e": email, "t": int(time.time())}).encode()).decode().rstrip("=")
+    sig = hmac.new(_CK_KEY, payload.encode(), hashlib.sha256).hexdigest()[:40]
+    return payload + "." + sig
+
+
+def _ck_verify(token):
+    try:
+        payload, sig = str(token).rsplit(".", 1)
+        good = hmac.new(_CK_KEY, payload.encode(), hashlib.sha256).hexdigest()[:40]
+        if not hmac.compare_digest(sig, good):
+            return None
+        data = json.loads(base64.urlsafe_b64decode(payload + "=" * (-len(payload) % 4)))
+        return data if time.time() - data["t"] < _CK_TTL else None
+    except Exception:
+        return None
+
+
+@app.route("/builder")
+def builder():
+    return render_template("builder.html", ld=[seo.breadcrumb([("Home", "/"), ("3D House Builder", "/builder")]), seo.webapp_ld(SITE_NAME)])
+
+
+@app.route("/api/builder/checkin", methods=["POST"])
+def builder_checkin():
+    d = request.get_json(silent=True) or {}
+    name = re.sub(r"\s+", " ", str(d.get("name", ""))).strip()[:80]
+    email = str(d.get("email", "")).strip()[:120]
+    phone = re.sub(r"[^0-9+()\-\s]", "", str(d.get("phone", "")))[:25]
+    city = re.sub(r"\s+", " ", str(d.get("city", ""))).strip()[:60]
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "?").split(",")[0].strip()
+    hits = [t for t in _ck_hits.get(ip, []) if time.time() - t < 600]
+    if len(hits) >= 8:
+        return jsonify(ok=False, error="Too many check-ins from this connection. Please try again in a few minutes."), 429
+    if len(name) < 2:
+        return jsonify(ok=False, error="Please enter your full name.", field="name"), 400
+    if not re.fullmatch(r"[^@\s]{1,64}@[^@\s]{1,255}\.[A-Za-z]{2,}", email):
+        return jsonify(ok=False, error="Please enter a valid email address.", field="email"), 400
+    if not d.get("consent"):
+        return jsonify(ok=False, error="Please tick the box to continue.", field="consent"), 400
+    _ck_hits[ip] = hits + [time.time()]
+    os.makedirs(app.instance_path, exist_ok=True)
+    with open(os.path.join(app.instance_path, "builder_checkins.jsonl"), "a", encoding="utf-8") as fh:
+        fh.write(json.dumps({"time": time.strftime("%Y-%m-%d %H:%M:%S"), "name": name, "email": email, "phone": phone, "city": city, "consent": True}, ensure_ascii=False) + "\n")
+    return jsonify(ok=True, token=_ck_token(name, email), name=name)
+
+
+def _data_url_jpeg(value, limit=3_000_000):
+    m = re.fullmatch(r"data:image/jpeg;base64,([A-Za-z0-9+/=]+)", str(value or ""))
+    if not m:
+        return None
+    raw = base64.b64decode(m.group(1))
+    return raw if 0 < len(raw) <= limit and raw[:2] == b"\xff\xd8" else None
+
+
+@app.route("/api/builder/pdf", methods=["POST"])
+def builder_pdf():
+    if (request.content_length or 0) > 9_000_000:
+        return jsonify(ok=False, error="Design is too large."), 413
+    d = request.get_json(silent=True) or {}
+    who = _ck_verify(d.get("token"))
+    if not who:
+        return jsonify(ok=False, error="Please check in again to unlock the PDF.", code="checkin"), 401
+    try:
+        pdf = pdfmini.build_report(d.get("design") or {}, who, _data_url_jpeg(d.get("render")), _data_url_jpeg(d.get("inspiration")), SITE_NAME)
+    except Exception as exc:  # never leak internals
+        app.logger.exception("builder pdf failed: %s", exc)
+        return jsonify(ok=False, error="Could not build the PDF. Please try again."), 500
+    return Response(pdf, mimetype="application/pdf", headers={"Content-Disposition": 'attachment; filename="ai-house-design-blueprint.pdf"', "Cache-Control": "no-store"})
 
 
 @app.route("/faq")
@@ -480,10 +580,10 @@ def _lastmod():
 
 # path -> (priority, changefreq).  Google ignores priority and changefreq but other crawlers read them; lastmod is the one that counts.
 _SM = {
-    "/": (1.0, "daily"), "/designer": (0.9, "weekly"), "/gallery": (0.8, "weekly"), "/faq": (0.8, "weekly"), "/contact": (0.5, "monthly"),
+    "/": (1.0, "daily"), "/designer": (0.9, "weekly"), "/builder": (0.8, "weekly"), "/gallery": (0.8, "weekly"), "/faq": (0.8, "weekly"), "/contact": (0.5, "monthly"),
     "/free-ai-house-design/": (0.9, "weekly"), "/floor-plan-creator/": (0.9, "weekly"),
-    "/modern-house-design/": (0.8, "weekly"), "/elevation-design/": (0.8, "weekly"), "/small-house-design/": (0.8, "weekly"),
-    "/passive-house-design/": (0.8, "weekly"), "/indian-village-house-design/": (0.8, "weekly"),
+    "/modern-houses-design/": (0.8, "weekly"), "/elevation-design/": (0.8, "weekly"), "/small-houses-design/": (0.8, "weekly"),
+    "/passive-houses-design/": (0.8, "weekly"), "/indian-village-house-design/": (0.8, "weekly"),
     "/guides/": (0.7, "weekly"),
 }
 
@@ -492,7 +592,7 @@ _SM = {
 def sitemap():
     guide_pages = [v["path"] for v in seo.ALL_PAGES.values() if v["kind"] == "guide"]
     landing_pages = [v["path"] for v in seo.ALL_PAGES.values() if v["kind"] == "landing"]
-    core_pages = ["/", "/gallery", "/designer", "/faq", "/contact"]
+    core_pages = ["/", "/gallery", "/designer", "/builder", "/faq", "/contact"]
     rows = [(p, *_SM[p]) for p in core_pages + landing_pages + ["/guides/"]]
     rows += [(f"/topic/{t['slug']}", 0.7, "weekly") for t in topics.TOPICS]
     rows += [(p, 0.7, "monthly") for p in guide_pages]
@@ -511,4 +611,3 @@ def healthz():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=os.getenv("FLASK_DEBUG") == "1")
-    
