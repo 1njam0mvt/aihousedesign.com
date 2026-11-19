@@ -532,6 +532,11 @@ def robots():
     return Response(f"User-agent: *\nAllow: /\nSitemap: {seo.SITE_URL}/sitemap.xml\n", mimetype="text/plain")
 
 
+@app.route("/ads.txt")
+def ads_txt():
+    return Response("google.com, pub-7898637148411541, DIRECT, f08c47fec0942fa0\n", mimetype="text/plain")
+
+
 @app.route("/favicon.ico")
 def favicon():
     # real multi-size .ico (16/32/48) at the root: Google and older browsers request exactly this URL
