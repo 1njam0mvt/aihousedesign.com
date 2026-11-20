@@ -45,9 +45,14 @@ model and 4D construction timeline instantly.{% endblock %}
     <div id="view"></div>
   </section>
 </div>
+<section class="doc" style="margin-top:28px">
+  <h2>AI house designer FAQ</h2>
+  <div class="faq">{% for q, a in faqs %}<details{% if loop.first %} open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
+  <p class="muted">Plans are concepts, not approval drawings. See the <a href="{{ url_for('methodology') }}">methodology</a>.</p>
+</section>
 {% endblock %}
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="{{ url_for('static', filename='js/vendor/three.r128.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/plan2d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/viewer3d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/view.js') }}"></script>

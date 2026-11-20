@@ -12,7 +12,7 @@ from flask import Flask, send_from_directory, abort, jsonify, redirect, render_t
 
 from core import ai, catalog, seo, topics
 from core.stages import BUILD_STAGES, BUILD_TOTAL_BUDGET, BUILD_TOTAL_DAYS
-from core import pdfmini
+from core import pdfmini, insights
 import base64, hashlib, hmac
 from core.i18n import LANGS, get_dict
 from core.planner import STYLES, FACINGS
@@ -118,7 +118,7 @@ def inject():
                 SITE_URL=seo.SITE_URL, canonical=seo.SITE_URL + request.path, site_ld=seo.site_ld(SITE_NAME),
                 SEO_LINKS=[(v["nav"], v["path"]) for v in seo.ALL_PAGES.values() if v["kind"] == "landing"],
                 BUILD_STAGES=BUILD_STAGES, BUILD_TOTAL_BUDGET=BUILD_TOTAL_BUDGET, BUILD_TOTAL_DAYS=BUILD_TOTAL_DAYS,
-                FIRST_DESIGN_ID=catalog.DESIGNS[0]["id"])
+                FIRST_DESIGN_ID=catalog.DESIGNS[0]["id"], SITE_UPDATED=seo.UPDATED)
 
 
 def _int(name, default=None, lo=None, hi=None):
@@ -162,7 +162,8 @@ def design(design_id):
 
 @app.route("/designer")
 def designer():
-    return render_template("designer.html", ld=[seo.breadcrumb([("Home", "/"), ("AI Designer", "/designer")]), seo.webapp_ld(SITE_NAME)])
+    return render_template("designer.html", faqs=seo.DESIGNER_FAQS,
+                           ld=[seo.breadcrumb([("Home", "/"), ("AI Designer", "/designer")]), seo.webapp_ld(SITE_NAME), seo.faq_ld(seo.DESIGNER_FAQS)])
 
 
 @app.route("/topic/<slug>")
@@ -196,7 +197,7 @@ def _landing_view(key):
              ([seo.article_ld(p, SITE_NAME)] if p["kind"] == "guide" else [])
         related = [(seo.ALL_PAGES[r]["nav"], seo.ALL_PAGES[r]["path"]) for r in p["related"]]
         return render_template("landing.html", p=p, cards=cards, count=count, topic=t, crumbs=crumbs, ld=ld, related=related,
-                               designer_url=url_for("designer") + "?" + urlencode(p["cta"]))
+                               designer_url=p.get("cta_url") or url_for("designer") + "?" + urlencode(p["cta"]))
     return view
 
 
@@ -299,7 +300,9 @@ def _ck_verify(token):
 
 @app.route("/builder")
 def builder():
-    return render_template("builder.html", ld=[seo.breadcrumb([("Home", "/"), ("3D House Builder", "/builder")]), seo.webapp_ld(SITE_NAME)])
+    return render_template("builder.html", faqs=seo.BUILDER_FAQS, steps=seo.BUILDER_STEPS,
+                           ld=[seo.breadcrumb([("Home", "/"), ("3D House Builder", "/builder")]), seo.builder_ld(SITE_NAME), seo.faq_ld(seo.BUILDER_FAQS),
+                               seo.howto_ld("How to design a house in 3D", "Design a house step by step in the free 3D house builder and download it as an image or PDF.", seo.BUILDER_STEPS, "/builder")])
 
 
 @app.route("/api/builder/checkin", methods=["POST"])
@@ -529,12 +532,18 @@ def api_chat():
 @app.route("/robots.txt")
 def robots():
     # /api/ stays crawlable on purpose: gallery cards load from it and Google needs it to render the page.
-    return Response(f"User-agent: *\nAllow: /\nSitemap: {seo.SITE_URL}/sitemap.xml\n", mimetype="text/plain")
-
-
-@app.route("/ads.txt")
-def ads_txt():
-    return Response("google.com, pub-7898637148411541, DIRECT, f08c47fec0942fa0\n", mimetype="text/plain")
+    # AI search and answer engines are allowed on purpose (set AI_CRAWLERS=block to opt out of AI training crawlers only).
+    block = "\n".join(["Disallow: /api/builder/"])
+    out = [f"User-agent: *\nAllow: /\n{block}\n"]
+    retrieval = ["OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Applebot", "DuckAssistBot"]
+    training = ["GPTBot", "ClaudeBot", "Google-Extended", "Applebot-Extended", "CCBot", "Amazonbot", "meta-externalagent"]
+    for bot in retrieval:
+        out.append(f"User-agent: {bot}\nAllow: /\n{block}\n")
+    rule = "Disallow: /" if os.getenv("AI_CRAWLERS", "allow").lower() == "block" else f"Allow: /\n{block}"
+    for bot in training:
+        out.append(f"User-agent: {bot}\n{rule}\n")
+    out.append(f"Sitemap: {seo.SITE_URL}/sitemap.xml\n")
+    return Response("\n".join(out), mimetype="text/plain", headers={"Cache-Control": "public, max-age=3600"})
 
 
 @app.route("/favicon.ico")
@@ -590,6 +599,8 @@ _SM = {
     "/modern-houses-design/": (0.8, "weekly"), "/elevation-design/": (0.8, "weekly"), "/small-houses-design/": (0.8, "weekly"),
     "/passive-houses-design/": (0.8, "weekly"), "/indian-village-house-design/": (0.8, "weekly"),
     "/guides/": (0.7, "weekly"),
+    "/3d-house-design-ai/": (0.9, "weekly"), "/ai-home-exterior-design/": (0.8, "weekly"), "/ai-house-maker/": (0.9, "weekly"),
+    "/house-design-statistics": (0.8, "monthly"), "/methodology": (0.6, "monthly"),
 }
 
 
@@ -597,7 +608,7 @@ _SM = {
 def sitemap():
     guide_pages = [v["path"] for v in seo.ALL_PAGES.values() if v["kind"] == "guide"]
     landing_pages = [v["path"] for v in seo.ALL_PAGES.values() if v["kind"] == "landing"]
-    core_pages = ["/", "/gallery", "/designer", "/builder", "/faq", "/contact"]
+    core_pages = ["/", "/gallery", "/designer", "/builder", "/house-design-statistics", "/methodology", "/faq", "/contact"]
     rows = [(p, *_SM[p]) for p in core_pages + landing_pages + ["/guides/"]]
     rows += [(f"/topic/{t['slug']}", 0.7, "weekly") for t in topics.TOPICS]
     rows += [(p, 0.7, "monthly") for p in guide_pages]
@@ -609,6 +620,74 @@ def sitemap():
                     + body + '</urlset>', mimetype="application/xml")
 
 
+# ---------------------------------------------------------------- AI search: llms.txt, original data and method pages
+def _page_lines(kind):
+    return [f"- [{v['nav']}]({seo.url(v['path'])}): {v['desc']}" for v in seo.ALL_PAGES.values() if v["kind"] == kind]
+
+
+@app.route("/llms.txt")
+def llms_txt():
+    d = insights.compute()
+    lines = [f"# {SITE_NAME}", "",
+             f"> Free AI house design generator: 2D floor plans with dimensions, rotatable 3D models, front elevations, 4D construction timelines, rough cost estimates "
+             f"and a 3D house builder. {d['total']:,} ready designs in {d['n_styles']} styles. No login needed to design.", "",
+             "Plans are concepts, not approval or structural drawings. Costs are rough planning estimates. A licensed architect and engineer must verify any plan before construction.", "",
+             "## Tools",
+             f"- [AI house designer]({seo.url('/designer')}): generate a 2D plan, 3D model and rough cost from plot size, bedrooms, floors and style",
+             f"- [3D house builder]({seo.url('/builder')}): build a house in 3D with floors, boundary, furniture, finishes, roof and sea-view balcony; export PNG, JPG or PDF",
+             f"- [House design gallery]({seo.url('/gallery')}): browse and filter all {d['total']:,} designs", "",
+             "## Topics"] + _page_lines("landing") + ["", "## Guides"] + _page_lines("guide") + ["",
+             "## Data, method and trust",
+             f"- [House design statistics]({seo.url('/house-design-statistics')}): sizes and estimated costs computed from all {d['total']:,} designs",
+             f"- [Methodology]({seo.url('/methodology')}): how plans are generated and how costs are estimated, with limits",
+             f"- [FAQ]({seo.url('/faq')}): common questions about the tools", f"- [Privacy policy]({seo.url('/privacy')})", f"- [Contact and corrections]({seo.url('/contact')})", "",
+             "## Optional", f"- [Full text for AI systems]({seo.url('/llms-full.txt')}): facts, FAQs and statistics in one file"]
+    return Response("\n".join(lines) + "\n", mimetype="text/plain", headers={"Cache-Control": "public, max-age=3600"})
+
+
+@app.route("/llms-full.txt")
+def llms_full():
+    d = insights.compute()
+    o = d["overall"]
+    out = [f"# {SITE_NAME}: full reference", "", f"Updated {seo.UPDATED}. Site: {seo.SITE_URL}", "", "## What it is",
+           f"{SITE_NAME} is a free web tool that generates house designs. Each design has a dimensioned 2D floor plan, a rotatable 3D model, front elevation views, "
+           f"a 4D construction timeline and a rough build cost estimate. The library holds {d['total']:,} designs in {d['n_styles']} styles on {d['n_plots']} plot sizes. "
+           "A separate 3D house builder lets users choose a base floor, boundary, furniture, finishes and roof and download an image or a PDF report.", "",
+           "## How it works",
+           "Plans come from a procedural planner that packs rooms into valid layouts from plot size, bedrooms, floors, style and facing direction. "
+           "An optional language assistant can add short design notes. Cost is built area multiplied by a per-square-foot rate for the style. See the methodology page.", "",
+           "## Limits",
+           "Plans are concepts. They are not structural drawings, not approval drawings and do not apply local building rules. Estimates exclude land, permits, taxes, fees and furnishing. "
+           "The tools do not convert photos into 3D models.", "",
+           "## Key statistics (computed from the library)",
+           f"- Designs: {d['total']:,}; styles: {d['n_styles']}; plot sizes: {d['n_plots']}",
+           f"- Median built area: {o['median_area']:,.0f} sq ft; median estimated cost: Rs {o['median_cost']:.1f} lakh",
+           f"- Lowest cost per sq ft by style: {d['cheapest']['label']} (Rs {d['cheapest']['psf']:,.0f}); highest: {d['priciest']['label']} (Rs {d['priciest']['psf']:,.0f})",
+           f"- Source: {seo.url('/house-design-statistics')}", "", "## Frequently asked questions"]
+    for q, a in list(seo.HOME_FAQS) + list(seo.DESIGNER_FAQS) + list(seo.BUILDER_FAQS):
+        out += [f"### {q}", a, ""]
+    out += ["## Pages"] + _page_lines("landing") + _page_lines("guide") + ["", "## How to cite",
+            f"{SITE_NAME}, {seo.url('/')}. For data, cite {seo.url('/house-design-statistics')} and the date shown on the page."]
+    return Response("\n".join(out) + "\n", mimetype="text/plain", headers={"Cache-Control": "public, max-age=3600"})
+
+
+@app.route("/house-design-statistics")
+def house_stats():
+    d = insights.compute()
+    desc = (f"Original data from {d['total']:,} house plans: median built area {d['overall']['median_area']:,.0f} sq ft, median estimated cost Rs {d['overall']['median_cost']:.1f} lakh, by style, bedrooms and plot.")
+    vars_ = ["Built area (sq ft)", "Estimated build cost (INR lakh)", "Cost per sq ft (INR)", "Style", "Bedrooms", "Floors", "Plot size", "Facing direction"]
+    return render_template("statistics.html", d=d, desc=desc, updated=seo.UPDATED,
+                           ld=[seo.breadcrumb([("Home", "/"), ("House design statistics", "/house-design-statistics")]),
+                               seo.dataset_ld("House design statistics: sizes and estimated costs", desc, "/house-design-statistics", d["total"], vars_)])
+
+
+@app.route("/methodology")
+def methodology():
+    rates = sorted(((catalog._label(k), v["rate"]) for k, v in STYLES.items()), key=lambda x: x[1])
+    return render_template("methodology.html", rates=rates, d=insights.compute(), updated=seo.UPDATED,
+                           ld=[seo.breadcrumb([("Home", "/"), ("Methodology", "/methodology")])])
+
+
 @app.route("/healthz")
 def healthz():
     return "ok"
@@ -616,3 +695,4 @@ def healthz():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=os.getenv("FLASK_DEBUG") == "1")
+    

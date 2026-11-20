@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Methodology: How {{ SITE_NAME }} Plans and Costs Work{% endblock %}
+{% block desc %}How {{ SITE_NAME }} generates house plans, how cost estimates are calculated, what they leave out, and how to report a mistake.{% endblock %}
+{% block content %}
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('index') }}">Home</a><span aria-hidden="true"> › </span><span aria-current="page">Methodology</span></nav>
+<div class="landing">
+  <article class="doc">
+    <h1>Methodology: How Plans and Costs Are Made</h1>
+    <p class="lead">{{ SITE_NAME }} generates house plans with a rule-based planner and estimates cost as built area times a per-square-foot rate for the style. The results are concepts and rough budgets for comparing ideas. They are not structural drawings, approval drawings or quotations.</p>
+    <p class="muted">Updated <time datetime="{{ updated }}">{{ updated }}</time></p>
+
+    <h2>What the tools do</h2>
+    <ul>
+      <li><strong>AI house designer:</strong> turns plot size, bedrooms, floors, style and facing direction (or a short text request) into a 2D plan, a 3D model and a cost estimate.</li>
+      <li><strong>Design library:</strong> {{ '{:,}'.format(d.total) }} generated plans in {{ d.n_styles }} styles on {{ d.n_plots }} plot sizes, each with a 2D plan, 3D model, elevation and 4D construction timeline.</li>
+      <li><strong>3D house builder:</strong> an interactive 3D view for choosing floors, boundary, furniture, finishes and roof, with image and PDF export.</li>
+    </ul>
+
+    <h2>How plans are generated</h2>
+    <p>A procedural planner works in feet. It takes the buildable rectangle of the plot and packs rooms (living, kitchen, dining, bedrooms, bathrooms, verandah, pooja, stair and more) into horizontal bands that fill the rectangle exactly, using relative area weights for each room type. Layouts are therefore gap-free and valid as concepts. The same inputs always give the same plan.</p>
+    <p>The designer reads your request with a rule-based parser that understands plot sizes such as 30x40, bedroom counts, floors and style words. If a language model is configured it can add short design notes, but the layout itself comes from the planner.</p>
+
+    <h2>How cost estimates are calculated</h2>
+    <p>Estimated cost equals the built area in square feet multiplied by a rate per square foot for the chosen style. These are the rates used:</p>
+    <div class="data-wrap"><table class="data"><thead><tr><th>Style</th><th>Rate (₹ per sq ft)</th></tr></thead><tbody>
+      {% for label, rate in rates %}<tr><th scope="row">{{ label }}</th><td>{{ '{:,}'.format(rate) }}</td></tr>{% endfor %}
+    </tbody></table></div>
+    <p>The 3D house builder shows a separate indicative estimate in US dollars that adds base structure, boundary, furniture, finishes and roof.</p>
+
+    <h2>What estimates leave out</h2>
+    <ul><li>Land, registration and taxes</li><li>Approvals, drawings and professional fees</li><li>Furniture, appliances and landscaping unless added in the 3D builder</li><li>Local price changes, labour rates and the quality of finishes you choose</li></ul>
+
+    <h2>Limits you should know</h2>
+    <ul>
+      <li>Plans are concepts. They are not structural designs and do not apply your local building rules, setbacks or fire and safety codes.</li>
+      <li>The tools do not convert photos into 3D models.</li>
+      <li>Always have a licensed architect and structural engineer review and approve drawings before construction.</li>
+    </ul>
+
+    <h2>Data, privacy and corrections</h2>
+    <p>The <a href="{{ url_for('house_stats') }}">house design statistics</a> are computed from the library and update when the library changes. Read the <a href="{{ url_for('privacy') }}">privacy policy</a> to see what we collect. If you find a mistake in a plan, a number or a page, tell us through the <a href="{{ url_for('contact') }}">contact page</a> and we will review it and correct it.</p>
+    <div class="cta"><a class="btn primary" href="{{ url_for('designer') }}">Try the AI house designer</a><a class="btn" href="{{ url_for('builder') }}">Open the 3D house builder</a></div>
+  </article>
+</div>
+{% endblock %}

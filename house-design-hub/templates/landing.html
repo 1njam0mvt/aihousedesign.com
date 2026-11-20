@@ -11,6 +11,7 @@
     <article class="doc">
         <h1>{{ p.h1 }}</h1>
         <p class="lead">{{ p.lead }}</p>
+        <p class="muted">Updated <time datetime="{{ SITE_UPDATED }}">{{ SITE_UPDATED }}</time></p>
         <div class="cta">
             <a class="btn primary" href="{{ designer_url }}">{{ p.cta_label }}</a>
             {% if topic %}<a class="btn" href="{{ url_for('gallery') }}?topic={{ topic.slug }}">Browse {{

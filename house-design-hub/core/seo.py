@@ -418,6 +418,216 @@ GUIDES = {
     ),
 }
 
+# ---------------------------------------------------------------- round 2: pages built from the keyword research (one search intent per URL)
+UPDATED = os.getenv("SITE_UPDATED", "2026-11-08")
+_CTA = dict(style="modern", beds=3, floors=2, w=30, d=40, facing="E")
+
+LANDING.update({
+    "3d-house-design-ai": dict(
+        nav="3D House Design AI",
+        title="3D House Design AI: Free 3D House Plan Generator Online",
+        desc="Generate a free 3D house design with AI: enter plot size, bedrooms and style, then rotate the 3D model, open the 2D plan and see a rough cost. No login.",
+        h1="Free 3D House Design with AI",
+        lead="A 3D house design AI tool turns your plot size, number of bedrooms and style into a 3D house model you can rotate, with a matching 2D floor plan and a rough cost. On AI House Design this is free and needs no login.",
+        cta=_CTA, cta_label="Generate a 3D house design", topic="modern-house-design",
+        sections=[
+            ["What you get with each 3D house design", [], [
+                "A 3D house model you can rotate and zoom to judge shape, roof and massing",
+                "A matching 2D floor plan with room sizes and dimensions",
+                "Front elevation views of the exterior",
+                "A 4D construction timeline from foundation to finishing",
+                "A rough build cost estimate based on built area and style",
+                "7,968 ready designs across 15 styles if you prefer to browse first"]],
+            ["How to make a 3D house plan in four steps", [], [
+                "Enter your plot width and depth in feet",
+                "Choose the number of bedrooms and floors",
+                "Pick a style and the direction the front faces",
+                "Generate, then drag to rotate the 3D model and open the 2D plan to check the rooms"]],
+            ["3D house design or 2D floor plan?", [
+                "A 2D floor plan shows the rooms from above with dimensions. It is what builders and approval offices work from. A 3D model shows height, roof shape and how the house looks from outside. Check room sizes and circulation on the 2D plan, judge style and massing on the 3D model, and use both together."]],
+            ["Arrange furniture and finishes in 3D", [
+                "To place furniture, choose floors and wall colours, add a boundary wall and a roof, use the 3D house builder. You can download the result as an image or as a PDF blueprint report."]],
+        ],
+        faqs=[
+            ["How do I make a 3D house design for free?", "Open the AI house designer, enter plot size, bedrooms, floors and style, and generate. You get a rotatable 3D model, a 2D plan and a rough cost. It is free and there is no login."],
+            ["Can I rotate the 3D house model?", "Yes. Drag the 3D model to rotate it and scroll to zoom, so you can check the house from every side."],
+            ["Can I build a house from a 3D design?", "A 3D design is a concept. Before building, have the plan checked and approved by a licensed architect and structural engineer, and confirm local building rules."]],
+        related=["free-ai-house-design", "floor-plan-creator", "elevation-design", "guides/how-to-make-a-3d-picture-of-your-house"]),
+    "ai-home-exterior-design": dict(
+        nav="AI Home Exterior Design",
+        title="AI Home Exterior Design: Free Front and Exterior House Ideas",
+        desc="Design a home exterior for free with AI: pick a style, see the front elevation and a 3D model, then compare roof shapes, colours and facade ideas.",
+        h1="AI Home Exterior Design",
+        lead="AI home exterior design means generating the outside of a house, including front elevation, roof shape and style, from a few inputs. On AI House Design you choose a style and plot, then see the exterior in 3D and as a front elevation, free and without login.",
+        cta=dict(_CTA, facing="N"), cta_label="Design a home exterior", topic="modern-house-design",
+        sections=[
+            ["What to decide for a home exterior", [], [
+                "Overall style: modern, traditional, minimalist, village, villa and more",
+                "Roof shape: flat, gable, hip, shed or butterfly",
+                "Facade colours and materials: plaster, brick, stone or timber",
+                "Boundary wall or fence, gate and entrance",
+                "Balcony, verandah or porch at the front"]],
+            ["How to try exterior ideas quickly", [
+                "Start with the AI house designer to see the front elevation and a rotatable 3D model for a chosen style. Then open the 3D house builder to try 5 roof styles, 8 facade colours, 16 boundary and fence styles, and an optional sea-facing balcony. Download your favourite as an image."]],
+            ["Match the exterior to climate and plot", [
+                "Sloped roofs shed heavy rain well, flat roofs give a usable terrace, and deep verandahs shade walls in hot weather. Light facade colours reflect heat. Check setbacks and height limits for your plot before you fall for a design."]],
+        ],
+        faqs=[
+            ["Is AI home exterior design free?", "Yes. Generating exterior and front elevation views on AI House Design is free and needs no login."],
+            ["Can I change the roof and colours?", "Yes. In the 3D house builder you can choose a roof style and colour, a facade colour and a boundary style, then download the picture."],
+            ["How accurate is an AI exterior design?", "Treat it as a concept for comparing ideas. A licensed architect should prepare drawings for approval and construction."]],
+        related=["elevation-design", "modern-houses-design", "3d-house-design-ai", "guides/how-to-make-a-3d-picture-of-your-house"]),
+    "ai-house-maker": dict(
+        nav="AI House Maker",
+        title="AI House Maker and Creator: Build a House Online for Free",
+        desc="Free AI house maker and creator: generate a house design in seconds or build your own in 3D with floors, furniture, finishes and a roof, then download it.",
+        h1="AI House Maker and House Creator",
+        lead="An AI house maker creates a house design for you, and a house creator lets you build one yourself. AI House Design offers both: generate a plan from a short brief, or use the 3D house builder to choose floors, boundary, furniture, finishes and roof, free and with image downloads.",
+        cta=_CTA, cta_label="Open the 3D house builder", cta_url="/builder", topic=None,
+        sections=[
+            ["Two ways to make a house", [], [
+                "Generate: describe plot, bedrooms and style and get a plan, 3D model and cost",
+                "Build: pick a base floor, then add boundary, furniture, finishes, roof and balcony in 3D"]],
+            ["What the 3D house builder includes", [], [
+                "7 base floor layouts from studio to villa",
+                "16 boundary styles: brick, stone, bamboo, glass, hedges and more",
+                "32 furniture and appliance items for living, kitchen, dining, bedroom and bath",
+                "Wall paint colours, 6 marble designs and 6 wood floors",
+                "5 roof styles and an optional sea-facing balcony",
+                "Upload your own inspiration image and download PNG, JPG or a PDF report"]],
+            ["From idea to blueprint", [
+                "When you are happy with the design, download the picture, or check in once to get a PDF with your specifications, furniture list and cost allocation. Share it with your architect to start the conversation."]],
+        ],
+        faqs=[
+            ["Is the AI house maker free?", "Yes. You can generate designs and use the 3D house builder for free. The PDF report asks for a quick check-in with your name and email."],
+            ["Can I upload my own house photo?", "Yes. Upload an inspiration image in the last step of the 3D house builder and it appears beside your model and in your downloads."]],
+        related=["free-ai-house-design", "3d-house-design-ai", "guides/how-to-design-a-house-with-ai", "ai-home-exterior-design"]),
+})
+
+_rates = [v["rate"] for v in __import__("core.planner", fromlist=["STYLES"]).STYLES.values()]
+_RMIN, _RMAX = min(_rates), max(_rates)
+
+GUIDES.update({
+    "ai-house-design-vs-architect": dict(
+        nav="AI house design vs architect",
+        title="AI House Design vs Architect: Cost, Speed and Limits",
+        desc="Compare AI house design tools with hiring an architect: what each costs, how fast they are, what they cannot do and how to use both well.",
+        h1="AI House Design vs Hiring an Architect",
+        lead="AI house design is best for fast, free concepts: a layout, a 3D view and a rough cost. An architect is needed for approvals, structural safety and decisions that depend on your site. The best path is to use AI first, then take the result to a licensed professional.",
+        cta=_CTA, cta_label="Try the AI house designer",
+        sections=[
+            ["Quick comparison", [], [
+                "Cost: AI tools such as AI House Design are free to use; architects charge professional fees",
+                "Speed: AI gives options in seconds; drawing sets take weeks",
+                "Customisation: AI covers plot size, rooms, floors and style; architects design around your exact site, budget and habits",
+                "Approvals: AI concepts are not approval drawings; architects prepare stamped drawings",
+                "Structure and safety: AI concepts are not structural designs; engineers design and certify the structure"]],
+            ["What AI does well", [
+                "It lets you compare many layouts in minutes, test plot sizes and facing directions, and see a 3D model before you spend money. It also helps you describe what you want, which makes meetings with an architect shorter and cheaper."]],
+            ["What AI cannot do", [
+                "It cannot visit your plot, read soil conditions, apply your local building rules or take responsibility for safety. The plans on AI House Design are concepts. They are not structural drawings or approval drawings."]],
+            ["How to use both", [], [
+                "Generate several plans and shortlist two or three",
+                "Check the room sizes on the 2D plan and the look on the 3D model",
+                "Save your choices, for example as a PDF from the 3D house builder",
+                "Share them with an architect as a brief and ask for a site-specific design"]],
+        ],
+        faqs=[
+            ["Can AI replace an architect?", "No. AI helps you explore ideas quickly, but approvals, structural safety and site-specific design need licensed professionals."],
+            ["Is it worth using AI before hiring an architect?", "Yes. Arriving with a clear plan, a 3D reference and a rough budget helps an architect understand your needs faster."]],
+        related=["guides/how-to-design-a-house-with-ai", "guides/how-much-does-ai-house-design-cost", "free-ai-house-design", "guides/software-architects-use"]),
+    "how-much-does-ai-house-design-cost": dict(
+        nav="How much does AI house design cost?",
+        title="How Much Does AI House Design Cost? Design vs Build Cost",
+        desc="Designing a house with AI House Design is free. Learn what building the house can cost, how our estimate is calculated and how to lower the budget.",
+        h1="How Much Does It Cost to Design a House with AI?",
+        lead=f"Designing a house with AI House Design costs nothing: plans, 3D models and exterior designs are free and need no login. The cost that matters is building the house. Our estimates use a per-square-foot rate by style, from about ₹{_RMIN:,} to ₹{_RMAX:,} per sq ft of built area.",
+        cta=_CTA, cta_label="Get a free cost estimate",
+        sections=[
+            ["What is free", [], [
+                "2D floor plans with dimensions",
+                "Rotatable 3D house models and front elevations",
+                "The 4D construction timeline",
+                "The rough cost estimate and the cost estimator on the home page",
+                "The 3D house builder and image downloads (the PDF report needs a quick check-in)"]],
+            ["How our build cost estimate works", [
+                f"Each design has a built area in square feet. The estimate multiplies built area by a style rate, which ranges from ₹{_RMIN:,} to ₹{_RMAX:,} per sq ft in the planner. Simple low cost and village styles sit at the low end, villas and mansions at the high end. See the methodology page for the full table."]],
+            ["What the estimate does not include", [], [
+                "Land, registration and taxes",
+                "Approvals and professional fees",
+                "Furniture, appliances and landscaping, unless you add them in the 3D builder",
+                "Price changes in your city and the quality of finishes you choose"]],
+            ["How to lower the cost of a house", [], [
+                "Choose a compact, regular shape: fewer corners cost less than complex shapes",
+                "Stack wet areas such as kitchen and bathrooms to shorten plumbing",
+                "Pick one or two floors your plot suits instead of oversizing",
+                "Select finishes in phases and start with the basics",
+                "Compare designs in the gallery and sort by estimated cost"]],
+        ],
+        faqs=[
+            ["Is AI house design free?", "Yes. Generating house designs on AI House Design is free and needs no login."],
+            ["Is the cost estimate exact?", "No. It is a rough planning figure. Ask a local contractor for a quotation before you commit."],
+            ["Which styles are cheapest to build?", "In our planner, low cost and village designs use the lowest per-square-foot rates, and villas and mansions use the highest."]],
+        related=["guides/ai-house-design-vs-architect", "free-ai-house-design", "small-houses-design", "indian-village-house-design"]),
+    "how-to-make-a-3d-picture-of-your-house": dict(
+        nav="How to make a 3D picture of your house",
+        title="How to Make a 3D Picture of Your House for Free",
+        desc="Make a 3D picture of your house online: generate a 3D model from your plot and style, or build the rooms yourself in 3D and download the image.",
+        h1="How to Make a 3D Picture of Your House",
+        lead="To make a 3D picture of your house, enter your plot size, bedrooms and style in a 3D house design tool and rotate the model, or build your rooms yourself in a 3D builder and download the image. Both options are free on AI House Design.",
+        cta=_CTA, cta_label="Make a 3D house model",
+        sections=[
+            ["Option 1: generate a 3D house model", [], [
+                "Open the AI house designer",
+                "Enter plot width and depth in feet, bedrooms and floors",
+                "Choose a style and the direction the front faces",
+                "Generate, then drag to rotate and zoom the 3D model"]],
+            ["Option 2: build the rooms in 3D", [], [
+                "Open the 3D house builder and pick a base floor layout",
+                "Choose a boundary wall or fence, then add furniture and appliances",
+                "Set wall paint, marble or wood floors, and a roof style",
+                "Download the picture as PNG or JPG, or get a PDF blueprint report"]],
+            ["Tips for a better 3D picture", [], [
+                "Start from your real plot size so the proportions are right",
+                "Try two or three styles and compare them",
+                "Hide the roof while arranging furniture, then show it for the final view",
+                "Add an inspiration image so you and your architect see the same idea"]],
+        ],
+        faqs=[
+            ["How can I make a 3D picture of my house?", "Use the AI house designer to generate a rotatable 3D model from your plot and style, or the 3D house builder to arrange rooms, furniture and finishes and download the image."],
+            ["Can I make a 3D model of an existing house?", "You can recreate a similar layout with the 3D house builder and compare it with your photo. The tools do not convert a photo into a 3D model."]],
+        related=["3d-house-design-ai", "ai-house-maker", "guides/how-to-design-a-house-with-ai", "ai-home-exterior-design"]),
+    "free-ai-house-design-generator-checklist": dict(
+        nav="Free AI house design generator checklist",
+        title="Free AI House Design Generator: 8 Things to Compare",
+        desc="Choosing a free AI house design generator? Compare these 8 features: plan quality, 3D model, exterior views, cost estimate, exports, limits and trust.",
+        h1="Free AI House Design Generator: What to Compare",
+        lead="A good free AI house design generator gives you a dimensioned 2D plan, a rotatable 3D model, exterior views, a cost estimate and clear limits, without forcing a login. Use this checklist to compare tools before you rely on one.",
+        cta=_CTA, cta_label="Try the AI house designer",
+        sections=[
+            ["The 8-point checklist", [], [
+                "2D floor plan with room sizes and dimensions",
+                "3D model you can rotate and zoom",
+                "Front elevation and exterior views",
+                "A rough cost estimate, with a clear note on what it excludes",
+                "Plot sizes and styles that match your region",
+                "Free use without a login, and a clear privacy policy",
+                "Exports such as images or a PDF you can share with an architect",
+                "Honest limits: it says plans are concepts, not approval or structural drawings"]],
+            ["How AI House Design compares", [
+                "AI House Design provides dimensioned 2D plans, a rotatable 3D model, front elevations, a 4D construction timeline, a rough cost estimate, 7,968 ready designs in 15 styles, and a 3D house builder with image and PDF downloads. It does not provide structural drawings, approval drawings or a conversion from photos to 3D."]],
+            ["Questions to ask any tool", [], [
+                "Can I see how the plan or cost is calculated?",
+                "Is there a methodology page and a way to report mistakes?",
+                "What happens to the details I enter?"]],
+        ],
+        faqs=[
+            ["What is the best free AI house design generator?", "The best one for you shows a dimensioned plan, a 3D model and exterior views, explains its limits, and exports something you can share. Use the checklist on this page to compare."],
+            ["Are free AI house design tools accurate?", "They are accurate enough for concepts and comparisons. Always have a licensed architect and engineer verify plans before construction."]],
+        related=["free-ai-house-design", "guides/ai-house-design-vs-architect", "guides/software-architects-use", "ai-house-maker"]),
+})
+
+
 ALL_PAGES = {}
 for _k, _v in LANDING.items():
     ALL_PAGES[_k] = dict(_v, path=f"/{_k}/", kind="landing")
@@ -442,14 +652,13 @@ def faq_ld(faqs):
 
 
 def site_ld(name):
-    return {"@context": "https://schema.org", "@graph": [
-        {"@type": "WebSite", "@id": url("/#website"), "url": url("/"), "name": name, "inLanguage": "en",
-         "potentialAction": {"@type": "SearchAction",
-                             "target": {"@type": "EntryPoint", "urlTemplate": url("/gallery") + "?q={search_term_string}"},
-                             "query-input": "required name=search_term_string"}},
-        {"@type": "Organization", "@id": url("/#org"), "name": name, "url": url("/"),
-         "logo": url("/static/img/icon-512.png")},
-    ]}
+    graph = [{"@type": "WebSite", "@id": url("/#website"), "url": url("/"), "name": name, "inLanguage": "en", "publisher": {"@id": url("/#org")},
+              "description": "Free AI house design generator with 2D plans, 3D models and cost estimates.",
+              "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": url("/gallery") + "?q={search_term_string}"},
+                                  "query-input": "required name=search_term_string"}}, org_ld(name)]
+    if person_ld():
+        graph.append(person_ld())
+    return {"@context": "https://schema.org", "@graph": graph}
 
 
 def webapp_ld(name):
@@ -461,14 +670,99 @@ def webapp_ld(name):
 
 
 def article_ld(page, name):
-    return {"@context": "https://schema.org", "@type": "Article", "headline": page["h1"], "description": page["desc"],
-            "mainEntityOfPage": url(page["path"]), "datePublished": PUBLISHED, "dateModified": PUBLISHED,
-            "author": {"@type": "Organization", "name": name, "url": url("/")},
-            "publisher": {"@type": "Organization", "name": name, "logo": {"@type": "ImageObject", "url": url("/static/img/icon-512.png")}},
-            "image": url("/static/img/og-default.png")}
+    author = {"@id": url("/#author")} if AUTHOR["name"] else {"@type": "Organization", "name": name, "url": url("/")}
+    return {"@context": "https://schema.org", "@type": "Article", "headline": page["h1"], "description": page["desc"], "inLanguage": "en",
+            "mainEntityOfPage": url(page["path"]), "datePublished": PUBLISHED, "dateModified": UPDATED, "author": author,
+            "publisher": {"@id": url("/#org")}, "isPartOf": {"@id": url("/#website")}, "image": url("/static/img/og-default.png")}
 
 
 def itemlist_ld(designs):
     return {"@context": "https://schema.org", "@type": "ItemList",
             "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": url(f"/design/{d['id']}"), "name": d["name"]}
                                 for i, d in enumerate(designs)]}
+
+# ---------------------------------------------------------------- round 2: entity, E-E-A-T and answer-engine data
+SOCIALS = [u.strip() for u in os.getenv("SOCIAL_LINKS", "").split(",") if u.strip().startswith("http")]
+AUTHOR = dict(name=os.getenv("AUTHOR_NAME", "").strip(), url=os.getenv("AUTHOR_URL", "").strip(), bio=os.getenv("AUTHOR_BIO", "").strip())
+
+BUILDER_FAQS = [
+    ("What is the 3D house builder?",
+     "The 3D house builder is a free tool where you design a house step by step in an isometric 3D view: choose one of 7 base floors, a boundary, "
+     "furniture and appliances, wall paint, marble or wood floors, a roof and an optional sea-facing balcony, then download the result."),
+    ("Is the 3D house builder free?",
+     "Yes. Building and downloading PNG or JPG images is free. The PDF blueprint report needs a quick check-in with your name and email before it downloads."),
+    ("What is in the PDF blueprint report?",
+     "The PDF contains a rendered view of your 3D design, your inspiration image if you uploaded one, your layout, boundary, finishes and roof choices, "
+     "a furniture schedule with prices and a cost allocation chart."),
+    ("What happens to my details when I check in?",
+     "Your name, email and optional phone and city are stored with the time of check-in to prepare your report and, if you agreed, to contact you about your design. "
+     "Your design and uploaded image are used to create the PDF and are not kept on the server. See the privacy policy for details."),
+    ("How accurate is the cost estimate in the 3D builder?",
+     "It is a rough planning figure that adds base structure, boundary, furniture, finishes and roof at indicative rates. It excludes land, permits and fees. Ask a local contractor for a quotation."),
+    ("Can I upload my own dream house image?",
+     "Yes. In step 6 you can upload a photo. It is shown beside your 3D model and included in your image downloads and PDF. It is processed in your browser."),
+]
+BUILDER_STEPS = [
+    ("Choose a base floor", "Pick one of 7 floor layouts, from a studio to a villa."),
+    ("Choose a boundary", "Select one of 16 wall, fence or hedge styles for the plot border."),
+    ("Add furniture and appliances", "Pick items such as sofas, beds, a refrigerator or a bathtub and click the floor to place them."),
+    ("Pick surface finishes", "Choose wall paint, luxury marble or hardwood flooring."),
+    ("Set the roof and sea view", "Select a roof style and colour, a facade colour and an optional sea-facing balcony."),
+    ("Add an inspiration image and download", "Upload your own image, then download a PNG, JPG or the PDF blueprint report."),
+]
+DESIGNER_FAQS = [
+    ("How does the AI house designer work?",
+     "You enter plot size, bedrooms, floors, style and facing direction, or type a short description. The designer reads your request and a procedural planner "
+     "packs rooms into a valid layout, then draws the 2D plan, a rotatable 3D model and a rough cost. Plans are concepts, not approval drawings."),
+    ("What does the AI house designer give me?",
+     "A 2D floor plan with room sizes, a 3D model you can rotate, front elevation views, a 4D construction timeline and a rough build cost estimate."),
+    ("Can I change my design after it is generated?",
+     "Yes. Change the plot size, bedrooms, floors, style or facing direction and generate again to compare options. You can also open any of the 7,968 ready designs in the gallery."),
+    ("Does it replace an architect?",
+     "No. Use it to explore and compare ideas, then have a licensed architect and structural engineer prepare and approve the drawings before you build."),
+]
+
+
+def org_ld(name):
+    org = {"@type": "Organization", "@id": url("/#org"), "name": name, "alternateName": ["AI Houses Design", "aihousesdesign.com"],
+           "url": url("/"), "logo": {"@type": "ImageObject", "url": url("/static/img/icon-512.png"), "width": 512, "height": 512},
+           "description": "Free AI house design generator: 2D floor plans, 3D models, 4D construction timelines, rough cost estimates and a 3D house builder.",
+           "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "url": url("/contact")}}
+    if SOCIALS:
+        org["sameAs"] = SOCIALS
+    if AUTHOR["name"]:
+        org["founder"] = {"@id": url("/#author")}
+    return org
+
+
+def person_ld():
+    if not AUTHOR["name"]:
+        return None
+    p = {"@type": "Person", "@id": url("/#author"), "name": AUTHOR["name"], "worksFor": {"@id": url("/#org")}}
+    if AUTHOR["url"]:
+        p["url"] = AUTHOR["url"]
+    if AUTHOR["bio"]:
+        p["description"] = AUTHOR["bio"]
+    if SOCIALS:
+        p["sameAs"] = SOCIALS
+    return p
+
+
+def builder_ld(name):
+    return {"@context": "https://schema.org", "@type": "WebApplication", "@id": url("/builder#app"), "name": name + " 3D House Builder",
+            "url": url("/builder"), "applicationCategory": "DesignApplication", "operatingSystem": "Any (web browser)", "browserRequirements": "Requires JavaScript",
+            "description": "Free 3D house builder: choose a base floor, boundary, furniture, finishes and roof, add a sea-facing balcony and download a PNG, JPG or PDF blueprint.",
+            "featureList": ["7 base floor layouts", "16 boundary and fence styles", "32 furniture and appliance items", "Marble, wood and paint finishes",
+                            "5 roof styles", "Sea-facing balcony option", "Inspiration image upload", "PNG, JPG and PDF export"],
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}, "publisher": {"@id": url("/#org")}}
+
+
+def howto_ld(title, desc, steps, path):
+    return {"@context": "https://schema.org", "@type": "HowTo", "name": title, "description": desc, "totalTime": "PT10M",
+            "step": [{"@type": "HowToStep", "position": i + 1, "name": n, "text": t, "url": url(path) + "#step-" + str(i + 1)} for i, (n, t) in enumerate(steps)]}
+
+
+def dataset_ld(name, desc, path, total, variables):
+    return {"@context": "https://schema.org", "@type": "Dataset", "name": name, "description": desc, "url": url(path), "isAccessibleForFree": True,
+            "creator": {"@id": url("/#org")}, "datePublished": PUBLISHED, "dateModified": UPDATED, "inLanguage": "en",
+            "variableMeasured": variables, "measurementTechnique": "Computed from the AI House Design library of %s generated house plans." % format(total, ",")}

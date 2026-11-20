@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}House Design Statistics: Sizes and Costs | {{ SITE_NAME }}{% endblock %}
+{% block desc %}{{ desc }}{% endblock %}
+{% block ogtype %}article{% endblock %}
+{% block content %}
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('index') }}">Home</a><span aria-hidden="true"> › </span><span aria-current="page">House design statistics</span></nav>
+<div class="landing">
+  <article class="doc">
+    <h1>House Design Statistics: Sizes and Estimated Costs</h1>
+    <p class="lead">Across {{ '{:,}'.format(d.total) }} house plans in {{ d.n_styles }} styles, the median built area is <strong>{{ '{:,.0f}'.format(d.overall.median_area) }} sq ft</strong> and the median estimated build cost is <strong>₹{{ '%.1f'|format(d.overall.median_cost) }} lakh</strong>. {{ d.cheapest.label }} homes have the lowest cost per sq ft (₹{{ '{:,.0f}'.format(d.cheapest.psf) }}) and {{ d.priciest.label }} homes the highest (₹{{ '{:,.0f}'.format(d.priciest.psf) }}).</p>
+    <p class="muted">Updated <time datetime="{{ updated }}">{{ updated }}</time>. Computed from the live design library, so it matches what you see in the <a href="{{ url_for('gallery') }}">gallery</a>.</p>
+
+    <h2>Key findings</h2>
+    <ul>
+      <li>Average built area is {{ '{:,.0f}'.format(d.overall.area) }} sq ft; the average estimated cost is ₹{{ '%.1f'|format(d.overall.cost) }} lakh (about ₹{{ '{:,.0f}'.format(d.overall.psf) }} per sq ft).</li>
+      <li>Estimated costs range from ₹{{ '%.1f'|format(d.min_cost) }} lakh for the smallest low cost plans to ₹{{ '%.0f'|format(d.max_cost) }} lakh for the largest mansions.</li>
+      <li>The most common style is {{ d.styles[0].label }} ({{ '{:,}'.format(d.styles[0].count) }} plans).</li>
+      <li>Plots range from {{ d.plots[0].key }} to {{ d.plots[-1].key }}; the library covers {{ d.n_plots }} plot sizes.</li>
+    </ul>
+
+    <h2>By style</h2>
+    <div class="data-wrap"><table class="data"><thead><tr><th>Style</th><th>Plans</th><th>Avg built area (sq ft)</th><th>Avg cost (₹ lakh)</th><th>Cost per sq ft (₹)</th></tr></thead><tbody>
+      {% for s in d.styles %}<tr><th scope="row">{{ s.label }}</th><td>{{ '{:,}'.format(s.count) }}</td><td>{{ '{:,.0f}'.format(s.area) }}</td><td>{{ '%.1f'|format(s.cost) }}</td><td>{{ '{:,.0f}'.format(s.psf) }}</td></tr>{% endfor %}
+    </tbody></table></div>
+
+    <h2>By number of bedrooms</h2>
+    <div class="data-wrap"><table class="data"><thead><tr><th>Bedrooms</th><th>Plans</th><th>Avg built area (sq ft)</th><th>Avg cost (₹ lakh)</th></tr></thead><tbody>
+      {% for b in d.beds %}<tr><th scope="row">{{ b.key }} BHK</th><td>{{ '{:,}'.format(b.count) }}</td><td>{{ '{:,.0f}'.format(b.area) }}</td><td>{{ '%.1f'|format(b.cost) }}</td></tr>{% endfor %}
+    </tbody></table></div>
+
+    <h2>By number of floors</h2>
+    <div class="data-wrap"><table class="data"><thead><tr><th>Floors</th><th>Plans</th><th>Avg built area (sq ft)</th><th>Avg cost (₹ lakh)</th></tr></thead><tbody>
+      {% for f in d.floors %}<tr><th scope="row">{{ f.key }}</th><td>{{ '{:,}'.format(f.count) }}</td><td>{{ '{:,.0f}'.format(f.area) }}</td><td>{{ '%.1f'|format(f.cost) }}</td></tr>{% endfor %}
+    </tbody></table></div>
+
+    <h2>By plot size</h2>
+    <div class="data-wrap"><table class="data"><thead><tr><th>Plot</th><th>Plot area (sq ft)</th><th>Plans</th><th>Avg built area (sq ft)</th><th>Avg cost (₹ lakh)</th></tr></thead><tbody>
+      {% for p in d.plots %}<tr><th scope="row">{{ p.key }}</th><td>{{ '{:,}'.format(p.sqft) }}</td><td>{{ '{:,}'.format(p.count) }}</td><td>{{ '{:,.0f}'.format(p.area) }}</td><td>{{ '%.1f'|format(p.cost) }}</td></tr>{% endfor %}
+    </tbody></table></div>
+
+    <h2>Which way do the houses face?</h2>
+    <p>{% for k, n in d.facing %}{{ k }}: {{ '{:,}'.format(n) }} plans{{ ', ' if not loop.last }}{% endfor %}. Each plot is generated for every facing direction so you can match the road side of your plot.</p>
+
+    <h2>How these numbers are produced</h2>
+    <p>Every figure is computed from the {{ '{:,}'.format(d.total) }} generated designs in the library. Cost is the planner's rough estimate: built area multiplied by a per-square-foot rate for the style. It is not a market quotation and excludes land, approvals, taxes and furnishing. Read the <a href="{{ url_for('methodology') }}">methodology</a> for the rate table and the limits.</p>
+
+    <h2>Cite this page</h2>
+    <p class="cite">{{ SITE_NAME }}, "House design statistics: sizes and estimated costs", {{ SITE_URL }}/house-design-statistics, updated {{ updated }}.</p>
+    <div class="cta"><a class="btn primary" href="{{ url_for('designer') }}">Design a house for your plot</a><a class="btn" href="{{ url_for('gallery') }}">Browse {{ '{:,}'.format(d.total) }} designs</a></div>
+  </article>
+</div>
+{% endblock %}
